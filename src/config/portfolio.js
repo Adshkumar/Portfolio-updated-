@@ -67,7 +67,6 @@ export const navLinks = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#experience", label: "Experience" },
-  { href: "#projects", label: "Projects" },
   { href: "#achievements", label: "Achievements" },
   { href: "#skills", label: "Skills" },
   { href: "#contact", label: "Contact" },
@@ -75,7 +74,11 @@ export const navLinks = [
 
 export const aboutStats = [
   // { number: "2+", label: "Years of Experience", link: "https://github.com/Adshkumar" },
-  { number: "2", label: "Professional Roles", link: null },
+  {
+    number: "400+",
+    label: "Git Commits",
+    link: "https://github.com/search?q=author%3AAdshkumar&utm_source=chatgpt.com&type=commits",
+  },
   { number: "1", label: "Certification", link: null },
 ];
 
@@ -88,16 +91,68 @@ export const education = {
 
 export const experiences = [
   {
-    company: "Full-Stack Developer",
-    role: "Independent Builder",
-    duration: "2023 – Present",
-    type: "Remote • India",
-    tech: "React • Node.js • Express • MongoDB",
+    company: "AKM Techie",
+    role: "Intern Web Developer",
+    duration: "June 2025 – July 2025",
+    type: "India",
+    tech: "HTML • CSS • JavaScript • Responsive Design • UI/UX",
     logo: null,
+    articleLink: "/experience/akm-techie",
+    proofLink: "https://dtest-inky.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Dtest",
     points: [
-      "Built real-world web products focused on usability, performance, and clean architecture.",
-      "Developed full-stack features with authentication, APIs, database workflows, and responsive UI design.",
-      "Worked across frontend, backend, and deployment to ship polished digital experiences end-to-end.",
+      "Developed DTEST, a responsive multi-page website featuring an admin dashboard, client portal, and service pages.",
+      "Created consistent, custom-styled interfaces and interactive experiences for contact forms and service demonstrations.",
+      "Built dynamic business statistics displays and refined layouts to work across devices.",
+    ],
+  },
+  {
+    company: "Finance Tracker",
+    role: "Full-Stack Mobile Project",
+    type: "Personal Project",
+    tech: "React Native • Expo • Supabase • PostgreSQL • Clerk • Gemini AI • NativeWind",
+    logo: null,
+    articleLink: "/experience/finance-tracker",
+    proofLink: "https://finance-app-invite.vercel.app",
+    githubLink: "https://github.com/Adshkumar/Finance-Tracker",
+    points: [
+      "Built a mobile budgeting app for tracking accounts, income, expenses, and monthly budgets across iOS and Android.",
+      "Integrated Gemini AI for receipt scanning, voice-based transaction entry, and conversational spending assistance.",
+      "Implemented Clerk authentication with Supabase and PostgreSQL, including row-level security for user financial data.",
+      "Added transaction search and analytics, Excel export, account management, and biometric or PIN-based app locking.",
+    ],
+  },
+  {
+    company: "URL Shortener",
+    role: "Full-Stack Project",
+    duration: "June 2026 – July 2026",
+    type: "Self Project • India",
+    tech: "MongoDB • Express.js • React.js • Node.js • JWT • REST APIs • Tailwind CSS • Docker",
+    logo: null,
+    articleLink: "/experience/url-shortener",
+    proofLink: "https://url-shortener-seven-lac.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/URL-Shortener",
+    points: [
+      "Built a full-stack platform for creating custom short links, managing URLs, and tracking link performance.",
+      "Implemented JWT authentication, protected user dashboards, click analytics, and real-time URL statistics.",
+      "Developed responsive link-management interfaces and REST APIs with the MERN stack.",
+      "Orchestrated the MongoDB database, API, and frontend with Docker Compose, using a shared bridge network and persistent database storage.",
+    ],
+  },
+  {
+    company: "Agentic AI",
+    role: "Full-Stack AI Project",
+    duration: "May 2026 – June 2026",
+    type: "Self Project • India",
+    tech: "Next.js • TypeScript • Clerk • Prisma • PostgreSQL • Supabase • Gemini • Cline SDK • Sandpack",
+    logo: null,
+    articleLink: "/experience/agentic-ai",
+    proofLink: "https://agentic-flow-ai.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Agentic-AI",
+    points: [
+      "Built an AI-powered application builder that turns natural-language prompts into React code rendered in a live browser preview.",
+      "Integrated Gemini generation and a Cline SDK agent for streaming, file-by-file app improvements in authenticated workspaces.",
+      "Persisted chat history, workspaces, generated files, plan details, and credits with Clerk, Prisma, and PostgreSQL.",
     ],
   },
   {
@@ -105,13 +160,15 @@ export const experiences = [
     role: "Full-Stack Project",
     duration: "2024",
     type: "Node.js • MongoDB • Socket.io",
-    tech: "Node.js • Express.js • MongoDB • JWT • Socket.io",
+    tech: "Node.js • Express.js • MongoDB • JWT • Socket.io • Docker",
     logo: "/images/chat-app.png",
+    articleLink: "/experience/chat-application",
     proofLink: "https://chat-application-sable-rho.vercel.app/",
     githubLink: "https://github.com/Adshkumar/ChatApplication",
     points: [
       "Built a real-time chat application with secure authentication, room-based messaging, live status, and typing indicators.",
       "Implemented WebSocket-powered communication and persistent message history for a seamless, interactive user experience.",
+      "Added separate Dockerfiles for the backend and frontend, plus Docker Compose to run the application services together.",
     ],
   },
   {
@@ -119,13 +176,15 @@ export const experiences = [
     role: "Full-Stack Product",
     duration: "2024",
     type: "React • Node.js • AI",
-    tech: "React.js • Node.js • Express.js • MongoDB • JWT • Puppeteer",
+    tech: "React.js • Node.js • Express.js • MongoDB • JWT • Puppeteer • Docker",
     logo: "/images/GEN-AI.png",
+    articleLink: "/experience/ai-interview-platform",
     proofLink: "https://adarsh-interviewai.vercel.app/",
     githubLink: "https://github.com/Adshkumar/ai-interview-platform-",
     points: [
       "Built an AI-powered mock interview platform with user auth, interview flow logic, and automated feedback generation.",
       "Integrated Puppeteer-based report generation and file handling to create a more complete evaluation workflow.",
+      "Containerized the frontend and backend with separate Dockerfiles for isolated Node.js runtime environments.",
     ],
   },
   {
@@ -133,8 +192,9 @@ export const experiences = [
     role: "API & System Design",
     duration: "2024",
     type: "Backend Engineering",
-    tech: "Node.js • Express.js • MongoDB • JWT • Socket.IO",
+    tech: "React • Vite • Node.js • Express • MongoDB • Socket.IO • Google Maps • Razorpay",
     logo: "/images/UBER.png",
+    articleLink: "/experience/uber-clone",
     proofLink: "https://uber-psi-three.vercel.app/",
     githubLink: "https://github.com/Adshkumar/UBER",
     points: [
@@ -144,72 +204,85 @@ export const experiences = [
   },
 ];
 
+export const projects = [];
+
+/*
 export const projects = [
   {
-    title: "CHAT APPLICATION",
+    title: "DTEST Client Portal",
     description:
-      "A real-time chat application built with secure user authentication and instant messaging features. Users can register, log in, join chat rooms, and exchange messages in real time. Implemented WebSocket-based communication for seamless live chatting, with typing indicators, online/offline user status, and message timestamps.",
-    icon: "fas fa-comments",
-    tech: ["Node.js", "Express.js", "MongoDB", "JWT", "Socket.io", "Authentication"],
-    liveLink: "https://chat-application-sable-rho.vercel.app/",
-    githubLink: "https://github.com/Adshkumar/ChatApplication",
+      "A multi-page DTEST portal with client and admin areas, login, chatbot information, practical resources, and business statistics.",
+    icon: "fas fa-laptop-code",
+    tech: ["PHP", "CSS"],
+    liveLink: "https://dtest-inky.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Dtest",
   },
   {
-    title: "AI Interview Platform",
+    title: "DTEST Site",
     description:
-      "A full-stack AI-powered interview preparation platform where users can authenticate, attempt mock interviews, and receive AI-generated feedback reports. Built with secure authentication, file handling, and Puppeteer-based report generation.",
-    icon: "fas fa-brain",
-    tech: ["Node.js", "Express.js", "MongoDB", "JWT", "React.js", "AI Integration", "Puppeteer"],
-    liveLink: "https://adarsh-interviewai.vercel.app/",
-    githubLink: "https://github.com/Adshkumar/ai-interview-platform-",
+      "A standalone DTEST website introducing its AI chatbot service and explaining how the service works.",
+    icon: "fas fa-robot",
+    tech: ["HTML"],
+    liveLink: "https://dtest-site.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Dtest_site",
   },
   {
-    title: "Uber",
+    title: "Bloggify",
     description:
-      "A comprehensive backend system simulating Uber's core functionality including user authentication and driver management. Secured endpoints using JWT authentication, implemented real-time communication with Socket.IO for driver-passenger coordination, and designed efficient MongoDB schemas for data storage.",
-    icon: "fas fa-car-side",
-    tech: ["Node.js", "Express.js", "MongoDB", "JWT", "Socket.IO", "REST API"],
-    liveLink: "https://uber-psi-three.vercel.app/",
-    githubLink: "https://github.com/Adshkumar/UBER",
+      "A full-stack blogging platform with user accounts, session-based authentication, and tools to create, edit, and manage blog posts.",
+    icon: "fas fa-pen-nib",
+    tech: ["Node.js", "Express.js", "MongoDB", "EJS", "Sessions", "Multer"],
+    liveLink: "https://bloggify-nu.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Bloggify",
   },
   {
-    title: "Finance App",
+    title: "Zomato",
     description:
-      "A cross-platform finance application built with React Native for Android and iOS. Designed to provide users with a simple and convenient way to manage their financial activities.",
-    icon: "fas fa-wallet",
-    tech: ["React Native", "Android", "iOS"],
-    githubLink: "https://github.com/Adshkumar/React-Native-Finance-App",
+      "A full-stack food discovery application with user authentication, food listings, and food-partner workflows.",
+    icon: "fas fa-utensils",
+    tech: ["React", "Vite", "Tailwind CSS", "Express.js", "MongoDB", "Cloudinary"],
+    liveLink: "https://zomato-silk-phi.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/Zomato",
+  },
+  {
+    title: "Bank Transaction Backend",
+    description:
+      "A Node.js backend for secure banking workflows, with authentication, account operations, and transaction APIs backed by MongoDB.",
+    icon: "fas fa-building-columns",
+    tech: ["Node.js", "Express.js", "MongoDB", "JWT", "REST API"],
+    githubLink: "https://github.com/Adshkumar/bank-transaction-backend",
+  },
+  {
+    title: "URL Shortener",
+    description:
+      "A full-stack link management platform for creating custom short URLs, managing links, and tracking clicks, devices, browsers, and daily trends. Includes JWT authentication, custom aliases, QR code generation, a responsive analytics dashboard, and Docker Compose services for MongoDB, the API, and frontend.",
+    icon: "fas fa-link",
+    tech: ["React", "Vite", "Tailwind CSS", "Express.js", "MongoDB", "JWT", "Analytics", "Docker"],
+    liveLink: "https://url-shortener-seven-lac.vercel.app/",
+    githubLink: "https://github.com/Adshkumar/URL-Shortener",
   },
 ];
+*/
 
 export const achievements = [
   {
-    rank: "Project",
-    title: "CHAT APPLICATION",
-    desc: "Built a real-time messaging product with authentication, room support, and live communication features.",
-    link: "https://github.com/Adshkumar/ChatApplication",
-    linkText: "GitHub",
+    rank: "Problem Solving",
+    title: "LeetCode",
+    desc: "Solved 160+ DSA problems and earned badges, demonstrating consistent practice and strong algorithmic thinking.",
+    link: "https://leetcode.com/u/Adarsh_kumar62041/",
+    linkText: "LeetCode Profile",
   },
   {
-    rank: "Product",
-    title: "AI Interview Platform",
-    desc: "Developed an AI-driven interview prep platform with feedback mechanisms and automated reporting.",
-    link: "https://adarsh-interviewai.vercel.app/",
-    linkText: "Live Demo",
+    rank: "Internship",
+    title: "Internship Certificate",
+    desc: "Successfully completed a web development internship with hands-on project experience.",
+    link: "/logos/Internship_Completion_Letter.pdf",
+    linkText: "View Certificate",
   },
   {
-    rank: "System Design",
-    title: "Uber Clone",
-    desc: "Built a secure ride-booking backend with real-time coordination and scalable data models.",
-    link: "https://github.com/Adshkumar/UBER",
-    linkText: "Source Code",
-  },
-  {
-    rank: "Mobile",
-    title: "Finance App",
-    desc: "Created a cross-platform finance app for Android and iOS with a clean user experience and mobile-first design.",
-    link: "https://github.com/Adshkumar/React-Native-Finance-App",
-    linkText: "View App",
+    rank: "Portfolio",
+    title: "Full-Stack Projects",
+    desc: "Delivered 4+ full-stack projects featuring real-time functionality and production-ready implementations.",
   },
 ];
 

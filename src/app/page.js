@@ -9,7 +9,6 @@ import {
   Footer,
   Hero,
   Navbar,
-  Projects,
   Skills,
 } from "@/components";
 import { useEffect, useSyncExternalStore } from "react";
@@ -89,7 +88,6 @@ export default function Home({ initialBlogOpen = false }) {
         <Hero initialBlogOpen={initialBlogOpen} />
         <About />
         <Experience />
-        <Projects />
         <Achievements />
         <Activity theme={theme} />
         <Skills />

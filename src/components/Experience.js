@@ -1,4 +1,5 @@
 import { experiences } from "@/config/portfolio";
+import Link from "next/link";
 
 function initials(company) {
   const words = company.replace(/[–-]/g, " ").split(/\s+/).filter(Boolean);
@@ -6,12 +7,21 @@ function initials(company) {
   return company.slice(0, 3);
 }
 
-export default function Experience() {
+export default function Experience({ showAll = false }) {
+  const visibleExperiences = showAll ? experiences : experiences.slice(0, 3);
+
   return (
     <section id="experience" className="section reveal">
-      <h2 className="sectionTitle">Experience</h2>
+      <div className="expSectionHeader">
+        <h2 className="sectionTitle">Experience</h2>
+        {!showAll && experiences.length > 3 && (
+          <Link href="/experience" className="expShowAll">
+            all →
+          </Link>
+        )}
+      </div>
       <div className="expList">
-        {experiences.map((exp, i) => (
+        {visibleExperiences.map((exp, i) => (
           <div key={i} className="expItem">
             <div className="expBadge">
               {exp.logo ? (
@@ -37,7 +47,7 @@ export default function Experience() {
                   <li key={j} dangerouslySetInnerHTML={{ __html: point }} />
                 ))}
               </ul>
-              {(exp.proofLink || exp.githubLink) && (
+              {(exp.proofLink || exp.githubLink || exp.articleLink) && (
                 <div className="expLinks">
                   {exp.proofLink && (
                     <a
@@ -45,7 +55,7 @@ export default function Experience() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <i className="fas fa-external-link-alt"></i>{" "}
+                      <i className="fas fa-external-link-alt"></i>
                       {exp.githubLink ? "Live" : "View"}
                     </a>
                   )}
@@ -55,8 +65,18 @@ export default function Experience() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <i className="fab fa-github"></i> GitHub
+                      <i className="fab fa-github"></i>
+                      GitHub
                     </a>
+                  )}
+                  {exp.articleLink && (
+                    <Link href={exp.articleLink}>
+                      <i
+                        className="fas fa-arrow-up-right-from-square"
+                        aria-hidden="true"
+                      ></i>
+                      View case study
+                    </Link>
                   )}
                 </div>
               )}

@@ -752,6 +752,663 @@ a.cred:hover {
 }
 
 /* ===== Experience list ===== */
+.expSectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.expSectionHeader .sectionTitle {
+  margin-bottom: 16px;
+}
+
+.experienceBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  transition: color var(--transition);
+}
+
+.experienceBack:hover {
+  color: var(--text);
+}
+
+.caseStudy {
+  margin-bottom: 48px;
+}
+
+.caseStudyHeader {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.caseStudyEyebrow {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.caseStudyTitle {
+  margin-top: 6px;
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.caseStudyLead {
+  max-width: 600px;
+  margin-top: 12px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.caseStudyLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.caseStudyLinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.caseStudyLinks a:hover {
+  color: var(--text);
+}
+
+.caseStudySection {
+  margin-top: 28px;
+}
+
+.caseStudySection h2 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 650;
+}
+
+.caseStudySection > p,
+.caseStudyFeature p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.caseStudyFeatureList {
+  display: grid;
+  gap: 14px;
+}
+
+.caseStudyPerformanceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.caseStudyPerformanceGrid article {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.caseStudyFeature h3 {
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.caseStudyTech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.caseStudyTech span {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+}
+
+.caseStudyAvailability {
+  margin-top: 14px;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+.caseStudyScreenshot {
+  margin-top: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.caseStudyScreenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.caseStudyScreenshot figcaption {
+  padding: 8px 12px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.caseStudyScreenshot img {
+  max-height: 380px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.caseStudyFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.caseStudyFacts div,
+.caseStudyIntegrationGrid > div,
+.caseStudyEngineeringGrid article {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.caseStudyFacts span,
+.caseStudyFacts strong {
+  display: block;
+}
+
+.caseStudyFacts span {
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.caseStudyFacts strong {
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.caseStudyArchitecture {
+  display: grid;
+  gap: 0;
+  margin-top: 18px;
+}
+
+.caseStudyArchitectureNode {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.caseStudyArchitectureIndex {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.caseStudyArchitectureNode strong,
+.caseStudyArchitectureNode div > span {
+  display: block;
+}
+
+.caseStudyArchitectureNode strong {
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.caseStudyArchitectureNode div > span {
+  margin-top: 3px;
+  color: var(--text-secondary);
+  font-size: 0.77rem;
+  line-height: 1.55;
+}
+
+.caseStudyArchitectureArrow {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 10px;
+  padding-left: 22px;
+  color: var(--text-muted);
+}
+
+.caseStudyArchitectureArrow i {
+  font-size: 0.72rem;
+}
+
+.caseStudyArchitectureArrow span {
+  font-size: 0.68rem;
+}
+
+.caseStudyIntegrationGrid,
+.caseStudyEngineeringGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.caseStudyIntegrationGrid h3,
+.caseStudyEngineeringGrid h3,
+.caseStudyPerformanceGrid h3 {
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.caseStudyIntegrationGrid p,
+.caseStudyEngineeringGrid p,
+.caseStudyPerformanceGrid p {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.caseStudyFlow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.caseStudyFlowStep {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.caseStudyFlowStep > span {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.caseStudyFlowStep strong {
+  color: var(--text);
+  font-size: 0.8rem;
+}
+
+.caseStudyFlowStep p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.caseStudyLifecycle {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.caseStudyLifecycleStep {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.caseStudyLifecycleStep > div {
+  min-width: 0;
+}
+
+.caseStudyLifecycleMarker {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.caseStudyLifecycleStep strong {
+  display: block;
+  margin: 2px 0 5px;
+  color: var(--text);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
+}
+
+.caseStudyLifecycleStep p {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.caseStudyLifecycleStep > i {
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  z-index: 1;
+  padding: 4px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  transform: translate(50%, -50%);
+}
+
+.caseStudyLifecycleNote {
+  margin-top: 9px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.caseStudyTableWrap {
+  width: 100%;
+  margin-top: 14px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.caseStudyTable {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.76rem;
+}
+
+.caseStudyTable th,
+.caseStudyTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.caseStudyTable thead th {
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.67rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.caseStudyTable tbody th {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.caseStudyTable tr:last-child th,
+.caseStudyTable tr:last-child td {
+  border-bottom: 0;
+}
+
+.caseStudyTable code {
+  white-space: nowrap;
+}
+
+.caseStudyApiGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.caseStudyApiCard {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.caseStudyApiCard h3 {
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.caseStudyApiCard p {
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  line-height: 1.65;
+}
+
+.caseStudyImplementationNotes {
+  padding: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.caseStudyImplementationNotes > p {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.caseStudyDetailList {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.caseStudyDetailList li {
+  padding-left: 2px;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.caseStudyDetailList li::marker {
+  color: var(--text-muted);
+}
+
+.caseStudyDetailList code,
+.caseStudyOpsNote code,
+.caseStudySection code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--bg-elev);
+  color: var(--text);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.92em;
+}
+
+.caseStudyOpsNote {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 2px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.caseStudyDataDiagram {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.caseStudyDataDomain {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.caseStudyDataDomain h3 {
+  margin-bottom: 2px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.caseStudyEntityRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.caseStudyEntity {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-elev);
+}
+
+.caseStudyEntityPrimary {
+  border-color: var(--border-strong);
+}
+
+.caseStudyEntity strong {
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: 0.74rem;
+  font-weight: 650;
+}
+
+.caseStudyEntity span {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.caseStudyRelation {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.caseStudyClosing {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.caseStudyRepositoryLink {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.caseStudyRepositoryLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .caseStudyFacts,
+  .caseStudyIntegrationGrid,
+  .caseStudyEngineeringGrid,
+  .caseStudyDataDiagram,
+  .caseStudyApiGrid,
+  .caseStudyPerformanceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .caseStudyFlow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .caseStudyLifecycle {
+    flex-direction: column;
+  }
+
+  .caseStudyLifecycleStep {
+    align-items: flex-start;
+  }
+
+  .caseStudyLifecycleStep > i {
+    top: auto;
+    right: 50%;
+    bottom: -12px;
+    transform: translate(50%, 50%) rotate(90deg);
+  }
+
+  .caseStudyScreenshot {
+    margin-top: 18px;
+  }
+}
+
 .expList {
   display: flex;
   flex-direction: column;
@@ -872,19 +1529,39 @@ a.cred:hover {
 
 .expLinks {
   display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 12px;
   margin-top: 10px;
   font-size: 0.78rem;
 }
 
 .expLinks a {
+  flex: 0 0 auto;
   color: var(--text-secondary);
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
 }
 
 .expLinks a:hover {
+  color: var(--text);
+}
+
+.expShowAll {
+  flex-shrink: 0;
+  margin: 0 0 16px 12px;
+  padding: 2px 0 2px 8px;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  transition: color var(--transition);
+  line-height: 1.2;
+}
+
+.expShowAll:hover {
   color: var(--text);
 }
 
@@ -1302,12 +1979,11 @@ a.cred:hover {
 
 /* ===== Reveal animation (subtle) ===== */
 .reveal {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: none;
 }
 
 .reveal.active {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }

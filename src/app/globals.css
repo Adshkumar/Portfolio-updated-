@@ -1057,6 +1057,10 @@ a.cred:hover {
   object-fit: contain;
 }
 
+:root[data-theme="light"] .skillIcon {
+  filter: brightness(0);
+}
+
 @media (max-width: 640px) {
   .section {
     margin-bottom: 36px;

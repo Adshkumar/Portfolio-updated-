@@ -1058,9 +1058,28 @@ a.cred:hover {
 }
 
 @media (max-width: 640px) {
+  .section {
+    margin-bottom: 36px;
+  }
+
+  .sectionTitle {
+    margin-bottom: 12px;
+  }
+
   .skillRow {
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .skillTags {
+    min-width: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .skillTags span {
+    max-width: 100%;
   }
 }
 

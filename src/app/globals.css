@@ -118,7 +118,7 @@ strong {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
 }
 
 @media (min-width: 640px) {

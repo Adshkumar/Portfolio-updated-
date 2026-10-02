@@ -1,0 +1,192 @@
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{xcolor}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-1.0in}
+\addtolength{\textheight}{2.2in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-7pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=-2pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\vspace*{6pt}
+\begin{center}
+    {\Huge \scshape Adarsh Kumar} \\ \vspace{4pt}
+    \small 
+    \href{tel:+919304584358}{\faPhone\ +91 9304584358} ~ 
+    \href{mailto:adarsh99733207@gmail.com}{\faEnvelope\ \underline{adarsh99733207@gmail.com}} \\
+    \href{https://www.linkedin.com/in/adarsh-kumar62041/}{\faLinkedin\ \underline{LinkedIn}} ~
+    \href{https://x.com/Adarshsingh1a}{\faTwitter\ \underline{X}} ~
+    \href{https://www.instagram.com/adsingh9.1/}{\faInstagram\ \underline{Instagram}} ~
+    \href{https://leetcode.com/u/Adarsh_kumar62041/}{\faLaptopCode\ \underline{LeetCode}} ~
+    \href{https://github.com/Adshkumar}{\faGithub\ \underline{GitHub}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Chhotu Ram Rural Institute Of Technology, Delhi}{Sept 2023 -- Jul 2027}
+      {Bachelor of Technology in Computer Science $|$ CGPA: 8.22}{Ranchi, Jharkhand}
+    \resumeSubheading
+      {Darbhanga Public School}{Aug 2020 -- Jun 2022}
+      {\textbf{PCM} (12th: 91.0\%)}{Darbhanga, Bihar}
+  \resumeSubHeadingListEnd
+
+%-----------CODING PROFILES-----------
+\vspace{-4mm}
+\section{Coding Profiles}
+\noindent
+$\bullet$ Codeforces: \textbf{Expert: 1648} \href{https://codeforces.com/profile/plagiarism2012}{\textbf{[Link]}} \hfill
+$\bullet$ LeetCode: \textbf{Guardian: 2290} \href{https://leetcode.com/u/Adarsh_kumar62041/}{\textbf{[Link]}} \hfill
+$\bullet$ CodeChef: \textbf{4-Star: 1865} \href{https://www.codechef.com/users/real_wish_53}{\textbf{[Link]}}
+\vspace{-4mm}
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {\textbf{Google Summer of Code 2026} $|$ \textmd{Python Software Foundation}}{May 2026 -- Sep 2026}
+      {Open Source Developer $|$ Python, BorgBackup, C}{Remote}
+      \resumeItemListStart
+        \resumeItem{Selected for \textbf{GSoC 2026} under the \textbf{Python Software Foundation} to implement pack file support for the next-generation \textbf{borg2} storage backend (\textit{Borgbackup Pack Files for borg2}). \hspace*{\fill} \href{https://summerofcode.withgoogle.com/programs/2026/organizations/python-software-foundation}{\textbf{[Program]}}}
+        \resumeItem{Authored \textbf{33 merged PRs} in BorgBackup (Borg) optimizing CI/CD pipelines, Python 3.12 compatibility, and resolving complex timezone bugs prior to selection. \hspace*{\fill} \href{https://github.com/borgbackup/borg/pulls?q=is\%3Amerged+is\%3Apr+author\%3AAdshkumar}{\textbf{[PRs]}}}
+        \resumeItem{Authored \textbf{6 merged PRs} in BorgBase (Vorta) completing 2 projects, resolved critical Windows crash loops in \textbf{OSSF CVE Binary Tool} via filesystem optimizations. \hspace*{\fill} \href{https://github.com/borgbase/vorta/pulls?q=is\%3Amerged+is\%3Apr+author\%3AAdshkumar}{\textbf{[PRs]}}}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {\textbf{EkamApps (Turrant AI)} $|$ \textmd{Python, PostgreSQL, REST APIs, Next.js}}{Oct 2025 -- Jan 2026}
+      {AI Engineering Intern}{Remote}
+      \resumeItemListStart
+        \resumeItem{Engineered a scalable RESTful API suite and credit-based billing microservice, successfully handling 500+ concurrent transactions using Node.js. \hspace*{\fill} \href{https://turrant.ai/}{\textbf{[Company]}}}
+        \resumeItem{Architected a multi-tenant notification system across WhatsApp, email, and web portals using an event-driven architecture.}
+        \resumeItem{Optimized PostgreSQL schemas (118+ tables) via advanced query tuning and indexing, improving OCR accuracy by 25\%.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {\textbf{PromptCue} $|$ \textmd{Node.js, Next.js, Redis}}{Dec 2024 -- Jun 2025}
+      {SDE Intern}{Remote}
+      \resumeItemListStart
+        \resumeItem{Built an AI aggregator platform integrating LLMs, MCP tools, local file systems, and image generation APIs using Node.js and Next.js.}
+        \resumeItem{Reduced model inference latency by 30\% by implementing Redis caching strategies and asynchronous processing queues.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------ACHIEVEMENTS---------------
+\section{Achievements}
+    \begin{itemize}[itemsep=-2pt, parsep=3pt, leftmargin=0.15in]
+        \small
+        \item Served as \textbf{Technical Lead} for \textbf{Pantheon'25}, managing infrastructure for 4000+ visitors and spearheading the 'HackQuest'25' hackathon for 1200+ participants. \hspace*{\fill} \href{https://pantheon25.com/}{\textbf{[Link]}}
+        \item Acted as \textbf{Core Developer} for \textbf{BITOTSAV}, building a QR-based ticketing system for 5000+ attendees and boosting engagement by 40\%. \hspace*{\fill} \href{https://bitotsav.bitmesra.ac.in/}{\textbf{[Link]}}
+        \item Served as \textbf{Technical Coordinator} for \textbf{UNESQUO \& SPIC MACAY}, ensuring 99.9\% uptime for web platforms during cultural events. \hspace*{\fill} \href{http://unesquo.in/}{\textbf{[Link]}}
+        \item Secured \textbf{2nd place} for an innovative Stocks Portfolio Manager solution in \textbf{HACKATRON} at BIT Sindri. \hspace*{\fill} \href{https://www.linkedin.com/posts/vaibhav-anand-singh-412604299_teamosiris-hackathon-hackatron-ugcPost-7357728905987788800-T3L3}{\textbf{[Post]}}
+        \item Received Pre-Placement Interview (PPI) from ILNB Services in \textbf{HACKFEST} by \textbf{IIT ISM Dhanbad}. \hspace*{\fill} \href{https://www.linkedin.com/posts/vaibhav-anand-singh-412604299_hackfest25-fintech-ai-ugcPost-7317647847674298386-bCB4}{\textbf{[Post]}}
+        \item Secured \textbf{1st place} in \textbf{CICADA-CTF} and won the no-monitor contest in \textbf{Blind Coding}.
+    \end{itemize}
+
+%-----------PROJECTS-----------
+\section{Projects}
+  \resumeSubHeadingListStart
+    \resumeProjectHeading
+      {\textbf{Gsoc-espionage} $|$ \emph{React.js, TypeScript, Vite, GitHub REST API}}{\href{https://gsoc.app/}{\textbf{Live}} $|$ \href{https://github.com/Adshkumar/Gsoc-espionage}{\textbf{GitHub}}}
+      \resumeItemListStart
+        \resumeItem{Engineered a GitHub PR analytics dashboard serving \textbf{2.5k+ active users}, visualizing merge rates, contributor stats, and activity timelines for any repository via the GitHub API.}
+        \resumeItem{Implemented advanced data handling features including branch filtering, customizable time ranges, and \textbf{CSV/JSON data exports} for detailed repository auditing.}
+        \resumeItem{Integrated dynamic \textbf{GSoC 2026 organization lists} and robust theme support, ensuring a highly scalable and accessible user experience.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages:} C, C++, Java, Python, JavaScript, TypeScript, HTML/CSS, SQL, Solidity \\
+     \textbf{Web Technologies:} Next.js, Node.js, GraphQL, REST APIs, WebSockets, Prisma, Supabase, Appwrite \\
+     \textbf{Databases \& Cloud:} PostgreSQL, MongoDB, Redis, Docker, AWS, GCP, Nginx, CI/CD \\
+     \textbf{Developer Tools:} Git, GitHub, VS Code, Postman, Firebase, Vercel, Cloudinary, Render
+    }}
+ \end{itemize}
+
+\end{document}  

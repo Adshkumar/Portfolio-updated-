@@ -1,0 +1,303 @@
+{
+  "site": {
+    "name": "Adarsh Kumar",
+    "initials": "AK",
+    "tagline": "CSE • BIT Mesra • AI Engineer • 5x Hackathon Winner",
+    "description": "Adarsh Kumar - Computer Science student at BIT Mesra, 5x Hackathon Winner, AI Engineer, Open Source Contributor.",
+    "about": "An engineer and open source contributor specializing in AI Systems and Full-Stack Development.",
+    "resumeLink": "https://drive.google.com/file/d/15WgBVmarlHjF76NDsubvpdaAJWCaWO9e/view"
+  },
+  "contact": {
+    "email": "mr.raj.earth@gmail.com",
+    "socials": [
+      { "platform": "GitHub", "url": "https://github.com/Adshkumar" },
+      {
+        "platform": "LinkedIn",
+        "url": "https://www.linkedin.com/in/adarsh-kumar62041/"
+      },
+      { "platform": "X (Twitter)", "url": "https://x.com/Adarshsingh1a" }
+    ],
+    "calendar": {
+      "call15min": "https://cal.com/adshkumar/15min",
+      "call30min": "https://cal.com/adshkumar/30min"
+    }
+  },
+  "codingProfiles": [
+    {
+      "platform": "Codeforces",
+      "rank": "Expert",
+      "rating": 1648,
+      "url": "https://codeforces.com/profile/plagiarism2012"
+    },
+    {
+      "platform": "LeetCode",
+      "rank": "Guardian",
+      "rating": 2290,
+      "url": "https://leetcode.com/u/Asuratrix/",
+      "globalRank": "4670/874349"
+    },
+    {
+      "platform": "CodeChef",
+      "rank": "4-Star",
+      "rating": 1865,
+      "url": "https://www.codechef.com/users/real_wish_53",
+      "globalRank": 3082,
+      "countryRank": 2529
+    }
+  ],
+  "education": {
+    "institution": "Chhotu Ram Rural Institute Of Technology, Delhi",
+    "degree": "Diploma in Computer Science",
+    "duration": {
+      "start": "September 2024",
+      "end": "June 2027"
+    },
+    "cgpa": 7.6
+  },
+  "stats": [
+    {
+      "value": "125+",
+      "label": "Merged PRs (Open Source)",
+      "link": "https://github.com/search?q=is%3Apr+author%3Amr-raj12+is%3Amerged&type=pullrequests"
+    },
+    {
+      "value": "2.5k+",
+      "label": "Active Users (GSoC Espionage)",
+      "link": "https://gsoc.app/"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Google Summer of Code 2026",
+      "role": "Open Source Developer",
+      "organization": "Python Software Foundation",
+      "duration": { "start": "May 2026", "end": "Sep 2026" },
+      "type": "Remote",
+      "status": "Active",
+      "tech": ["Python", "BorgBackup", "C"],
+      "logo": "https://www.google.com/s2/favicons?domain=summerofcode.withgoogle.com&sz=128",
+      "proofLink": "https://summerofcode.withgoogle.com/programs/2026/organizations/python-software-foundation",
+      "highlights": [
+        "Implementing pack file support for the next-generation borg2 storage backend (Borgbackup Pack Files for borg2)"
+      ],
+      "prsLink": "https://github.com/search?q=is%3Apr+author%3Amr-raj12+is%3Amerged&type=pullrequests"
+    },
+    {
+      "company": "Open Source Contributor",
+      "role": "Contributor",
+      "organizations": ["BorgBackup", "BorgBase", "OSSF"],
+      "duration": { "start": "Dec 2025", "end": "Present" },
+      "type": "Remote",
+      "pullRequestCount": "50+",
+      "tech": ["Python", "CI/CD", "GitHub Actions"],
+      "logo": "/logos/borg.png",
+      "proofLink": "https://github.com/borgbackup/borg/pulls?q=is%3Amerged+is%3Apr+author%3Amr-raj12",
+      "highlights": [
+        "BorgBackup (Borg): Authored 33 PRs optimizing CI/CD pipelines, Python 3.12 compatibility, and resolving complex timezone bugs",
+        "BorgBase (Vorta): Authored 16 PRs optimizing CI/CD pipelines, Python 3.12 compatibility, and resolving complex timezone bugs, completing 2 full projects",
+        "OSSF (CVE Binary Tool): Resolved critical Windows crash loops involving sqlite3 databases via filesystem optimizations",
+        "Also contributed to: Supermemory and Hermes Agent (Nous Research)"
+      ]
+    },
+    {
+      "company": "EkamApps (Turrant AI)",
+      "role": "AI Engineering Intern",
+      "duration": { "start": "Oct 2025", "end": "Jan 2026" },
+      "type": "Remote",
+      "durationMonths": 4,
+      "tech": [
+        "Python",
+        "FastAPI",
+        "Next.js",
+        "PostgreSQL",
+        "REST APIs",
+        "Supabase"
+      ],
+      "logo": "/logos/ekamapps.jpg",
+      "proofLink": "https://turrant.ai",
+      "highlights": [
+        "Engineered a scalable RESTful API suite and credit-based billing microservice handling 500+ concurrent transactions using Node.js and FastAPI",
+        "Architected a multi-tenant notification system across WhatsApp, email, and web portals using event-driven architecture with message queuing",
+        "Optimized PostgreSQL schemas (118+ tables) via advanced query tuning and indexing, improving OCR accuracy by 25%"
+      ]
+    },
+    {
+      "company": "Klyrax Labs",
+      "role": "Associate Software Engineer",
+      "duration": { "start": "Dec 2025", "end": "May 2026" },
+      "type": "Remote",
+      "status": "Part-time",
+      "tech": [],
+      "logo": "/logos/klyrax_labs_logo.jpg",
+      "proofLink": "https://www.linkedin.com/in/adarsh-kumar62041/",
+      "highlights": [
+        "Contributing to product development and engineering initiatives as an Associate Software Engineer"
+      ]
+    },
+    {
+      "company": "BITAcademia",
+      "role": "SDE Intern",
+      "duration": { "start": "July 2025", "end": "May 2026" },
+      "type": "On-site",
+      "location": "Chhotu Ram Rural Institute Of Technology, Delhi",
+      "tech": ["React", "Node.js", "MongoDB", "Express"],
+      "logo": "https://www.google.com/s2/favicons?domain=bitmesra.ac.in&sz=128",
+      "proofLink": "http://139.167.188.221:3000",
+      "githubLink": "https://github.com/BitWebApp/BitWebApp-24",
+      "highlights": [
+        "Developed features for the official academic platform to streamline academic management for students, faculty, and administration",
+        "Contributed to building a comprehensive system for managing academic workflows at BIT Mesra"
+      ]
+    },
+    {
+      "company": "PromptCue",
+      "role": "SDE Intern",
+      "duration": { "start": "Jan 2025", "end": "Jun 2025" },
+      "type": "Remote",
+      "durationMonths": 6,
+      "tech": ["Node.js", "Next.js", "Redis", "PostgreSQL"],
+      "logo": "/logos/promptcue.png",
+      "proofLink": "https://www.linkedin.com/in/adarsh-kumar62041/",
+      "highlights": [
+        "Built an AI aggregator platform integrating LLMs, MCP tools, local file systems, and image generation APIs using Node.js and Next.js",
+        "Implemented multi-model support enabling seamless switching between Gemini, GPT, Claude, and other LLMs through a unified interface",
+        "Reduced model inference latency by 30% by implementing Redis caching strategies and asynchronous processing queues"
+      ]
+    },
+    {
+      "company": "ScrapGenie",
+      "role": "SDE Intern",
+      "duration": { "start": "Dec 2024", "end": "Jan 2025" },
+      "type": "Remote",
+      "durationMonths": 2,
+      "tech": [],
+      "logo": "/logos/scrapgenie.jpg",
+      "proofLink": "https://www.linkedin.com/in/adarsh-kumar62041/",
+      "highlights": [
+        "Contributed to software development initiatives enhancing operational efficiency and scalability for an innovative scrap recycling platform"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Cogent",
+      "description": "Terminal-based autonomous coding agent integrating Gemini and Groq models with filesystem and shell tools through a unified streaming interface. Features an autonomous read-act loop with context compaction, session persistence, and provider-agnostic tool execution for interactive and batch workflows.",
+      "tech": ["TypeScript", "Node.js", "LLMs"],
+      "githubLink": "https://github.com/mr-raj12/cogent"
+    },
+    {
+      "title": "Runexus",
+      "description": "Distributed workflow orchestration engine that executes DAG-based jobs across Kubernetes runner pods with parallel scheduling and Redis-backed queues. Implements heartbeat monitoring and watchdog-based failure detection, guaranteeing deterministic workflow completion and automatic handling of pod failures.",
+      "tech": ["TypeScript", "Kubernetes", "Redis", "Express", "Docker"],
+      "githubLink": "https://github.com/mr-raj12/Runexus"
+    },
+    {
+      "title": "Exchange Stack",
+      "description": "Centralized cryptocurrency exchange supporting spot and perpetual markets with a high-performance in-memory matching engine, price-time priority, and real-time WebSocket updates. Built on a 6-service event-driven architecture using Redis Streams, WAL + snapshot recovery, and PostgreSQL audit trails for durable order processing and sub-second restarts.",
+      "tech": [
+        "TypeScript",
+        "Redis Streams",
+        "PostgreSQL",
+        "WebSockets",
+        "Docker"
+      ],
+      "githubLink": "https://github.com/mr-raj12/exchange-stack"
+    },
+    {
+      "title": "GSoC Espionage",
+      "description": "GitHub PR analytics dashboard with 2.5k+ active users visualizing merge rates, contributor stats, and activity timelines for any repository. Features branch filtering, customizable time ranges, CSV/JSON data exports, GSoC 2026 organization lists, and theme support.",
+      "tech": ["React", "TypeScript", "Vite", "GitHub API"],
+      "liveLink": "https://gsoc.app/",
+      "githubLink": "https://github.com/mr-raj12/Gsoc-espionage",
+      "activeUsers": "2.5k+"
+    }
+  ],
+  "achievements": [
+    {
+      "rank": "Tech Lead",
+      "title": "Pantheon'25 – HackQuest'25",
+      "description": "Technical Lead managing infrastructure for 4000+ visitors and spearheading the HackQuest'25 hackathon for 1200+ participants",
+      "link": "https://pantheon25.com/",
+      "linkText": "pantheon25.com"
+    },
+    {
+      "rank": "Core Dev",
+      "title": "BITOTSAV",
+      "description": "Core Developer building a QR-based ticketing system for 5000+ attendees, boosting event engagement by 40%",
+      "link": "https://bitotsav.bitmesra.ac.in/",
+      "linkText": "bitotsav.bitmesra.ac.in"
+    },
+    {
+      "rank": "Coordinator",
+      "title": "UNESQUO & SPIC MACAY",
+      "description": "Technical Coordinator ensuring 99.9% uptime for web platforms during cultural and musical events",
+      "link": "http://unesquo.in/",
+      "linkText": "unesquo.in"
+    },
+    {
+      "rank": "2nd Place",
+      "title": "HACKATRON – BIT Sindri",
+      "description": "Secured 2nd place with an innovative Stocks Portfolio Manager solution at HACKATRON",
+      "link": "https://www.linkedin.com/posts/vaibhav-anand-singh-412604299_teamosiris-hackathon-hackatron-ugcPost-7357728905987788800-T3L3",
+      "linkText": "View Post"
+    },
+    {
+      "rank": "PPI Offer",
+      "title": "HACKFEST – IIT ISM Dhanbad",
+      "description": "Received Pre-Placement Interview (PPI) offer from ILNB Services at HACKFEST by IIT ISM Dhanbad",
+      "link": "https://www.linkedin.com/posts/vaibhav-anand-singh-412604299_hackfest25-fintech-ai-ugcPost-7317647847674298386-bCB4",
+      "linkText": "View Post"
+    },
+    {
+      "rank": "1st Place",
+      "title": "CICADA-CTF",
+      "description": "Secured 1st place in CICADA-CTF and won the no-monitor contest in Blind Coding competition",
+      "link": null,
+      "linkText": null
+    }
+  ],
+  "skills": {
+    "languages": [
+      "C",
+      "C++",
+      "Java",
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "HTML/CSS",
+      "SQL",
+      "Solidity"
+    ],
+    "webDevelopment": [
+      "React",
+      "Next.js",
+      "Node.js",
+      "GraphQL",
+      "REST APIs",
+      "WebSockets",
+      "Prisma",
+      "Supabase",
+      "Appwrite"
+    ],
+    "databasesAndCloud": [
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Docker",
+      "AWS",
+      "GCP",
+      "Nginx",
+      "CI/CD"
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "VS Code",
+      "Postman",
+      "Firebase",
+      "Vercel",
+      "Cloudinary",
+      "Render"
+    ]
+  }
+}

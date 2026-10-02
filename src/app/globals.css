@@ -144,6 +144,8 @@ strong {
 
 .heroAvatar {
   flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 3px;
   width: 64px;
   height: 64px;
   border-radius: 50%;

@@ -6,8 +6,9 @@ export default function About() {
       <h2 className="sectionTitle">About</h2>
       <div className="sectionLead">
         <p>
-          I&apos;m a full-stack developer focused on building modern web experiences,
-          clean product architecture, and solutions that feel intuitive for real users.
+          I&apos;m a Delhi-based full-stack developer building thoughtful digital
+          experiences—from intuitive interfaces to robust, real-time systems.
+          I turn ideas into reliable products with clean code and lasting impact.
         </p>
       </div>
 

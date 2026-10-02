@@ -11,7 +11,8 @@ export const siteConfig = {
   title: "Adarsh Kumar",
   description:
     "Full-stack developer passionate about building modern web applications that solve real-world problems with elegant, user-centered design.",
-  tagline: "Crafting Seamless Experiences with Code & Creativity",
+  tagline:
+    "Software Engineer making the complex feel simple—and the useful feel exceptional.",
   resumeLink: "/Adarsh-Kumar-Resume.pdf",
 };
 
@@ -73,7 +74,7 @@ export const navLinks = [
 ];
 
 export const aboutStats = [
-  { number: "2+", label: "Years of Experience", link: "https://github.com/Adshkumar" },
+  // { number: "2+", label: "Years of Experience", link: "https://github.com/Adshkumar" },
   { number: "2", label: "Professional Roles", link: null },
   { number: "1", label: "Certification", link: null },
 ];

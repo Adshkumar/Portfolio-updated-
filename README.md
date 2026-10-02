@@ -1,34 +1,81 @@
-# Adarsh Kumar — Portfolio
+<div align="center">
 
-Personal portfolio for **Adarsh Kumar**, built with Next.js and React.
+# Adarsh Kumar
 
-- **Live site:** [adsingh-portfolio.vercel.app](https://adsingh-portfolio.vercel.app/)
-- **Resume:** [View or download PDF](./public/Adarsh-Kumar-Resume.pdf)
+### Full-Stack Developer | Building thoughtful digital experiences
 
-## Features
+I design and build responsive web applications that bring together clear user experiences, reliable backend systems, and practical product thinking.
 
-- Responsive portfolio with Home, About, Experience, Projects, Achievements, Activity, Skills, and Contact sections
-- Persistent light and dark themes
-- GitHub and LeetCode activity calendar:
-  - Light mode displays GitHub activity.
-  - Dark mode alternates between GitHub and LeetCode by day.
-  - The most recently loaded calendars are cached in the browser and refreshed in the background.
-  - The 2026 GitHub daily contribution counts are estimates based on public activity; private daily counts are not available from the public data source.
-- Resume links in the hero section and navigation dock
-- Local images for experience badges
-- Scroll reveal animations
+[Portfolio](https://adsingh-portfolio.vercel.app/) · [Resume](./public/Adarsh-Kumar-Resume.pdf) · [GitHub](https://github.com/Adshkumar) · [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/)
+
+</div>
+
+---
+
+## About
+
+I’m a Delhi-based full-stack developer focused on turning ideas into useful, well-crafted software. I enjoy working across the stack—from shaping an intuitive interface to building the APIs, authentication, and data flows behind it.
+
+My current toolkit includes **JavaScript, React, Next.js, Node.js, Express, and MongoDB**. I’m pursuing a Diploma in Computer Science at **Chhotu Ram Rural Institute of Technology, Delhi**, while continuing to learn through hands-on projects.
+
+## Selected Work
+
+### Real-Time Chat Application
+
+A room-based messaging app with secure authentication, live communication, online status, typing indicators, and persistent message history.
+
+**Built with:** Node.js · Express · MongoDB · JWT · Socket.IO  
+[Live application](https://chat-application-sable-rho.vercel.app/) · [Source code](https://github.com/Adshkumar/ChatApplication)
+
+### AI Interview Platform
+
+An interview preparation product where users can work through mock interviews and receive AI-generated feedback, with report generation and file handling built into the workflow.
+
+**Built with:** React · Node.js · Express · MongoDB · JWT · Puppeteer  
+[Live application](https://adarsh-interviewai.vercel.app/) · [Source code](https://github.com/Adshkumar/ai-interview-platform-)
+
+### Uber-Inspired Ride-Booking Backend
+
+A backend project exploring core ride-booking workflows, protected endpoints, driver management, real-time rider–driver coordination, and structured data models.
+
+**Built with:** Node.js · Express · MongoDB · JWT · Socket.IO  
+[Live application](https://uber-psi-three.vercel.app/) · [Source code](https://github.com/Adshkumar/UBER)
+
+### Cross-Platform Finance App
+
+A mobile-first finance application concept designed to make everyday financial activity simple to manage across Android and iOS.
+
+**Built with:** React Native  
+[Source code](https://github.com/Adshkumar/React-Native-Finance-App)
+
+## Portfolio Highlights
+
+- **A focused presentation:** experience, selected projects, achievements, skills, and contact details in one responsive portfolio.
+- **A considered interface:** persistent light and dark themes, responsive layouts, and subtle scroll-reveal motion.
+- **A live activity view:** GitHub activity in light mode and a daily GitHub/LeetCode rotation in dark mode, with recent data cached for quicker repeat visits.
+- **A direct introduction:** the current resume is available from the portfolio’s hero section and navigation dock.
+
+> **Activity data note:** Public GitHub data does not expose private daily contribution counts. The 2026 GitHub daily values shown in the portfolio are estimates based on public activity and the supplied calendar pattern; they are not an exact record of private contributions. LeetCode activity depends on the availability and freshness of its public calendar service.
 
 ## Tech Stack
 
-- Next.js 16 with the App Router and static export
-- React 19
-- JavaScript
-- CSS with custom properties
-- Font Awesome icons
+| Area | Tools |
+| --- | --- |
+| Framework | Next.js 16 · React 19 |
+| Languages | JavaScript |
+| UI | CSS · CSS custom properties · Font Awesome |
+| Backend and data | Node.js · Express · MongoDB · REST APIs |
+| Authentication and real time | JWT · Socket.IO |
+| Deployment | Static export · Vercel |
 
-## Getting Started
+## Run Locally
 
-Requirements: Node.js and npm.
+### Requirements
+
+- Node.js
+- npm
+
+### Install and start
 
 ```bash
 npm install
@@ -37,41 +84,49 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Available Commands
+### Available scripts
 
 ```bash
 npm run dev    # Start the development server
 npm run lint   # Run ESLint
-npm run build  # Create the production static export
+npm run build  # Generate the production static export
 ```
 
-The production export is written to `out/`. The project is configured for static hosting and can be deployed through Vercel.
+The production export is written to `out/`. The project uses Next.js static export and is configured for static hosting.
 
 ## Project Structure
 
 ```text
 public/
-├── Adarsh-Kumar-Resume.pdf
-└── images/                  # Experience badge images
+├── Adarsh-Kumar-Resume.pdf    # Portfolio resume
+└── images/                    # Experience badge images
 src/
 ├── app/
-│   ├── globals.css          # Global styles, themes, and responsive layout
-│   ├── layout.js            # Root layout and metadata
-│   └── page.js              # Main page and theme state
-├── components/              # Portfolio sections and UI components
+│   ├── globals.css            # Themes, layout, and component styles
+│   ├── layout.js              # Root layout and metadata
+│   └── page.js                # Main page and theme state
+├── components/                # Portfolio sections and UI
 └── config/
-    └── portfolio.js         # Profile, links, projects, and section content
+    └── portfolio.js           # Profile, experience, projects, and links
 ```
 
-## Updating Portfolio Content
+## Updating the Portfolio
 
-Edit [`src/config/portfolio.js`](./src/config/portfolio.js) to update profile details, social links, experience, projects, achievements, and skills. Replace the PDF at `public/Adarsh-Kumar-Resume.pdf` to update the resume.
+Update [`src/config/portfolio.js`](./src/config/portfolio.js) to change profile details, social links, experience, projects, achievements, and skills. Replace `public/Adarsh-Kumar-Resume.pdf` to publish a new resume.
 
-## Contact
+## Connect
 
-- **LinkedIn:** [Adarsh Kumar](https://www.linkedin.com/in/adarsh-kumar62041/)
-- **X:** [@Adarshsingh1a](https://x.com/Adarshsingh1a)
-- **GitHub:** [@Adshkumar](https://github.com/Adshkumar)
-- **Instagram:** [@adsingh9.1](https://www.instagram.com/adsingh9.1/)
-- **LeetCode:** [Adarsh_kumar62041](https://leetcode.com/u/Adarsh_kumar62041/)
 - **Email:** [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com)
+- **LinkedIn:** [Adarsh Kumar](https://www.linkedin.com/in/adarsh-kumar62041/)
+- **GitHub:** [@Adshkumar](https://github.com/Adshkumar)
+- **LeetCode:** [Adarsh_kumar62041](https://leetcode.com/u/Adarsh_kumar62041/)
+- **X:** [@Adarshsingh1a](https://x.com/Adarshsingh1a)
+- **Instagram:** [@adsingh9.1](https://www.instagram.com/adsingh9.1/)
+
+---
+
+<div align="center">
+
+**Open to conversations about software, collaboration, and building useful products.**
+
+</div>

@@ -6,7 +6,7 @@ const COMMITS_API = "/data/github-commits.json";
 const LEETCODE_CALENDAR_API =
   "https://alfa-leetcode-api.onrender.com/Adarsh_kumar62041/calendar";
 const CONTRIBUTIONS_REFRESH_INTERVAL = 5 * 60 * 1000;
-const ACTIVITY_CACHE_PREFIX = "portfolio-activity-v3";
+const ACTIVITY_CACHE_PREFIX = "portfolio-activity-v4";
 const WEEKDAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""];
 const MONTH_LABELS = [
   "Jan",
@@ -150,6 +150,14 @@ function getLeetCodeLevel(count) {
   return 4;
 }
 
+function getGitHubCommitLevel(count) {
+  if (count === 0) return 0;
+  if (count === 1) return 1;
+  if (count <= 3) return 2;
+  if (count <= 6) return 3;
+  return 4;
+}
+
 function getLocalDateKey(date) {
   return [
     date.getFullYear(),
@@ -230,41 +238,42 @@ export default function Activity({ theme = "dark" }) {
         );
         if (
           result.metric !== "repository-commits" ||
-          !Array.isArray(yearData?.contributionDays) ||
-          !Number.isSafeInteger(yearData.contributionTotal) ||
-          yearData.contributionTotal < 0 ||
-          yearData.contributionDays.some(
-            ({ date, count, level }) =>
+          !Array.isArray(yearData?.daily) ||
+          !Number.isSafeInteger(yearData.commits) ||
+          yearData.daily.some(
+            ({ date, commits, publicCommits, privateCommits }) =>
               typeof date !== "string" ||
               !date.startsWith(`${year}-`) ||
-              !Number.isSafeInteger(count) ||
-              count < 0 ||
-              !Number.isInteger(level) ||
-              level < 0 ||
-              level > 4
+              !Number.isSafeInteger(commits) ||
+              commits < 0 ||
+              !Number.isSafeInteger(publicCommits) ||
+              publicCommits < 0 ||
+              !Number.isSafeInteger(privateCommits) ||
+              privateCommits < 0 ||
+              commits !== publicCommits + privateCommits
           ) ||
-          yearData.contributionTotal !==
-            yearData.contributionDays.reduce(
-              (total, day) => total + day.count,
-              0
-            )
+          yearData.commits !==
+            yearData.daily.reduce((total, day) => total + day.commits, 0)
         ) {
-          throw new Error(
-            "GitHub contribution calendar response was incomplete."
-          );
+          throw new Error("GitHub commit data response was incomplete.");
         }
 
         if (!disposed) {
+          const contributions = yearData.daily.map(({ date, commits }) => ({
+            date,
+            count: commits,
+            level: getGitHubCommitLevel(commits),
+          }));
           saveActivityData({
             platform: "github",
-            total: yearData.contributionTotal,
-            contributions: yearData.contributionDays,
+            total: yearData.commits,
+            contributions,
           });
           setError("");
         }
       } catch (loadError) {
         if (!disposed && loadError.name !== "AbortError") {
-          setError("GitHub contributions could not be refreshed.");
+          setError("GitHub commits could not be refreshed.");
         }
       }
     }
@@ -424,7 +433,7 @@ export default function Activity({ theme = "dark" }) {
               <p className="contributionSummary">
                 {visibleContributionData.platform === "leetcode"
                   ? `${visibleContributionData.total} submissions in the past one year`
-                  : `${visibleContributionData.total} contributions in ${year}`}
+                  : `${visibleContributionData.total} commits in ${year}`}
               </p>
               <a
                 className="contributionSettings"
@@ -467,7 +476,7 @@ export default function Activity({ theme = "dark" }) {
                   aria-label={
                     visibleContributionData.platform === "leetcode"
                       ? "LeetCode submissions in the past year"
-                      : `GitHub contributions in ${year}`
+                      : `GitHub commits in ${year}`
                   }
                 >
                   {weeks.map((week, weekIndex) => (
@@ -482,8 +491,8 @@ export default function Activity({ theme = "dark" }) {
                             className="contributionDay"
                             data-level={day.level}
                             role="gridcell"
-                            aria-label={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "contributions"} on ${day.date}`}
-                            title={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "contributions"} on ${day.date}`}
+                            aria-label={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "commits"} on ${day.date}`}
+                            title={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "commits"} on ${day.date}`}
                             key={day.date}
                           />
                         ) : (
@@ -512,7 +521,7 @@ export default function Activity({ theme = "dark" }) {
               >
                 {visibleContributionData.platform === "leetcode"
                   ? "LeetCode submissions"
-                  : "Learn how we count contributions"}
+                  : "GitHub commits across public and private repositories"}
               </a>
               <div
                 className="contributionLegend"
@@ -536,7 +545,7 @@ export default function Activity({ theme = "dark" }) {
             Loading{" "}
             {platform === "leetcode"
               ? "LeetCode submissions"
-              : `${year} GitHub contributions`}
+              : `${year} GitHub commits`}
             ...
           </p>
         )}

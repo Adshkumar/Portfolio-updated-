@@ -16,6 +16,8 @@ if (!/^[A-Za-z0-9-]+$/.test(login)) {
 
 const currentYear = new Date().getUTCFullYear();
 const yearsToFetch = [currentYear - 1, currentYear];
+const since = new Date(Date.UTC(currentYear - 1, 0, 1)).toISOString();
+const until = new Date(Date.UTC(currentYear + 1, 0, 1) - 1).toISOString();
 const yearCounts = new Map(
   yearsToFetch.map((year) => [
     year,
@@ -35,32 +37,6 @@ const headers = {
   Authorization: `Bearer ${token}`,
   "X-GitHub-Api-Version": "2022-11-28",
 };
-const contributionCalendarQuery = `
-  query($login: String!, $from: DateTime!, $to: DateTime!) {
-    user(login: $login) {
-      contributionsCollection(from: $from, to: $to) {
-        contributionCalendar {
-          totalContributions
-          weeks {
-            contributionDays {
-              date
-              contributionCount
-              contributionLevel
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-const contributionLevels = {
-  NONE: 0,
-  FIRST_QUARTILE: 1,
-  SECOND_QUARTILE: 2,
-  THIRD_QUARTILE: 3,
-  FOURTH_QUARTILE: 4,
-};
-
 function nextPage(linkHeader) {
   const next = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
   return next?.[1] ?? null;
@@ -77,72 +53,6 @@ async function getJson(url, action) {
     );
   }
   return { data, linkHeader: response.headers.get("Link") };
-}
-
-async function getContributionCalendar(year) {
-  const from = new Date(Date.UTC(year, 0, 1)).toISOString();
-  const to = new Date(Date.UTC(year + 1, 0, 1) - 1).toISOString();
-  const response = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      query: contributionCalendarQuery,
-      variables: { login, from, to },
-    }),
-  });
-  const result = await response.json();
-  if (!response.ok) {
-    throw new Error(
-      `GitHub contribution calendar returned HTTP ${response.status}: ${
-        result.message || "Unknown GitHub API error"
-      }`
-    );
-  }
-  if (result.errors?.length) {
-    throw new Error(
-      `GitHub contribution calendar query failed: ${result.errors
-        .map(({ message }) => message)
-        .join("; ")}`
-    );
-  }
-
-  const calendar =
-    result.data?.user?.contributionsCollection?.contributionCalendar;
-  const contributionDays = calendar?.weeks?.flatMap(
-    ({ contributionDays: weekDays }) => weekDays
-  );
-  if (
-    !Number.isSafeInteger(calendar?.totalContributions) ||
-    calendar.totalContributions < 0 ||
-    !Array.isArray(contributionDays) ||
-    contributionDays.some(
-      ({ date, contributionCount, contributionLevel }) =>
-        typeof date !== "string" ||
-        !date.startsWith(`${year}-`) ||
-        !Number.isSafeInteger(contributionCount) ||
-        contributionCount < 0 ||
-        !Object.hasOwn(contributionLevels, contributionLevel)
-    ) ||
-    contributionDays.reduce(
-      (sum, { contributionCount }) => sum + contributionCount,
-      0
-    ) !== calendar.totalContributions
-  ) {
-    throw new Error(
-      `GitHub returned an incomplete contribution calendar for ${year}.`
-    );
-  }
-
-  return {
-    contributionTotal: calendar.totalContributions,
-    contributionDays: contributionDays.map(
-      ({ date, contributionCount, contributionLevel }) => ({
-        date,
-        count: contributionCount,
-        level: contributionLevels[contributionLevel],
-      })
-    ),
-  };
 }
 
 async function getRepositories() {
@@ -179,7 +89,36 @@ if (viewer.login?.toLowerCase() !== login.toLowerCase()) {
   );
 }
 
-async function addRepositoryCommits(repository) {
+async function getRepositoryBranches(repository) {
+  const branches = [];
+  let url = new URL(
+    `https://api.github.com/repos/${encodeURIComponent(
+      repository.owner.login
+    )}/${encodeURIComponent(repository.name)}/branches`
+  );
+  url.search = new URLSearchParams({
+    per_page: "100",
+  }).toString();
+
+  while (url) {
+    const { data, linkHeader } = await getJson(
+      url,
+      `Branch listing for ${repository.full_name}`
+    );
+    if (!Array.isArray(data)) {
+      throw new Error(`GitHub returned an invalid branch listing for ${repository.full_name}.`);
+    }
+    branches.push(...data);
+    url = nextPage(linkHeader);
+  }
+
+  if (!branches.length) {
+    throw new Error(`GitHub returned no branches for ${repository.full_name}.`);
+  }
+  return branches;
+}
+
+async function addBranchCommits(repository, branch) {
   let url = new URL(
     `https://api.github.com/repos/${encodeURIComponent(
       repository.owner.login
@@ -187,20 +126,22 @@ async function addRepositoryCommits(repository) {
   );
   url.search = new URLSearchParams({
     author: login,
+    sha: branch.name,
+    since,
+    until,
     per_page: "100",
   }).toString();
 
   while (url) {
     const { data, linkHeader } = await getJson(
       url,
-      `Commit history for ${repository.full_name}`
+      `Commit history for ${repository.full_name} (${branch.name})`
     );
     if (!Array.isArray(data)) {
       throw new Error(
-        `GitHub returned an invalid commit history for ${repository.full_name}.`
+        `GitHub returned an invalid commit history for ${repository.full_name} (${branch.name}).`
       );
     }
-
     for (const commit of data) {
       const authoredAt = new Date(commit.commit?.author?.date);
       if (Number.isNaN(authoredAt.getTime())) {
@@ -249,7 +190,15 @@ for (const repository of repositories) {
   ) {
     throw new Error("GitHub returned a repository with invalid metadata.");
   }
-  await addRepositoryCommits(repository);
+  const branches = await getRepositoryBranches(repository);
+  for (const branch of branches) {
+    if (typeof branch.name !== "string" || !branch.name) {
+      throw new Error(
+        `GitHub returned a branch without a name for ${repository.full_name}.`
+      );
+    }
+    await addBranchCommits(repository, branch);
+  }
 }
 
 const years = yearsToFetch.map((year) => {
@@ -276,9 +225,6 @@ const years = yearsToFetch.map((year) => {
     daily,
   };
 });
-for (const yearData of years) {
-  Object.assign(yearData, await getContributionCalendar(yearData.year));
-}
 const total = years.reduce((sum, { commits }) => sum + commits, 0);
 
 let existing;

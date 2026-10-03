@@ -22,7 +22,7 @@ const query = `
       login
     }
     user(login: $login) {
-      contributionsCollection(from: $from, to: $to, includePrivate: true) {
+      contributionsCollection(from: $from, to: $to) {
         contributionCalendar {
           totalContributions
         }

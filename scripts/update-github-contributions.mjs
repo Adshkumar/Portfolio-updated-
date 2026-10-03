@@ -23,6 +23,7 @@ const query = `
     }
     user(login: $login) {
       contributionsCollection(from: $from, to: $to) {
+        restrictedContributionsCount
         contributionCalendar {
           totalContributions
         }
@@ -63,13 +64,22 @@ for (const year of yearsToFetch) {
     );
   }
 
-  const count =
-    result.data?.user?.contributionsCollection?.contributionCalendar
-      ?.totalContributions;
-  if (!Number.isSafeInteger(count) || count < 0) {
+  const collection = result.data?.user?.contributionsCollection;
+  const visibleContributions =
+    collection?.contributionCalendar?.totalContributions;
+  const restrictedContributions = collection?.restrictedContributionsCount;
+  if (
+    !Number.isSafeInteger(visibleContributions) ||
+    visibleContributions < 0 ||
+    !Number.isSafeInteger(restrictedContributions) ||
+    restrictedContributions < 0
+  ) {
     throw new Error(`GitHub returned an invalid contribution total for ${year}`);
   }
-  years.push({ year, contributions: count });
+  years.push({
+    year,
+    contributions: visibleContributions + restrictedContributions,
+  });
 }
 
 const total = years.reduce(

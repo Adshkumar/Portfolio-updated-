@@ -114,11 +114,11 @@ src/
 
 Update [`src/config/portfolio.js`](./src/config/portfolio.js) to change profile details, social links, experience, projects, achievements, and skills. Replace `public/Adarsh-Kumar-Resume.pdf` to publish a new resume.
 
-### GitHub contribution totals
+### GitHub commit totals
 
-The annual contribution card sums the previous and current calendar years using GitHub's contribution calendar and any additional restricted contributions the API reports. The `Sync GitHub contribution totals` workflow refreshes the counts every 15 minutes and deploys updated static data when the total changes.
+The Git Commits card counts unique commits authored by the GitHub account on accessible repositories' default branches for the previous and current calendar years. It uses authenticated GitHub repository and commit APIs, splitting the total by public/private repository visibility. This is a commit-only metric, not the broader contribution-calendar total (which also includes eligible issues, pull requests, and reviews). The `Sync GitHub commit totals` workflow refreshes the data every 15 minutes.
 
-To include private contributions in the profile calendar, enable **Include private contributions on my profile** and turn off **Make profile private and hide activity** in GitHub's profile settings. If GitHub returns zero while a previous nonzero total exists, the sync fails instead of replacing the last known good totals. Add a repository Actions secret named `CONTRIBUTIONS_TOKEN`, authenticated as `Adshkumar` and with **Contents: Read and write** access to this portfolio repository, so the workflow can retrieve and publish the data. Never put the token in the site code, a committed file, or a chat message. The workflow refreshes automatically every 15 minutes.
+Add a repository Actions secret named `CONTRIBUTIONS_TOKEN` using a token authenticated as `Adshkumar` with read access to every repository whose commits should count, including private repositories, and **Contents: Read and write** access to this portfolio repository so the workflow can publish updated data. Repository privacy does not need to be changed. Never put the token in the site code, a committed file, or a chat message. Commits in repositories the token cannot access will not be counted.
 
 ## Connect
 

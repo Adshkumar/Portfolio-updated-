@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-const CONTRIBUTIONS_URL = "/data/github-contributions.json";
+const COMMITS_URL = "/data/github-commits.json";
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-function isValidContributionData(data) {
+function isValidCommitData(data) {
   return (
     data &&
+    data.metric === "repository-commits" &&
     Number.isSafeInteger(data.total) &&
     data.total >= 0 &&
     Array.isArray(data.years) &&
@@ -15,44 +16,53 @@ function isValidContributionData(data) {
     data.years.every(
       ({
         year,
-        contributions,
-        calendarContributions,
-        restrictedContributions,
+        commits,
+        publicCommits,
+        privateCommits,
       }) =>
         Number.isInteger(year) &&
-        Number.isSafeInteger(contributions) &&
-        contributions >= 0 &&
-        Number.isSafeInteger(calendarContributions) &&
-        calendarContributions >= 0 &&
-        Number.isSafeInteger(restrictedContributions) &&
-        restrictedContributions >= 0 &&
-        contributions === calendarContributions + restrictedContributions
+        Number.isSafeInteger(commits) &&
+        commits >= 0 &&
+        Number.isSafeInteger(publicCommits) &&
+        publicCommits >= 0 &&
+        Number.isSafeInteger(privateCommits) &&
+        privateCommits >= 0 &&
+        commits === publicCommits + privateCommits
     ) &&
     data.years[1].year === data.years[0].year + 1 &&
     data.total ===
-      data.years.reduce((total, { contributions }) => total + contributions, 0)
+      data.years.reduce((total, { commits }) => total + commits, 0)
   );
 }
 
 function needsInitialSync(data) {
   return (
-    data?.total === null &&
-    Array.isArray(data.years) &&
-    data.years.length === 0
+    (data?.total === null &&
+      data.metric === "repository-commits" &&
+      Array.isArray(data.years) &&
+      data.years.length === 0) ||
+    (data?.metric !== "repository-commits" &&
+      Number.isSafeInteger(data?.total) &&
+      Array.isArray(data?.years) &&
+      data.years.every(({ year, contributions }) =>
+        Number.isInteger(year) &&
+        Number.isSafeInteger(contributions) &&
+        contributions >= 0
+      ))
   );
 }
 
 export default function GitCommitCount() {
-  const [contributions, setContributions] = useState(null);
+  const [commitData, setCommitData] = useState(null);
   const [unavailable, setUnavailable] = useState(false);
-  const [setupRequired, setSetupRequired] = useState(false);
+  const [syncPending, setSyncPending] = useState(true);
 
   useEffect(() => {
     let active = true;
     let controller;
     let refreshTimeout;
 
-    const refreshContributions = async () => {
+    const refreshCommitData = async () => {
       clearTimeout(refreshTimeout);
       controller?.abort();
       const requestController = new AbortController();
@@ -60,43 +70,43 @@ export default function GitCommitCount() {
 
       try {
         const response = await fetch(
-          `${CONTRIBUTIONS_URL}?refresh=${Date.now()}`,
+          `${COMMITS_URL}?refresh=${Date.now()}`,
           {
             cache: "no-store",
             signal: requestController.signal,
           }
         );
         if (!response.ok) {
-          throw new Error(`Contribution data returned HTTP ${response.status}`);
+          throw new Error(`Commit data returned HTTP ${response.status}`);
         }
 
         const data = await response.json();
         if (needsInitialSync(data)) {
           if (active) {
-            setContributions(null);
-            setSetupRequired(true);
+            setCommitData(null);
+            setSyncPending(true);
             setUnavailable(false);
           }
           return;
         }
-        if (!isValidContributionData(data)) {
-          throw new Error("Contribution data has not been synced or is invalid");
+        if (!isValidCommitData(data)) {
+          throw new Error("Commit data has not been synced or is invalid");
         }
 
         if (active) {
-          setContributions(data);
-          setSetupRequired(false);
+          setCommitData(data);
+          setSyncPending(false);
           setUnavailable(false);
         }
       } catch (error) {
         if (active && error.name !== "AbortError") {
-          console.error("Unable to retrieve GitHub contribution totals:", error);
+          console.error("Unable to retrieve GitHub commit totals:", error);
           setUnavailable(true);
         }
       } finally {
         if (active && !requestController.signal.aborted) {
           refreshTimeout = window.setTimeout(
-            refreshContributions,
+            refreshCommitData,
             REFRESH_INTERVAL
           );
         }
@@ -104,10 +114,10 @@ export default function GitCommitCount() {
     };
 
     const refreshWhenVisible = () => {
-      if (document.visibilityState === "visible") refreshContributions();
+      if (document.visibilityState === "visible") refreshCommitData();
     };
 
-    refreshContributions();
+    refreshCommitData();
     document.addEventListener("visibilitychange", refreshWhenVisible);
 
     return () => {
@@ -119,15 +129,20 @@ export default function GitCommitCount() {
   }, []);
 
   const currentYear = new Date().getUTCFullYear();
-  const yearRange = contributions
-    ? `${contributions.years[0].year}–${contributions.years[1].year}`
+  const yearRange = commitData
+    ? `${commitData.years[0].year}–${commitData.years[1].year}`
     : `${currentYear - 1}–${currentYear}`;
-  const description = contributions
-    ? `${contributions.total.toLocaleString()} GitHub contributions from ${contributions.years[0].year} and ${contributions.years[1].year}`
-    : "GitHub contributions for the previous and current calendar years";
-  const restrictedContributions =
-    contributions?.years.reduce(
-      (total, { restrictedContributions: count }) => total + count,
+  const description = commitData
+    ? `${commitData.total.toLocaleString()} repository commits from ${commitData.years[0].year} and ${commitData.years[1].year}`
+    : "Repository commits for the previous and current calendar years";
+  const publicCommits =
+    commitData?.years.reduce(
+      (total, { publicCommits: count }) => total + count,
+      0
+    ) ?? 0;
+  const privateCommits =
+    commitData?.years.reduce(
+      (total, { privateCommits: count }) => total + count,
       0
     ) ?? 0;
 
@@ -136,29 +151,29 @@ export default function GitCommitCount() {
       <span
         className="statNumber"
         aria-label={
-          contributions
+          commitData
             ? description
-            : "Waiting for GitHub contribution data"
+            : "Waiting for GitHub commit data"
         }
         aria-live="polite"
       >
-        {contributions ? contributions.total.toLocaleString() : "—"}
+        {commitData ? commitData.total.toLocaleString() : "—"}
       </span>
       <span
         className="statLabel"
         title={
-          setupRequired
-            ? "Add the CONTRIBUTIONS_TOKEN Actions secret to enable private contribution totals"
-            : unavailable && contributions
-              ? "Showing the last successful sync; check the GitHub Actions contribution sync"
+          syncPending
+            ? "Waiting for the first commit-only sync. GitHub Actions will count public and private repositories accessible to CONTRIBUTIONS_TOKEN."
+            : unavailable && commitData
+              ? "Showing the last successful sync; check the GitHub Actions commit sync"
               : unavailable
-                ? "Contribution totals are unavailable; check the GitHub Actions sync and public data file"
-                : restrictedContributions > 0
-                  ? `Includes ${restrictedContributions.toLocaleString()} restricted contributions reported by GitHub`
-                    : "GitHub reports no additional restricted contributions. Keep “Include private contributions on my profile” enabled and turn off “Make profile private and hide activity” so GitHub can share your contribution activity."
+                ? "Commit totals are unavailable; check the GitHub Actions sync, token permissions, and public data file"
+                : privateCommits > 0
+                  ? `${publicCommits.toLocaleString()} public + ${privateCommits.toLocaleString()} private repository commits`
+                  : `${publicCommits.toLocaleString()} public commits; no commits were returned from private repositories accessible to the sync token`
         }
       >
-        {yearRange} Contributions{setupRequired ? " · setup required" : ""}
+        {yearRange} Git Commits{syncPending ? " · sync pending" : ""}
       </span>
     </>
   );

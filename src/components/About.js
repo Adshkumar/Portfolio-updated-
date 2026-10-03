@@ -50,7 +50,7 @@ export default function About() {
         {aboutStats.map((stat, i) => {
           const inner = (
             <>
-              {stat.liveCount === "github-contributions" ? (
+              {stat.liveCount === "github-commits" ? (
                 <GitCommitCount />
               ) : (
                 <>

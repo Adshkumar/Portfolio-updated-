@@ -55,7 +55,7 @@ A mobile-first finance application concept designed to make everyday financial a
 - **A live activity view:** GitHub activity in light mode and a daily GitHub/LeetCode rotation in dark mode, with recent data cached for quicker repeat visits.
 - **A direct introduction:** the current resume is available from the portfolio’s hero section and navigation dock.
 
-> **Activity data note:** Public GitHub data does not expose private daily contribution counts. The 2026 GitHub daily values shown in the portfolio are estimates based on public activity and the supplied calendar pattern; they are not an exact record of private contributions. LeetCode activity depends on the availability and freshness of its public calendar service.
+> **Activity data note:** Public GitHub data does not expose private daily contribution counts. The 2026 GitHub daily values shown in the portfolio are estimates based on public activity and the supplied calendar pattern; they are not an exact record of private contributions. The annual GitHub Contributions card is synced separately from GitHub's authenticated contribution calendar for the previous and current calendar years. LeetCode activity depends on the availability and freshness of its public calendar service.
 
 ## Tech Stack
 
@@ -113,6 +113,12 @@ src/
 ## Updating the Portfolio
 
 Update [`src/config/portfolio.js`](./src/config/portfolio.js) to change profile details, social links, experience, projects, achievements, and skills. Replace `public/Adarsh-Kumar-Resume.pdf` to publish a new resume.
+
+### GitHub contribution totals
+
+The annual contribution card sums the previous and current calendar years, including private activity visible to the authenticated GitHub account. The `Sync GitHub contribution totals` workflow refreshes the counts every 15 minutes and deploys updated static data when the total changes.
+
+To enable private contributions, add a repository Actions secret named `CONTRIBUTIONS_TOKEN`. Use a GitHub token authenticated as `Adshkumar`, authorized to read the account's private contribution data, and with **Contents: Read and write** access to this portfolio repository, so the workflow can retrieve the totals and publish the updated JSON. Never put the token in the site code, a committed file, or a chat message. Run the workflow once from the Actions tab after adding the secret.
 
 ## Connect
 

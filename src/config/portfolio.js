@@ -75,9 +75,9 @@ export const navLinks = [
 export const aboutStats = [
   // { number: "2+", label: "Years of Experience", link: "https://github.com/Adshkumar" },
   {
-    number: "400+",
-    label: "Git Commits",
-    link: "https://github.com/search?q=author%3AAdshkumar&utm_source=chatgpt.com&type=commits",
+    liveCount: "github-contributions",
+    label: "GitHub Contributions",
+    link: "https://github.com/Adshkumar?tab=overview",
   },
   { number: "1", label: "Certification", link: null },
 ];

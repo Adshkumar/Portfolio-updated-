@@ -1,0 +1,60 @@
+name: Sync GitHub contribution totals
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-github-contributions.yml"
+      - "scripts/update-github-contributions.mjs"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-contribution-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch authenticated contribution totals
+        run: node scripts/update-github-contributions.mjs
+        env:
+          CONTRIBUTIONS_TOKEN: ${{ secrets.CONTRIBUTIONS_TOKEN }}
+          GITHUB_LOGIN: Adshkumar
+
+      - name: Commit updated totals
+        id: update
+        run: |
+          if git diff --quiet -- public/data/github-contributions.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/github-contributions.json
+          git commit -m "Update GitHub contribution totals" -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push updated totals
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.CONTRIBUTIONS_TOKEN }}
+        run: |
+          gh auth setup-git
+          git push origin HEAD:main

@@ -1,3 +1,4 @@
+import GitCommitCount from "@/components/GitCommitCount";
 import { aboutStats, education } from "@/config/portfolio";
 
 export default function About() {
@@ -49,8 +50,14 @@ export default function About() {
         {aboutStats.map((stat, i) => {
           const inner = (
             <>
-              <span className="statNumber">{stat.number}</span>
-              <span className="statLabel">{stat.label}</span>
+              {stat.liveCount === "github-contributions" ? (
+                <GitCommitCount />
+              ) : (
+                <>
+                  <span className="statNumber">{stat.number}</span>
+                  <span className="statLabel">{stat.label}</span>
+                </>
+              )}
             </>
           );
           return stat.link ? (

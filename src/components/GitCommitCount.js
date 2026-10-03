@@ -16,17 +16,17 @@ function isValidContributionData(data) {
       ({
         year,
         contributions,
-        publicContributions,
+        calendarContributions,
         restrictedContributions,
       }) =>
         Number.isInteger(year) &&
         Number.isSafeInteger(contributions) &&
         contributions >= 0 &&
-        Number.isSafeInteger(publicContributions) &&
-        publicContributions >= 0 &&
+        Number.isSafeInteger(calendarContributions) &&
+        calendarContributions >= 0 &&
         Number.isSafeInteger(restrictedContributions) &&
         restrictedContributions >= 0 &&
-        contributions === publicContributions + restrictedContributions
+        contributions === calendarContributions + restrictedContributions
     ) &&
     data.years[1].year === data.years[0].year + 1 &&
     data.total ===
@@ -155,7 +155,7 @@ export default function GitCommitCount() {
                 ? "Contribution totals are unavailable; check the GitHub Actions sync and public data file"
                 : restrictedContributions > 0
                   ? `Includes ${restrictedContributions.toLocaleString()} restricted contributions reported by GitHub`
-                  : "GitHub reports no restricted contributions. If you expect private activity to count, enable “Include private contributions” in GitHub profile settings."
+                    : "GitHub reports no additional restricted contributions. Keep “Include private contributions on my profile” enabled and turn off “Make profile private and hide activity” so GitHub can share your contribution activity."
         }
       >
         {yearRange} Contributions{setupRequired ? " · setup required" : ""}

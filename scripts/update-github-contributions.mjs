@@ -79,7 +79,7 @@ for (const year of yearsToFetch) {
   years.push({
     year,
     contributions: visibleContributions + restrictedContributions,
-    publicContributions: visibleContributions,
+    calendarContributions: visibleContributions,
     restrictedContributions,
   });
 }

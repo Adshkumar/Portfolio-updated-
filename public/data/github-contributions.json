@@ -3,13 +3,13 @@
     {
       "year": 2025,
       "contributions": 27,
-      "publicContributions": 27,
+      "calendarContributions": 27,
       "restrictedContributions": 0
     },
     {
       "year": 2026,
       "contributions": 172,
-      "publicContributions": 172,
+      "calendarContributions": 172,
       "restrictedContributions": 0
     }
   ],

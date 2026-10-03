@@ -116,7 +116,7 @@ Update [`src/config/portfolio.js`](./src/config/portfolio.js) to change profile 
 
 ### GitHub commit totals
 
-The Git Commits card counts unique commits authored by the GitHub account on accessible repositories' default branches for the previous and current calendar years. It uses authenticated GitHub repository and commit APIs, splitting the total by public/private repository visibility. This is a commit-only metric, not the broader contribution-calendar total (which also includes eligible issues, pull requests, and reviews). The `Sync GitHub commit totals` workflow refreshes the data every 15 minutes.
+The Git Commits card and Activity calendar count unique commits authored by the GitHub account on accessible repositories' default branches for the previous and current calendar years. They use authenticated GitHub repository and commit APIs, splitting the total by public/private repository visibility. This is a commit-only metric, not the broader contribution-calendar total (which also includes eligible issues, pull requests, and reviews). The `Sync GitHub commit totals` workflow refreshes the data every 15 minutes.
 
 Add a repository Actions secret named `CONTRIBUTIONS_TOKEN` using a token authenticated as `Adshkumar` with read access to every repository whose commits should count, including private repositories, and **Contents: Read and write** access to this portfolio repository so the workflow can publish updated data. Repository privacy does not need to be changed. Never put the token in the site code, a committed file, or a chat message. Commits in repositories the token cannot access will not be counted.
 

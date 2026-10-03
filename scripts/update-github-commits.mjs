@@ -22,6 +22,7 @@ const yearCounts = new Map(
     {
       public: new Set(),
       private: new Set(),
+      daily: new Map(),
     },
   ])
 );
@@ -126,12 +127,21 @@ async function addRepositoryCommits(repository) {
       }
 
       const visibility = repository.private ? "private" : "public";
+      const date = authoredAt.toISOString().slice(0, 10);
+      const day = counts.daily.get(date) || {
+        public: new Set(),
+        private: new Set(),
+      };
       if (visibility === "public") {
         counts.public.add(commit.sha);
         counts.private.delete(commit.sha);
+        day.public.add(commit.sha);
+        day.private.delete(commit.sha);
       } else if (!counts.public.has(commit.sha)) {
         counts.private.add(commit.sha);
+        day.private.add(commit.sha);
       }
+      counts.daily.set(date, day);
     }
 
     url = nextPage(linkHeader);
@@ -155,11 +165,24 @@ const years = yearsToFetch.map((year) => {
   const counts = yearCounts.get(year);
   const publicCommits = counts.public.size;
   const privateCommits = counts.private.size;
+  const daily = [...counts.daily.entries()]
+    .map(([date, day]) => {
+      const publicDailyCommits = day.public.size;
+      const privateDailyCommits = day.private.size;
+      return {
+        date,
+        commits: publicDailyCommits + privateDailyCommits,
+        publicCommits: publicDailyCommits,
+        privateCommits: privateDailyCommits,
+      };
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
   return {
     year,
     commits: publicCommits + privateCommits,
     publicCommits,
     privateCommits,
+    daily,
   };
 });
 const total = years.reduce((sum, { commits }) => sum + commits, 0);

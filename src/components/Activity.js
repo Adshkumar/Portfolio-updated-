@@ -2,24 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-const CONTRIBUTIONS_API =
-  "https://github-contributions-api.jogruber.de/v4/Adshkumar";
+const COMMITS_API = "/data/github-commits.json";
 const LEETCODE_CALENDAR_API =
   "https://alfa-leetcode-api.onrender.com/Adarsh_kumar62041/calendar";
 const CONTRIBUTIONS_REFRESH_INTERVAL = 5 * 60 * 1000;
-const ACTIVITY_CACHE_PREFIX = "portfolio-activity-v1";
-const REFERENCE_DISPLAY_TOTAL = 311;
-const REFERENCE_PUBLIC_TOTAL = 95;
-const REFERENCE_YEAR = 2026;
-const REFERENCE_LEVELS = [
-  "00200000000003000000200200222000202232220000000000000",
-  "00000000000000000000000022220000000022320000000000000",
-  "00000000030024022000000022220002000322320000000000000",
-  "00000000030004002000000040220000202202420000000000000",
-  "30000000000000000000000022002002000200220000000000000",
-  "00000000020220000000000322022000222200220000000000000",
-  "00000000000220400002000222200002002022200000000000000",
-];
+const ACTIVITY_CACHE_PREFIX = "portfolio-activity-v2";
 const WEEKDAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""];
 const MONTH_LABELS = [
   "Jan",
@@ -35,74 +22,6 @@ const MONTH_LABELS = [
   "Nov",
   "Dec",
 ];
-
-function getReferenceLevel(date, year) {
-  if (year !== REFERENCE_YEAR) {
-    return 0;
-  }
-
-  const firstDay = new Date(year, 0, 1);
-  firstDay.setDate(firstDay.getDate() - firstDay.getDay());
-  const dayOffset = Math.round(
-    (new Date(`${date}T00:00:00`) - firstDay) / (24 * 60 * 60 * 1000)
-  );
-  const week = Math.floor(dayOffset / 7);
-  const dayOfWeek = dayOffset % 7;
-
-  return Number(REFERENCE_LEVELS[dayOfWeek]?.[week] || 0);
-}
-
-function estimateContributions(contributions, year, publicTotal) {
-  if (year !== REFERENCE_YEAR) {
-    return { total: publicTotal, contributions };
-  }
-
-  const targetTotal = Math.max(
-    REFERENCE_DISPLAY_TOTAL,
-    REFERENCE_DISPLAY_TOTAL + publicTotal - REFERENCE_PUBLIC_TOTAL,
-    contributions.reduce((sum, day) => sum + day.count, 0)
-  );
-  const weightedDays = contributions.map((day, index) => {
-    const referenceLevel = getReferenceLevel(day.date, year);
-    const referenceWeight = [0, 1, 2, 4, 7][referenceLevel];
-
-    return {
-      ...day,
-      level: referenceLevel || day.level,
-      exactCount: day.count + referenceWeight,
-      index,
-    };
-  });
-  const totalWeight = weightedDays.reduce(
-    (sum, day) => sum + day.exactCount,
-    0
-  );
-  const estimated = weightedDays.map((day) => {
-    const exactCount = (day.exactCount / totalWeight) * targetTotal;
-    const count = Math.floor(exactCount);
-
-    return {
-      ...day,
-      count,
-      remainder: exactCount - count,
-    };
-  });
-  const remaining = targetTotal - estimated.reduce((sum, day) => sum + day.count, 0);
-
-  [...estimated]
-    .sort((a, b) => b.remainder - a.remainder || a.index - b.index)
-    .slice(0, remaining)
-    .forEach(({ index }) => {
-      estimated[index].count += 1;
-    });
-
-  return {
-    total: estimated.reduce((sum, day) => sum + day.count, 0),
-    contributions: estimated.map(
-      ({ remainder, exactCount, index, ...day }) => day
-    ),
-  };
-}
 
 function getCalendarWeeks(year, contributions) {
   const contributionsByDate = new Map(
@@ -231,6 +150,14 @@ function getLeetCodeLevel(count) {
   return 4;
 }
 
+function getGitHubCommitLevel(count) {
+  if (count === 0) return 0;
+  if (count === 1) return 1;
+  if (count <= 3) return 2;
+  if (count <= 6) return 3;
+  return 4;
+}
+
 function getLocalDateKey(date) {
   return [
     date.getFullYear(),
@@ -295,39 +222,58 @@ export default function Activity({ theme = "dark" }) {
 
       try {
         const response = await fetch(
-          `${CONTRIBUTIONS_API}?y=${year}`,
-          { signal: controller.signal }
+          `${COMMITS_API}?refresh=${Date.now()}`,
+          { cache: "no-store", signal: controller.signal }
         );
 
         if (!response.ok) {
           throw new Error(
-            `GitHub contributions request failed (${response.status}).`
+            `GitHub commit data request failed (${response.status}).`
           );
         }
 
         const result = await response.json();
+        const yearData = result.years?.find(
+          (yearEntry) => yearEntry.year === year
+        );
         if (
-          !Array.isArray(result.contributions) ||
-          typeof result.total?.[year] !== "number"
+          result.metric !== "repository-commits" ||
+          !Array.isArray(yearData?.daily) ||
+          !Number.isSafeInteger(yearData.commits) ||
+          yearData.daily.some(
+            ({ date, commits, publicCommits, privateCommits }) =>
+              typeof date !== "string" ||
+              !date.startsWith(`${year}-`) ||
+              !Number.isSafeInteger(commits) ||
+              commits < 0 ||
+              !Number.isSafeInteger(publicCommits) ||
+              publicCommits < 0 ||
+              !Number.isSafeInteger(privateCommits) ||
+              privateCommits < 0 ||
+              commits !== publicCommits + privateCommits
+          ) ||
+          yearData.commits !==
+            yearData.daily.reduce((total, day) => total + day.commits, 0)
         ) {
-          throw new Error("GitHub contributions response was incomplete.");
+          throw new Error("GitHub commit data response was incomplete.");
         }
 
         if (!disposed) {
+          const contributions = yearData.daily.map(({ date, commits }) => ({
+            date,
+            count: commits,
+            level: getGitHubCommitLevel(commits),
+          }));
           saveActivityData({
             platform: "github",
-            ...estimateContributions(
-              result.contributions,
-              year,
-              result.total[year]
-            ),
-            isEstimated: year === REFERENCE_YEAR,
+            total: yearData.commits,
+            contributions,
           });
           setError("");
         }
       } catch (loadError) {
         if (!disposed && loadError.name !== "AbortError") {
-          setError("GitHub contributions could not be refreshed.");
+          setError("GitHub commits could not be refreshed.");
         }
       }
     }
@@ -402,7 +348,6 @@ export default function Activity({ theme = "dark" }) {
             platform: "leetcode",
             total,
             contributions,
-            isEstimated: false,
           });
           setError("");
         }
@@ -485,24 +430,17 @@ export default function Activity({ theme = "dark" }) {
         ) : visibleContributionData ? (
           <>
             <div className="contributionHeader">
-              <p
-                className="contributionSummary"
-                title={
-                  visibleContributionData.isEstimated
-                    ? "Daily counts are estimates distributed to match the supplied 2026 contribution calendar."
-                    : undefined
-                }
-              >
+              <p className="contributionSummary">
                 {visibleContributionData.platform === "leetcode"
                   ? `${visibleContributionData.total} submissions in the past one year`
-                  : `${visibleContributionData.total} contributions in ${year}`}
+                  : `${visibleContributionData.total} commits in ${year}`}
               </p>
               <a
                 className="contributionSettings"
                 href={
                   visibleContributionData.platform === "leetcode"
                     ? "https://leetcode.com/u/Adarsh_kumar62041/"
-                    : "https://github.com/Adshkumar?tab=overview"
+                    : "https://github.com/search?q=owner%3AAdshkumar+commits&type=commits"
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -538,7 +476,7 @@ export default function Activity({ theme = "dark" }) {
                   aria-label={
                     visibleContributionData.platform === "leetcode"
                       ? "LeetCode submissions in the past year"
-                      : `GitHub contributions in ${year}`
+                      : `GitHub commits in ${year}`
                   }
                 >
                   {weeks.map((week, weekIndex) => (
@@ -553,8 +491,8 @@ export default function Activity({ theme = "dark" }) {
                             className="contributionDay"
                             data-level={day.level}
                             role="gridcell"
-                            aria-label={`${day.count}${visibleContributionData.isEstimated ? " estimated" : ""} ${visibleContributionData.platform === "leetcode" ? "submissions" : "contributions"} on ${day.date}`}
-                            title={`${day.count}${visibleContributionData.isEstimated ? " estimated" : ""} ${visibleContributionData.platform === "leetcode" ? "submissions" : "contributions"} on ${day.date}`}
+                            aria-label={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "commits"} on ${day.date}`}
+                            title={`${day.count} ${visibleContributionData.platform === "leetcode" ? "submissions" : "commits"} on ${day.date}`}
                             key={day.date}
                           />
                         ) : (
@@ -580,17 +518,10 @@ export default function Activity({ theme = "dark" }) {
                 }
                 target="_blank"
                 rel="noreferrer"
-                title={
-                  visibleContributionData.isEstimated
-                    ? "Daily counts are estimated using public GitHub data and the supplied 2026 calendar pattern."
-                    : undefined
-                }
               >
-                {visibleContributionData.isEstimated
-                  ? "Estimated daily counts · Learn how we count contributions"
-                  : visibleContributionData.platform === "leetcode"
-                    ? "LeetCode submissions"
-                    : "Learn how we count contributions"}
+                {visibleContributionData.platform === "leetcode"
+                  ? "LeetCode submissions"
+                  : "GitHub commits across public and private repositories"}
               </a>
               <div
                 className="contributionLegend"
@@ -614,7 +545,7 @@ export default function Activity({ theme = "dark" }) {
             Loading{" "}
             {platform === "leetcode"
               ? "LeetCode submissions"
-              : `${year} GitHub contributions`}
+              : `${year} GitHub commits`}
             ...
           </p>
         )}

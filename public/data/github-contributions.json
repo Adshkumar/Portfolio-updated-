@@ -2,11 +2,15 @@
   "years": [
     {
       "year": 2025,
-      "contributions": 27
+      "contributions": 27,
+      "publicContributions": 27,
+      "restrictedContributions": 0
     },
     {
       "year": 2026,
-      "contributions": 171
+      "contributions": 171,
+      "publicContributions": 171,
+      "restrictedContributions": 0
     }
   ],
   "total": 198,

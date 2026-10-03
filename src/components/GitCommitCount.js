@@ -13,10 +13,20 @@ function isValidContributionData(data) {
     Array.isArray(data.years) &&
     data.years.length === 2 &&
     data.years.every(
-      ({ year, contributions }) =>
+      ({
+        year,
+        contributions,
+        publicContributions,
+        restrictedContributions,
+      }) =>
         Number.isInteger(year) &&
         Number.isSafeInteger(contributions) &&
-        contributions >= 0
+        contributions >= 0 &&
+        Number.isSafeInteger(publicContributions) &&
+        publicContributions >= 0 &&
+        Number.isSafeInteger(restrictedContributions) &&
+        restrictedContributions >= 0 &&
+        contributions === publicContributions + restrictedContributions
     ) &&
     data.years[1].year === data.years[0].year + 1 &&
     data.total ===
@@ -115,6 +125,11 @@ export default function GitCommitCount() {
   const description = contributions
     ? `${contributions.total.toLocaleString()} GitHub contributions from ${contributions.years[0].year} and ${contributions.years[1].year}`
     : "GitHub contributions for the previous and current calendar years";
+  const restrictedContributions =
+    contributions?.years.reduce(
+      (total, { restrictedContributions: count }) => total + count,
+      0
+    ) ?? 0;
 
   return (
     <>
@@ -138,7 +153,9 @@ export default function GitCommitCount() {
               ? "Showing the last successful sync; check the GitHub Actions contribution sync"
               : unavailable
                 ? "Contribution totals are unavailable; check the GitHub Actions sync and public data file"
-                : "Includes private contributions after the GitHub Actions token is configured"
+                : restrictedContributions > 0
+                  ? `Includes ${restrictedContributions.toLocaleString()} restricted contributions reported by GitHub`
+                  : "GitHub reports no restricted contributions. If you expect private activity to count, enable “Include private contributions” in GitHub profile settings."
         }
       >
         {yearRange} Contributions{setupRequired ? " · setup required" : ""}

@@ -47,8 +47,8 @@ function getCalendarWeeks(year, contributions) {
       const contribution = contributionsByDate.get(isoDate);
 
       week.push(
-        date.getFullYear() === year && contribution
-          ? { ...contribution, date: isoDate }
+        date.getFullYear() === year
+          ? contribution || { date: isoDate, count: 0, level: 0 }
           : null
       );
       cursor.setDate(cursor.getDate() + 1);

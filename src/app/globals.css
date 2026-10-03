@@ -502,7 +502,6 @@ strong {
 
 .contributionDayEmpty {
   background: transparent;
-  border: 1px solid var(--text-muted);
 }
 
 .contributionFooter {

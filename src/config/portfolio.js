@@ -77,7 +77,7 @@ export const aboutStats = [
   {
     liveCount: "github-commits",
     label: "Git Commits",
-    link: "https://github.com/Adshkumar?tab=overview",
+    link: "https://github.com/search?q=owner%3AAdshkumar+commits&type=commits",
   },
   { number: "1", label: "Certification", link: null },
 ];

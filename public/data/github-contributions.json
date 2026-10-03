@@ -1,5 +1,14 @@
 {
-  "years": [],
-  "total": null,
-  "updatedAt": null
+  "years": [
+    {
+      "year": 2025,
+      "contributions": 27
+    },
+    {
+      "year": 2026,
+      "contributions": 170
+    }
+  ],
+  "total": 197,
+  "updatedAt": "2026-10-03T07:39:28.730Z"
 }

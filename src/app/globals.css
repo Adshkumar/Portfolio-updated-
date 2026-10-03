@@ -157,10 +157,24 @@ strong {
 }
 
 .heroAvatar img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.heroAvatarLight {
+  display: none !important;
+}
+
+:root[data-theme="light"] .heroAvatarPhoto {
+  display: none !important;
+}
+
+:root[data-theme="light"] .heroAvatarLight {
+  display: block !important;
 }
 
 .heroAvatar:hover {
@@ -178,6 +192,50 @@ strong {
 .heroText {
   flex: 1;
   min-width: 0;
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 6px 11px 6px 8px;
+  border: 1px solid rgba(34, 211, 238, 0.24);
+  border-radius: 8px 999px 999px 8px;
+  background: linear-gradient(100deg, rgba(34, 211, 238, 0.1), rgba(34, 211, 238, 0.025));
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.heroEyebrowCursor {
+  display: inline-flex;
+  width: 19px;
+  height: 19px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.14);
+  color: #22d3ee;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  animation: heroPromptPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes heroPromptPulse {
+  50% {
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroEyebrowCursor {
+    animation: none;
+  }
 }
 
 .heroName {
@@ -210,6 +268,34 @@ strong {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+@media (max-width: 480px) {
+  .hero {
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .heroMain {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .heroAvatar {
+    width: 104px;
+    height: 104px;
+    margin-top: 0;
+  }
+
+  .heroText {
+    width: 100%;
+  }
+
+  .heroActions {
+    align-self: flex-start;
+    gap: 8px;
+  }
 }
 
 .heroResume {
@@ -953,69 +1039,161 @@ a.cred:hover {
   font-weight: 600;
 }
 
-.caseStudyArchitecture {
+.caseStudyArchitectureMap {
   display: grid;
-  gap: 0;
+  gap: 14px;
   margin-top: 18px;
 }
 
-.caseStudyArchitectureNode {
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-  padding: 14px;
+.caseStudyArchitectureTier {
+  overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 10px;
+  background: var(--bg-elev);
+}
+
+.caseStudyArchitectureTierHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
 
-.caseStudyArchitectureIndex {
+.caseStudyArchitectureTierHeading > span {
   display: inline-flex;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: var(--surface-hover);
-  color: var(--text);
+  border-radius: 7px;
+  background: rgba(34, 211, 238, 0.12);
+  color: #22d3ee;
   font-size: 0.68rem;
   font-weight: 700;
 }
 
-.caseStudyArchitectureNode strong,
-.caseStudyArchitectureNode div > span {
+.caseStudyArchitectureTierHeading strong,
+.caseStudyArchitectureTierHeading small {
   display: block;
 }
 
-.caseStudyArchitectureNode strong {
+.caseStudyArchitectureTierHeading strong {
   color: var(--text);
-  font-size: 0.86rem;
+  font-size: 0.83rem;
   font-weight: 650;
 }
 
-.caseStudyArchitectureNode div > span {
-  margin-top: 3px;
+.caseStudyArchitectureTierHeading small {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.caseStudyArchitecturePath {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 14px;
+}
+
+.caseStudyArchitectureNode {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.caseStudyArchitectureNode > span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 0.57rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+}
+
+.caseStudyArchitectureNode strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.caseStudyArchitectureNode small {
+  display: block;
+  margin-top: 5px;
   color: var(--text-secondary);
-  font-size: 0.77rem;
-  line-height: 1.55;
+  font-size: 0.65rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .caseStudyArchitectureArrow {
   display: flex;
-  min-height: 34px;
+  max-width: 62px;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding-left: 22px;
+  gap: 4px;
   color: var(--text-muted);
+  text-align: center;
 }
 
 .caseStudyArchitectureArrow i {
+  color: #22d3ee;
   font-size: 0.72rem;
 }
 
-.caseStudyArchitectureArrow span {
-  font-size: 0.68rem;
+.caseStudyArchitectureArrow small {
+  font-size: 0.58rem;
+  line-height: 1.35;
+}
+
+.caseStudyArchitectureBranches {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.caseStudyArchitectureBranch {
+  display: grid;
+  grid-template-columns: minmax(112px, 0.7fr) minmax(0, 2fr);
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.caseStudyArchitectureBranchLabel {
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.caseStudyArchitectureBranchPath {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.caseStudyArchitectureBranchPath span {
+  color: var(--text-secondary);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.caseStudyArchitectureBranchPath i {
+  color: #22d3ee;
+  font-size: 0.65rem;
 }
 
 .caseStudyIntegrationGrid,
@@ -1385,6 +1563,43 @@ a.cred:hover {
     grid-template-columns: 1fr;
   }
 
+  .caseStudyArchitecturePath {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .caseStudyArchitectureArrow {
+    max-width: none;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .caseStudyArchitectureArrow i,
+  .caseStudyArchitectureBranchPath i {
+    transform: rotate(90deg);
+  }
+
+  .caseStudyArchitectureBranch {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .caseStudyArchitectureBranchPath {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+    gap: 5px;
+  }
+
+  .caseStudyArchitectureBranchPath span {
+    padding: 7px 8px;
+    border-radius: 6px;
+    background: var(--bg-elev);
+  }
+
+  .caseStudyArchitectureBranchPath i {
+    justify-self: center;
+  }
+
   .caseStudyFlow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1689,6 +1904,30 @@ a.cred:hover {
 .achLink:hover {
   text-decoration-color: var(--text);
   color: var(--text);
+}
+
+@media (max-width: 480px) {
+  .achItem {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .achRank {
+    align-self: flex-start;
+  }
+
+  .achBody {
+    width: 100%;
+  }
+
+  .achDesc {
+    line-height: 1.55;
+  }
+
+  .achLink {
+    display: inline-block;
+    margin-top: 2px;
+  }
 }
 
 /* ===== Skills ===== */

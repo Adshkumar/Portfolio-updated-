@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import {
   codingProfiles,
@@ -112,8 +113,8 @@ export default function Navbar({ theme, onToggleTheme }) {
           boxShadow: `0 0 12px ${hexToRgba(highlight.color, 0.25)}`,
         }}
       />
-      <a
-        href="#home"
+      <Link
+        href="/#home"
         className={`dockItem${hoveredIndex === homeIdx ? " isActive" : ""}`}
         aria-label="Home"
         ref={registerItem(homeIdx, hoverColors.home)}
@@ -122,7 +123,7 @@ export default function Navbar({ theme, onToggleTheme }) {
         style={activeStyle(homeIdx, "home")}
       >
         <i className="fas fa-home"></i>
-      </a>
+      </Link>
       <a
         href={siteConfig.resumeLink}
         target="_blank"

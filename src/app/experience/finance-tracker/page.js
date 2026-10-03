@@ -3,25 +3,6 @@ import Hero from "@/components/Hero";
 import ThemeNavbar from "@/components/ThemeNavbar";
 import Link from "next/link";
 
-const architectureLayers = [
-  {
-    title: "Expo mobile client",
-    detail: "Expo Router screens · React Native · native camera, audio and sharing",
-  },
-  {
-    title: "Identity and app services",
-    detail: "Clerk sign-in · TanStack Query · typed service and validation layers",
-  },
-  {
-    title: "Supabase platform",
-    detail: "PostgreSQL · Row Level Security · Realtime · database APIs",
-  },
-  {
-    title: "Background integrations",
-    detail: "Gemini AI · scheduled Edge Functions · Resend email · Expo Push",
-  },
-];
-
 const productAreas = [
   {
     title: "1. Onboarding and identity",
@@ -206,34 +187,101 @@ export default function FinanceTrackerCaseStudy() {
           <section className="caseStudySection" aria-labelledby="architecture">
             <h2 id="architecture">System architecture</h2>
             <p>
-              The native client handles interactive flows and authenticated
-              queries. Supabase is the application data boundary; scheduled
-              jobs and webhooks run separately from the app process.
+              Start with the normal save path, then follow the supporting AI,
+              live-update, and background-job flows. Supabase is the
+              application data boundary; scheduled jobs and webhooks run
+              separately from the app process.
             </p>
             <div
-              className="caseStudyArchitecture"
+              className="caseStudyArchitectureMap"
               role="img"
-              aria-label="Architecture flow from Expo mobile client to Clerk identity and app services, to Supabase PostgreSQL with row-level security and realtime, and to Gemini and scheduled Edge Function integrations"
+              aria-label="Basic transaction flow: user enters data in the Expo app, app services validate it and attach Clerk identity, Supabase checks access using row-level security, then PostgreSQL stores it. Advanced flows: the app sends AI requests to Gemini for user review; PostgreSQL changes reach the active app over Realtime; scheduled jobs and database webhooks invoke Edge Functions for email and push notifications."
             >
-              {architectureLayers.map((layer, index) => (
-                <div className="caseStudyArchitectureStep" key={layer.title}>
+              <div className="caseStudyArchitectureTier">
+                <div className="caseStudyArchitectureTierHeading">
+                  <span>01</span>
+                  <div>
+                    <strong>Basic · saving a transaction</strong>
+                    <small>The app&apos;s standard, secure read/write path</small>
+                  </div>
+                </div>
+                <div className="caseStudyArchitecturePath">
                   <div className="caseStudyArchitectureNode">
-                    <span className="caseStudyArchitectureIndex">
-                      0{index + 1}
-                    </span>
-                    <div>
-                      <strong>{layer.title}</strong>
-                      <span>{layer.detail}</span>
+                    <span>CLIENT</span>
+                    <strong>Expo app</strong>
+                    <small>Screen · form · camera · voice</small>
+                  </div>
+                  <div className="caseStudyArchitectureArrow">
+                    <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                    <small>validate + authenticate</small>
+                  </div>
+                  <div className="caseStudyArchitectureNode">
+                    <span>APP LOGIC</span>
+                    <strong>App services</strong>
+                    <small>React Hook Form · Zod · TanStack Query · Clerk</small>
+                  </div>
+                  <div className="caseStudyArchitectureArrow">
+                    <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                    <small>JWT-scoped request</small>
+                  </div>
+                  <div className="caseStudyArchitectureNode">
+                    <span>ACCESS CONTROL</span>
+                    <strong>Supabase API + RLS</strong>
+                    <small>Policies check who can read or write each row</small>
+                  </div>
+                  <div className="caseStudyArchitectureArrow">
+                    <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                    <small>authorized query</small>
+                  </div>
+                  <div className="caseStudyArchitectureNode">
+                    <span>DATA</span>
+                    <strong>PostgreSQL</strong>
+                    <small>Transactions · accounts · budgets · groups</small>
+                  </div>
+                </div>
+              </div>
+
+              <div className="caseStudyArchitectureTier">
+                <div className="caseStudyArchitectureTierHeading">
+                  <span>02</span>
+                  <div>
+                    <strong>Advanced · connected workflows</strong>
+                    <small>Separate paths extend the core transaction flow</small>
+                  </div>
+                </div>
+                <div className="caseStudyArchitectureBranches">
+                  <div className="caseStudyArchitectureBranch">
+                    <span className="caseStudyArchitectureBranchLabel">AI-assisted capture</span>
+                    <div className="caseStudyArchitectureBranchPath">
+                      <span>App sends receipt, voice, or question</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>Gemini processes it</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>User reviews result, then saves via the basic path</span>
                     </div>
                   </div>
-                  {index < architectureLayers.length - 1 && (
-                    <div className="caseStudyArchitectureArrow" aria-hidden="true">
-                      <i className="fas fa-arrow-down"></i>
-                      <span>authenticated requests · scoped data · events</span>
+                  <div className="caseStudyArchitectureBranch">
+                    <span className="caseStudyArchitectureBranchLabel">Live updates</span>
+                    <div className="caseStudyArchitectureBranchPath">
+                      <span>PostgreSQL change</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>Supabase Realtime</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>Open app refreshes notification data</span>
                     </div>
-                  )}
+                  </div>
+                  <div className="caseStudyArchitectureBranch">
+                    <span className="caseStudyArchitectureBranchLabel">Scheduled + event-driven work</span>
+                    <div className="caseStudyArchitectureBranchPath">
+                      <span>Postgres Cron or database webhook</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>Supabase Edge Functions</span>
+                      <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      <span>Resend email or Expo Push to user</span>
+                    </div>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
             <div className="caseStudyIntegrationGrid">
               <div>

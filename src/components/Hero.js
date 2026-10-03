@@ -46,6 +46,16 @@ export default function Hero({ initialBlogOpen = false }) {
           <Image
             src="/adarsh-profile.png"
             alt={siteConfig.name}
+            className="heroAvatarPhoto"
+            width={150}
+            height={150}
+            priority
+          />
+          <Image
+            src="/adarsh-profile-light.png"
+            alt=""
+            aria-hidden="true"
+            className="heroAvatarLight"
             width={150}
             height={150}
             priority

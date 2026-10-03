@@ -118,7 +118,7 @@ Update [`src/config/portfolio.js`](./src/config/portfolio.js) to change profile 
 
 The annual contribution card sums the previous and current calendar years using GitHub's contribution calendar and any additional restricted contributions the API reports. The `Sync GitHub contribution totals` workflow refreshes the counts every 15 minutes and deploys updated static data when the total changes.
 
-To include private contributions in the profile calendar, enable **Include private contributions on my profile** and turn off **Make profile private and hide activity** in GitHub's profile settings. Then add a repository Actions secret named `CONTRIBUTIONS_TOKEN`. Use a GitHub token authenticated as `Adshkumar` and with **Contents: Read and write** access to this portfolio repository, so the workflow can retrieve the totals and publish the updated JSON. Never put the token in the site code, a committed file, or a chat message. The workflow refreshes automatically every 15 minutes.
+To include private contributions in the profile calendar, enable **Include private contributions on my profile** and turn off **Make profile private and hide activity** in GitHub's profile settings. If GitHub returns zero while a previous nonzero total exists, the sync fails instead of replacing the last known good totals. Add a repository Actions secret named `CONTRIBUTIONS_TOKEN`, authenticated as `Adshkumar` and with **Contents: Read and write** access to this portfolio repository, so the workflow can retrieve and publish the data. Never put the token in the site code, a committed file, or a chat message. The workflow refreshes automatically every 15 minutes.
 
 ## Connect
 

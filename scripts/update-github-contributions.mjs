@@ -96,6 +96,12 @@ try {
   if (error.code !== "ENOENT") throw error;
 }
 
+if (total === 0 && existing?.total > 0) {
+  throw new Error(
+    "GitHub returned zero contributions even though the previous sync had contributions. Keep “Include private contributions on my profile” enabled and turn off “Make profile private and hide activity”, then rerun the sync."
+  );
+}
+
 if (
   existing?.total === total &&
   JSON.stringify(existing.years) === JSON.stringify(years)

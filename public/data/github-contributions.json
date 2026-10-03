@@ -2,17 +2,17 @@
   "years": [
     {
       "year": 2025,
-      "contributions": 0,
-      "calendarContributions": 0,
+      "contributions": 27,
+      "calendarContributions": 27,
       "restrictedContributions": 0
     },
     {
       "year": 2026,
-      "contributions": 0,
-      "calendarContributions": 0,
+      "contributions": 172,
+      "calendarContributions": 172,
       "restrictedContributions": 0
     }
   ],
-  "total": 0,
-  "updatedAt": "2026-10-03T08:02:54.563Z"
+  "total": 199,
+  "updatedAt": "2026-10-03T07:53:49.981Z"
 }

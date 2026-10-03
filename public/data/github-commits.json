@@ -1,6 +1,19 @@
 {
   "metric": "repository-commits",
-  "years": [],
-  "total": null,
-  "updatedAt": null
+  "years": [
+    {
+      "year": 2025,
+      "commits": 76,
+      "publicCommits": 21,
+      "privateCommits": 55
+    },
+    {
+      "year": 2026,
+      "commits": 308,
+      "publicCommits": 164,
+      "privateCommits": 144
+    }
+  ],
+  "total": 384,
+  "updatedAt": "2026-10-03T08:22:31.430Z"
 }

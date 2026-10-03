@@ -35,6 +35,31 @@ const headers = {
   Authorization: `Bearer ${token}`,
   "X-GitHub-Api-Version": "2022-11-28",
 };
+const contributionCalendarQuery = `
+  query($login: String!, $from: DateTime!, $to: DateTime!) {
+    user(login: $login) {
+      contributionsCollection(from: $from, to: $to) {
+        contributionCalendar {
+          totalContributions
+          weeks {
+            contributionDays {
+              date
+              contributionCount
+              contributionLevel
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const contributionLevels = {
+  NONE: 0,
+  FIRST_QUARTILE: 1,
+  SECOND_QUARTILE: 2,
+  THIRD_QUARTILE: 3,
+  FOURTH_QUARTILE: 4,
+};
 
 function nextPage(linkHeader) {
   const next = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
@@ -52,6 +77,72 @@ async function getJson(url, action) {
     );
   }
   return { data, linkHeader: response.headers.get("Link") };
+}
+
+async function getContributionCalendar(year) {
+  const from = new Date(Date.UTC(year, 0, 1)).toISOString();
+  const to = new Date(Date.UTC(year + 1, 0, 1) - 1).toISOString();
+  const response = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      query: contributionCalendarQuery,
+      variables: { login, from, to },
+    }),
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      `GitHub contribution calendar returned HTTP ${response.status}: ${
+        result.message || "Unknown GitHub API error"
+      }`
+    );
+  }
+  if (result.errors?.length) {
+    throw new Error(
+      `GitHub contribution calendar query failed: ${result.errors
+        .map(({ message }) => message)
+        .join("; ")}`
+    );
+  }
+
+  const calendar =
+    result.data?.user?.contributionsCollection?.contributionCalendar;
+  const contributionDays = calendar?.weeks?.flatMap(
+    ({ contributionDays: weekDays }) => weekDays
+  );
+  if (
+    !Number.isSafeInteger(calendar?.totalContributions) ||
+    calendar.totalContributions < 0 ||
+    !Array.isArray(contributionDays) ||
+    contributionDays.some(
+      ({ date, contributionCount, contributionLevel }) =>
+        typeof date !== "string" ||
+        !date.startsWith(`${year}-`) ||
+        !Number.isSafeInteger(contributionCount) ||
+        contributionCount < 0 ||
+        !Object.hasOwn(contributionLevels, contributionLevel)
+    ) ||
+    contributionDays.reduce(
+      (sum, { contributionCount }) => sum + contributionCount,
+      0
+    ) !== calendar.totalContributions
+  ) {
+    throw new Error(
+      `GitHub returned an incomplete contribution calendar for ${year}.`
+    );
+  }
+
+  return {
+    contributionTotal: calendar.totalContributions,
+    contributionDays: contributionDays.map(
+      ({ date, contributionCount, contributionLevel }) => ({
+        date,
+        count: contributionCount,
+        level: contributionLevels[contributionLevel],
+      })
+    ),
+  };
 }
 
 async function getRepositories() {
@@ -185,6 +276,9 @@ const years = yearsToFetch.map((year) => {
     daily,
   };
 });
+for (const yearData of years) {
+  Object.assign(yearData, await getContributionCalendar(yearData.year));
+}
 const total = years.reduce((sum, { commits }) => sum + commits, 0);
 
 let existing;

@@ -1,6 +1,6 @@
 # Adarsh Kumar
 
-BIT CSE'27 · [**GSOC'26 @ PSF**](https://summerofcode.withgoogle.com/programs/2026/projects/fR0aXr03) · [**Turrant AI**](https://turrant.ai/) *(part of GITeX and India AI Summit'26)* · Klyrax Labs · PromptCue *(Founding Engineer)* · [**LinkedIn**](https://www.linkedin.com/in/adarsh-kumar62041/) · [**X**](https://x.com/Adarshsingh1a) · [**GitHub**](https://github.com/Adshkumar) · [**Instagram**](https://www.instagram.com/adsingh9.1/) · [**LeetCode**](https://leetcode.com/u/Adarsh_kumar62041/) · [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com)
+BIT CSE'27 · [**GSOC'26 @ PSF**](https://summerofcode.withgoogle.com/programs/2026/projects/fR0aXr03) · [**Turrant AI**](https://turrant.ai/) *(part of GITeX and India AI Summit'26)* · Klyrax Labs · PromptCue *(Founding Engineer)* · [**LinkedIn**](https://www.linkedin.com/in/adarsh-kumar62041/) · [**X**](https://x.com/Adshkumar62) · [**GitHub**](https://github.com/Adshkumar) · [**Instagram**](https://www.instagram.com/adsingh9.1/) · [**LeetCode**](https://leetcode.com/u/Adarsh_kumar62041/) · [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com)
 
 ---
 

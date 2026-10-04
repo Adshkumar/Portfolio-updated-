@@ -126,7 +126,7 @@ Add a repository Actions secret named `CONTRIBUTIONS_TOKEN` using a token authen
 - **LinkedIn:** [Adarsh Kumar](https://www.linkedin.com/in/adarsh-kumar62041/)
 - **GitHub:** [@Adshkumar](https://github.com/Adshkumar)
 - **LeetCode:** [Adarsh_kumar62041](https://leetcode.com/u/Adarsh_kumar62041/)
-- **X:** [@Adarshsingh1a](https://x.com/Adarshsingh1a)
+- **X:** [@Adshkumar62](https://x.com/Adshkumar62)
 - **Instagram:** [@adsingh9.1](https://www.instagram.com/adsingh9.1/)
 
 ---

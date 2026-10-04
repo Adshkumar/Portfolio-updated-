@@ -60,7 +60,7 @@ I want to keep growing as a developer who can design, build, and ship meaningful
 
 I’m always open to building new ideas, collaborating on strong products, and taking on challenges that help me keep learning.
 
-Connect with me on [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/), [X](https://x.com/Adarshsingh1a), [GitHub](https://github.com/Adshkumar), [Instagram](https://www.instagram.com/adsingh9.1/), or [LeetCode](https://leetcode.com/u/Adarsh_kumar62041/), or email me at [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com).
+Connect with me on [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/), [X](https://x.com/Adshkumar62), [GitHub](https://github.com/Adshkumar), [Instagram](https://www.instagram.com/adsingh9.1/), or [LeetCode](https://leetcode.com/u/Adarsh_kumar62041/), or email me at [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com).
 `;
 
 export default function GistContent() {

@@ -35,7 +35,7 @@ export const socialLinks = [
   },
   {
     platform: "twitter",
-    url: "https://x.com/Adarshsingh1a",
+    url: "https://x.com/Adshkumar62",
     icon: "fab fa-x-twitter",
     label: "X (Twitter)",
   },
@@ -282,7 +282,7 @@ export const achievements = [
   {
     rank: "Portfolio",
     title: "Full-Stack Projects",
-    desc: "Delivered 4+ full-stack projects featuring real-time functionality and production-ready implementations.",
+    desc: "Delivered 6+ full-stack projects featuring real-time functionality and production-ready implementations.",
   },
 ];
 

@@ -13,7 +13,7 @@ export const siteConfig = {
     "Full-stack developer passionate about building modern web applications that solve real-world problems with elegant, user-centered design.",
   tagline:
     "Software Engineer making the complex feel simple—and the useful feel exceptional.",
-  resumeLink: "/Adarsh-Kumar-Resume.pdf",
+  resumeLink: "",
 };
 
 export const contactInfo = {
@@ -82,12 +82,7 @@ export const aboutStats = [
   { number: "1", label: "Certification", link: null },
 ];
 
-export const education = {
-  institution: "Chhotu Ram Rural Institute Of Technology, Delhi",
-  degree: "Diploma in Computer Science",
-  duration: "September 2024 – June 2027",
-  cgpa: "7-6",
-};
+export const education = null;
 
 export const experiences = [
   {

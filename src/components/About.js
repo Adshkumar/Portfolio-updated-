@@ -7,22 +7,25 @@ export default function About() {
       <h2 className="sectionTitle">About</h2>
       <div className="sectionLead">
         <p>
-          I&apos;m a Delhi-based <strong className="aboutHighlight">Full-Stack</strong> developer building thoughtful digital
+          I&apos;m a Delhi-based <strong className="aboutHighlight">Full-Stack</strong> developer and founder building thoughtful digital
           experiences—from intuitive interfaces to robust, real-time systems.
-          I turn ideas into reliable products with clean code and lasting impact.
+          I turn ideas into reliable products with clean code and measurable impact.
+          Creator of <strong className="aboutHighlight"><a href="https://tsdn.vercel.app/" target="_blank" rel="noopener noreferrer">The System Design Newspaper</a></strong> and the <strong className="aboutHighlight">Finance Tracker app</strong>.
         </p>
       </div>
 
-      <div className="eduCard">
-        <div className="eduIcon" aria-hidden="true">
-          <i className="fas fa-graduation-cap"></i>
+      {education && (
+        <div className="eduCard">
+          <div className="eduIcon" aria-hidden="true">
+            <i className="fas fa-graduation-cap"></i>
+          </div>
+          <div className="eduBody">
+            <div className="eduInstitution">{education.institution}</div>
+            <div className="eduDegree">{education.degree}</div>
+            <div className="eduMeta">{education.duration}</div>
+          </div>
         </div>
-        <div className="eduBody">
-          <div className="eduInstitution">{education.institution}</div>
-          <div className="eduDegree">{education.degree}</div>
-          <div className="eduMeta">{education.duration}</div>
-        </div>
-      </div>
+      )}
 
       {/* YC mention hidden for now
       <a

@@ -124,19 +124,21 @@ export default function Navbar({ theme, onToggleTheme }) {
       >
         <i className="fas fa-home"></i>
       </Link>
-      <a
-        href={siteConfig.resumeLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`dockItem${hoveredIndex === resumeIdx ? " isActive" : ""}`}
-        aria-label="Resume"
-        ref={registerItem(resumeIdx, hoverColors.resume)}
-        onMouseEnter={onEnter(resumeIdx)}
-        onMouseLeave={onLeave}
-        style={activeStyle(resumeIdx, "resume")}
-      >
-        <i className="fas fa-file-alt"></i>
-      </a>
+      {siteConfig.resumeLink && (
+        <a
+          href={siteConfig.resumeLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`dockItem${hoveredIndex === resumeIdx ? " isActive" : ""}`}
+          aria-label="Resume"
+          ref={registerItem(resumeIdx, hoverColors.resume)}
+          onMouseEnter={onEnter(resumeIdx)}
+          onMouseLeave={onLeave}
+          style={activeStyle(resumeIdx, "resume")}
+        >
+          <i className="fas fa-file-alt"></i>
+        </a>
+      )}
       <span className="dockSep" aria-hidden="true"></span>
       {dockOrder.map((p, i) => {
         const link = byPlatform[p];

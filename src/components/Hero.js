@@ -76,16 +76,18 @@ export default function Hero({ initialBlogOpen = false }) {
         >
           <i className="fas fa-blog" style={{ fontSize: "1.25rem" }}></i>
         </button>
-        <a
-          href={siteConfig.resumeLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View Resume"
-          title="Resume"
-          className="heroResume"
-        >
-          <i className="fas fa-file-alt" style={{ fontSize: "1.25rem" }}></i>
-        </a>
+        {siteConfig.resumeLink && (
+          <a
+            href={siteConfig.resumeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View Resume"
+            title="Resume"
+            className="heroResume"
+          >
+            <i className="fas fa-file-alt" style={{ fontSize: "1.25rem" }}></i>
+          </a>
+        )}
       </div>
 
       {blogOpen && (

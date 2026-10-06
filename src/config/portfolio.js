@@ -97,7 +97,7 @@ export const experiences = [
     tech: "HTML • CSS • JavaScript • Responsive Design • UI/UX",
     logo: null,
     articleLink: "/experience/akm-techie",
-    proofLink: "https://dtest-inky.vercel.app/",
+    // proofLink: "https://dtest-inky.vercel.app/",
     githubLink: "https://github.com/Adshkumar/Dtest",
     points: [
       "Developed DTEST, a responsive multi-page website featuring an admin dashboard, client portal, and service pages.",
@@ -112,7 +112,7 @@ export const experiences = [
     tech: "React Native • Expo • Supabase • PostgreSQL • Clerk • Gemini AI • NativeWind",
     logo: "/finance-icon-logo.png",
     articleLink: "/experience/finance-tracker",
-    proofLink: "https://finance-app-invite.vercel.app",
+    proofLink: "",
     githubLink: "https://github.com/Adshkumar/Finance-Tracker",
     points: [
       "Built a mobile budgeting app for tracking accounts, income, expenses, and monthly budgets across iOS and Android.",
@@ -129,7 +129,7 @@ export const experiences = [
     tech: "MongoDB • Express.js • React.js • Node.js • JWT • REST APIs • Tailwind CSS • Docker",
     logo: "/url-shortener-thumbnail.png",
     articleLink: "/experience/url-shortener",
-    proofLink: "https://url-shortener-seven-lac.vercel.app/",
+    proofLink: "https://url-linksnap.vercel.app/",
     githubLink: "https://github.com/Adshkumar/URL-Shortener",
     points: [
       "Built a full-stack platform for creating custom short links, managing URLs, and tracking link performance.",

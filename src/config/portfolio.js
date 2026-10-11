@@ -96,6 +96,7 @@ export const experiences = [
     type: "Desktop Application • Open Source",
     tech: "Tauri 2 • React 19 • Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     logo: "/logos/r0-logo.png",
+    invertInLight: true,
     downloadLink: "https://github.com/Adshkumar/r0/releases/download/v0.1.11/r0-latest-setup.exe",
     githubLink: "https://github.com/Adshkumar/r0",
     points: [

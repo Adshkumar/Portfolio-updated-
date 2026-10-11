@@ -468,14 +468,9 @@ strong {
   margin-top: 12px;
 }
 
-:root:not([data-theme="light"]) .sectionLead .aboutHighlight {
+.sectionLead .aboutHighlight {
   color: var(--text);
   font-weight: 700;
-}
-
-:root[data-theme="light"] .sectionLead .aboutHighlight {
-  color: inherit;
-  font-weight: inherit;
 }
 
 .contributionCalendar {
@@ -1670,6 +1665,12 @@ a.cred:hover {
   height: 32px;
   object-fit: cover;
   border-radius: 50%;
+  transition: filter var(--transition);
+}
+
+:root[data-theme="light"] .expBadge img.expLogoInvertLight,
+:root[data-theme="light"] .expBadge img[src*="r0-logo"] {
+  filter: invert(1);
 }
 
 .expBody {

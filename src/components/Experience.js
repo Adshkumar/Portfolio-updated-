@@ -25,7 +25,11 @@ export default function Experience({ showAll = false }) {
           <div key={i} className="expItem">
             <div className="expBadge">
               {exp.logo ? (
-                <img src={exp.logo} alt={`${exp.company} logo`} />
+                <img
+                  src={exp.logo}
+                  alt={`${exp.company} logo`}
+                  className={exp.invertInLight ? "expLogoInvertLight" : undefined}
+                />
               ) : (
                 initials(exp.company)
               )}

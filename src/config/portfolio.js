@@ -90,6 +90,22 @@ export const education = {
 
 export const experiences = [
   {
+    company: "r0",
+    role: "Desktop IDE • Open Source",
+    duration: "2025 – Present",
+    type: "Desktop Application • Open Source",
+    tech: "Tauri 2 • React 19 • Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
+    logo: "/logos/r0-logo.png",
+    downloadLink: "https://github.com/Adshkumar/r0/releases/download/v0.1.11/r0-latest-setup.exe",
+    githubLink: "https://github.com/Adshkumar/r0",
+    points: [
+      "A fast, native desktop IDE and agentic code editor built on Tauri 2 and React, merging a full code editor, a real terminal, and an integrated AI panel into one lightweight app.",
+      "Deep agentic AI with Agent mode (up to 24 tool-use steps: read_file, grep, edit, bash_run), Plan mode, and Ask mode across 17+ providers (Anthropic, OpenAI, Gemini, Ollama, DeepSeek) with approval-gated execution.",
+      "Features CodeMirror 6 with inline AI diff reviews (Accept / Reject), multi-tab PTY terminal (portable-pty), Status Island (live git status, task tracker, RAM usage, token spend donut chart), and fuzzy command palette (Ctrl+P).",
+      "Local-first privacy architecture: Bring-Your-Own-Key stored in the OS keychain, SQLite session persistence with crash recovery, zero telemetry, and no subscriptions or cloud lock-in.",
+    ],
+  },
+  {
     company: "AKM Techie",
     role: "Intern Web Developer",
     duration: "June 2025 – July 2025",

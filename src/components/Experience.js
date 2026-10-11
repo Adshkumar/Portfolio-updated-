@@ -47,8 +47,19 @@ export default function Experience({ showAll = false }) {
                   <li key={j} dangerouslySetInnerHTML={{ __html: point }} />
                 ))}
               </ul>
-              {(exp.proofLink || exp.githubLink || exp.articleLink) && (
+              {(exp.proofLink || exp.downloadLink || exp.githubLink || exp.articleLink) && (
                 <div className="expLinks">
+                  {exp.downloadLink && (
+                    <a
+                      href={exp.downloadLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                    >
+                      <i className="fas fa-download"></i>
+                      Download
+                    </a>
+                  )}
                   {exp.proofLink && (
                     <a
                       href={exp.proofLink}

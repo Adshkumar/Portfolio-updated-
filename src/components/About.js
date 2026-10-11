@@ -10,7 +10,7 @@ export default function About() {
           I&apos;m a Delhi-based <strong className="aboutHighlight">Full-Stack</strong> developer and founder building thoughtful digital
           experiences—from intuitive interfaces to robust, real-time systems.
           I turn ideas into reliable products with clean code and measurable impact.
-          Creator of <strong className="aboutHighlight"><a href="https://tsdn.vercel.app/" target="_blank" rel="noopener noreferrer">The System Design Newspaper</a></strong> and the <strong className="aboutHighlight">Finance Tracker app</strong>.
+          Creator of <strong className="aboutHighlight"><a href="https://tsdn.vercel.app/" target="_blank" rel="noopener noreferrer">The System Design Newspaper</a></strong> and the <strong className="aboutHighlight">Finance Tracker app</strong>. Currently building <strong className="aboutHighlight"><a href="https://github.com/Adshkumar/r0" target="_blank" rel="noopener noreferrer">r0</a></strong>, an open-source AI-powered IDE designed to bring AI-assisted coding and development workflows into a single workspace.
         </p>
       </div>
 

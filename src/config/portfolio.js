@@ -54,7 +54,6 @@ export const socialLinks = [
 ];
 
 export const codingProfiles = [
-
   {
     platform: "LeetCode",
     rating: "Problem Solving",
@@ -94,16 +93,25 @@ export const experiences = [
     role: "Desktop IDE • Open Source",
     duration: "2025 – Present",
     type: "Desktop Application • Open Source",
-    tech: "Tauri 2 • React 19 • Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
+    // tech: "Tauri 2 • React 19 • Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
+    tech: "Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     logo: "/logos/r0-logo.png",
     invertInLight: true,
-    downloadLink: "https://github.com/Adshkumar/r0/releases/download/v0.1.11/r0-latest-setup.exe",
+    downloadLink:
+      "https://github.com/Adshkumar/r0/releases/download/v0.1.11/r0-latest-setup.exe",
     githubLink: "https://github.com/Adshkumar/r0",
+    // points: [
+    //   "A fast, native desktop IDE and agentic code editor built on Tauri 2 and React, merging a full code editor, a real terminal, and an integrated AI panel into one lightweight app.",
+    //   "Deep agentic AI with Agent mode (up to 24 tool-use steps: read_file, grep, edit, bash_run), Plan mode, and Ask mode across 17+ providers (Anthropic, OpenAI, Gemini, Ollama, DeepSeek) with approval-gated execution.",
+    //   "Features CodeMirror 6 with inline AI diff reviews (Accept / Reject), multi-tab PTY terminal (portable-pty), Status Island (live git status, task tracker, RAM usage, token spend donut chart), and fuzzy command palette (Ctrl+P).",
+    //   "Local-first privacy architecture: Bring-Your-Own-Key stored in the OS keychain, SQLite session persistence with crash recovery, zero telemetry, and no subscriptions or cloud lock-in.",
+    // ],
+
     points: [
-      "A fast, native desktop IDE and agentic code editor built on Tauri 2 and React, merging a full code editor, a real terminal, and an integrated AI panel into one lightweight app.",
-      "Deep agentic AI with Agent mode (up to 24 tool-use steps: read_file, grep, edit, bash_run), Plan mode, and Ask mode across 17+ providers (Anthropic, OpenAI, Gemini, Ollama, DeepSeek) with approval-gated execution.",
-      "Features CodeMirror 6 with inline AI diff reviews (Accept / Reject), multi-tab PTY terminal (portable-pty), Status Island (live git status, task tracker, RAM usage, token spend donut chart), and fuzzy command palette (Ctrl+P).",
-      "Local-first privacy architecture: Bring-Your-Own-Key stored in the OS keychain, SQLite session persistence with crash recovery, zero telemetry, and no subscriptions or cloud lock-in.",
+      "Built r0, an AI-powered desktop IDE that unifies intelligent coding, an integrated terminal, and agentic development workflows in one workspace.",
+      "Implemented Agent, Plan, and Ask modes with up to 24 tool-use steps and support for 17+ AI providers, enabling flexible AI-assisted development.",
+      "Developed inline AI code reviews with Accept / Reject controls, multi-tab terminal support, Git commit and push, and real-time development insights.",
+      "Designed for developer control and privacy with approval-gated execution, local-first API key management, session recovery, zero telemetry, and no subscription lock-in.",
     ],
   },
   {
@@ -306,21 +314,44 @@ export const skillCategories = [
   {
     title: "Frontend",
     icon: "fas fa-laptop-code",
-    skills: ["React", "Next.js", "JavaScript", "TypeScript", "HTML/CSS", "Tailwind", "Responsive Design"],
+    skills: [
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "HTML/CSS",
+      "Tailwind",
+      "Responsive Design",
+    ],
   },
   {
     title: "Backend",
     icon: "fas fa-server",
-    skills: ["Node.js", "Express.js", "REST APIs", "JWT", "Socket.io", "Authentication", "API Design"],
+    skills: [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "JWT",
+      "Socket.io",
+      "Authentication",
+      "API Design",
+    ],
   },
   {
     title: "Databases & Tools",
     icon: "fas fa-database",
-    skills: ["MongoDB",  "Git", "Docker", "Vercel", "GitHub", "Postman"],
+    skills: ["MongoDB", "Git", "Docker", "Vercel", "GitHub", "Postman"],
   },
   {
     title: "Mobile & AI",
     icon: "fas fa-robot",
-    skills: ["React Native", "Android", "AI Integration", "Prompt Engineering", "Automation", "Puppeteer"],
+    skills: [
+      "React Native",
+      "Android",
+      "AI Integration",
+      "Prompt Engineering",
+      "Automation",
+      "Puppeteer",
+    ],
   },
 ];

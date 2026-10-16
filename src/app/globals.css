@@ -542,9 +542,11 @@ strong {
   display: grid;
   grid-template-columns: repeat(53, minmax(0, 1fr));
   gap: 2px;
-  height: 18px;
+  height: 16px;
+  margin-bottom: 6px;
   color: var(--text-muted);
   font-size: 0.66rem;
+  line-height:1;
 }
 
 .contributionWeek {

@@ -90,28 +90,21 @@ export const education = {
 export const experiences = [
   {
     company: "r0",
-    role: "Desktop IDE • Open Source",
+    role: "Creator & Open-Source Developer",
     duration: "2025 – Present",
     type: "Desktop Application • Open Source",
-    // tech: "Tauri 2 • React 19 • Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     tech: "Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     logo: "/logos/r0-logo.png",
     invertInLight: true,
-    downloadLink:
-      "https://github.com/Adshkumar/r0/releases/download/v0.1.11/r0-latest-setup.exe",
+    downloadLink: "https://github.com/Adshkumar/r0/releases/latest/download/r0-latest-setup.exe",
     githubLink: "https://github.com/Adshkumar/r0",
-    // points: [
-    //   "A fast, native desktop IDE and agentic code editor built on Tauri 2 and React, merging a full code editor, a real terminal, and an integrated AI panel into one lightweight app.",
-    //   "Deep agentic AI with Agent mode (up to 24 tool-use steps: read_file, grep, edit, bash_run), Plan mode, and Ask mode across 17+ providers (Anthropic, OpenAI, Gemini, Ollama, DeepSeek) with approval-gated execution.",
-    //   "Features CodeMirror 6 with inline AI diff reviews (Accept / Reject), multi-tab PTY terminal (portable-pty), Status Island (live git status, task tracker, RAM usage, token spend donut chart), and fuzzy command palette (Ctrl+P).",
-    //   "Local-first privacy architecture: Bring-Your-Own-Key stored in the OS keychain, SQLite session persistence with crash recovery, zero telemetry, and no subscriptions or cloud lock-in.",
-    // ],
-
+    articleLink: "/experience/r0",
     points: [
-      "Built r0, an AI-powered desktop IDE that unifies intelligent coding, an integrated terminal, and agentic development workflows in one workspace.",
-      "Implemented Agent, Plan, and Ask modes with up to 24 tool-use steps and support for 17+ AI providers, enabling flexible AI-assisted development.",
-      "Developed inline AI code reviews with Accept / Reject controls, multi-tab terminal support, Git commit and push, and real-time development insights.",
-      "Designed for developer control and privacy with approval-gated execution, local-first API key management, session recovery, zero telemetry, and no subscription lock-in.",
+      "Built r0, a cross-platform desktop code editor combining AI agents, an integrated terminal, Git, and database tools in one workspace.",
+      "Implemented Agent, Plan, and Ask workflows with up to 24 tool-use steps, support for 17+ AI providers, and approval-gated execution.",
+      "Added inline AI code reviews with Accept / Reject controls, multi-tab terminal sessions, and integrated Git and GitHub workflows.",
+      "Expanded the editor with language-server support, Vim mode, split panes, workspace search, debugging adapters, project previews, and installable extensions.",
+      "Designed for developer control with local-first API key management, session recovery, zero telemetry, and no subscription lock-in.",
     ],
   },
   {

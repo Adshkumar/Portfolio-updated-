@@ -50,7 +50,8 @@ export default function ProjectCaseStudy({ study }) {
                 fetchPriority="high"
               />
               <figcaption>
-                Project banner from the repository README.
+                {study.heroImageCaption ||
+                  "Project banner from the repository README."}
               </figcaption>
             </figure>
           )}
@@ -224,12 +225,12 @@ export default function ProjectCaseStudy({ study }) {
             className="caseStudySection"
             aria-labelledby="data-retrieval"
           >
-            <h2 id="data-retrieval">Fast data retrieval and page delivery</h2>
+            <h2 id="data-retrieval">
+              {study.performanceTitle || "Fast data retrieval and page delivery"}
+            </h2>
             <p>
-              This portfolio case study is statically generated at build time,
-              so opening it does not wait for a case-study API or database
-              query. The notes below describe the project&apos;s own data path;
-              they distinguish implemented behavior from scale-up opportunities.
+              {study.performanceIntro ||
+                "This portfolio case study is statically generated at build time, so opening it does not wait for a case-study API or database query. The notes below describe the project's own data path and distinguish implemented behavior from scale-up opportunities."}
             </p>
             <div className="caseStudyPerformanceGrid">
               {(study.dataRetrieval || [

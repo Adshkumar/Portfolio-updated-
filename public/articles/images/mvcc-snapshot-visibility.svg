@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">MVCC row-version visibility across transaction snapshots</title>
+  <desc id="desc">Transaction A begins and reads version X0. Transaction B creates and commits version X1. Transaction A continues to see X0 under its original snapshot, while a new transaction sees X1.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.panel{fill:#141414;stroke:#404040;stroke-width:1.5}.node{fill:#1c1c1c;stroke:#525252;stroke-width:1.3}.old{fill:#142027;stroke:#22d3ee;stroke-width:1.5}.new{fill:#1b261d;stroke:#4ade80;stroke-width:1.5}.label{fill:#fff;font:600 15px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.section{fill:#22d3ee;font:700 13px system-ui,sans-serif;letter-spacing:.5px}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.timeline{stroke:#737373;stroke-width:2}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="360" rx="18"/>
+  <text class="title" x="30" y="38">A transaction keeps the snapshot it started with</text>
+  <text class="section" x="32" y="78">TRANSACTION TIMELINE</text>
+  <line class="timeline" x1="140" y1="116" x2="900" y2="116"/>
+  <circle cx="220" cy="116" r="6" fill="#22d3ee"/>
+  <circle cx="490" cy="116" r="6" fill="#22d3ee"/>
+  <circle cx="685" cy="116" r="6" fill="#4ade80"/>
+  <circle cx="850" cy="116" r="6" fill="#22d3ee"/>
+  <text class="sub" x="182" y="102">A begins</text>
+  <text class="sub" x="443" y="102">B updates</text>
+  <text class="sub" x="647" y="102">B commits</text>
+  <text class="sub" x="805" y="102">C begins</text>
+
+  <rect class="panel" x="30" y="144" width="900" height="80" rx="12"/>
+  <text class="label" x="52" y="174">Transaction A snapshot</text>
+  <text class="sub" x="52" y="197">Read before and after B commits</text>
+  <rect class="old" x="380" y="160" width="178" height="48" rx="8"/>
+  <text class="label" x="416" y="181">X0: value = 10</text>
+  <text class="sub" x="420" y="199">visible to A</text>
+  <path class="line" d="M570 184H660"/>
+  <rect class="node" x="676" y="160" width="220" height="48" rx="8"/>
+  <text class="label" x="700" y="181">A still reads X0</text>
+  <text class="sub" x="714" y="199">same snapshot</text>
+
+  <rect class="panel" x="30" y="242" width="900" height="80" rx="12"/>
+  <text class="label" x="52" y="272">Committed database versions</text>
+  <text class="sub" x="52" y="295">New snapshots see latest commit</text>
+  <rect class="old" x="380" y="258" width="178" height="48" rx="8"/>
+  <text class="label" x="416" y="279">X0: value = 10</text>
+  <text class="sub" x="420" y="297">older version</text>
+  <path class="line" d="M570 282H620"/>
+  <rect class="new" x="638" y="258" width="178" height="48" rx="8"/>
+  <text class="label" x="674" y="279">X1: value = 12</text>
+  <text class="sub" x="678" y="297">committed by B</text>
+  <path class="line" d="M824 282H860"/>
+  <text class="sub" x="862" y="286">C sees X1</text>
+</svg>

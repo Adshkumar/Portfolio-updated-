@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-labelledby="title desc">
+  <title id="title">Write skew under snapshot isolation</title>
+  <desc id="desc">Two transactions both read that two doctors are on call. Transaction A turns off doctor 1 and transaction B turns off doctor 2. Since they write different rows, both may commit under snapshot isolation, leaving nobody on call. Serializable protection aborts or coordinates one transaction.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <marker id="risk-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#fb7185"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.panel{fill:#141414;stroke:#404040;stroke-width:1.5}.node{fill:#1c1c1c;stroke:#525252;stroke-width:1.3}.risk{fill:#2a171a;stroke:#fb7185;stroke-width:1.5}.safe{fill:#17251a;stroke:#4ade80;stroke-width:1.5}.label{fill:#fff;font:600 15px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.section{fill:#22d3ee;font:700 13px system-ui,sans-serif;letter-spacing:.5px}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.badline{stroke:#fb7185;stroke-width:2;fill:none;marker-end:url(#risk-arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="380" rx="18"/>
+  <text class="title" x="30" y="38">Different-row writes can violate a shared invariant</text>
+  <text class="section" x="32" y="78">INITIAL SNAPSHOT: TWO DOCTORS ON CALL</text>
+  <rect class="node" x="330" y="92" width="130" height="54" rx="9"/>
+  <text class="label" x="355" y="116">Doctor 1</text>
+  <text class="sub" x="360" y="135">on call = true</text>
+  <rect class="node" x="500" y="92" width="130" height="54" rx="9"/>
+  <text class="label" x="525" y="116">Doctor 2</text>
+  <text class="sub" x="530" y="135">on call = true</text>
+
+  <rect class="panel" x="38" y="174" width="350" height="92" rx="12"/>
+  <text class="label" x="62" y="204">Transaction A</text>
+  <text class="sub" x="62" y="228">Reads both on-call rows</text>
+  <text class="sub" x="62" y="249">Writes Doctor 1 = off call</text>
+  <rect class="panel" x="572" y="174" width="350" height="92" rx="12"/>
+  <text class="label" x="596" y="204">Transaction B</text>
+  <text class="sub" x="596" y="228">Reads the same snapshot</text>
+  <text class="sub" x="596" y="249">Writes Doctor 2 = off call</text>
+  <path class="line" d="M388 220H568"/>
+
+  <rect class="risk" x="38" y="291" width="438" height="57" rx="10"/>
+  <text class="label" x="60" y="315">Snapshot isolation may allow both commits</text>
+  <text class="sub" x="60" y="337">Writes are on different rows; invariant is broken</text>
+  <path class="badline" d="M490 320H544"/>
+  <rect class="safe" x="560" y="291" width="362" height="57" rx="10"/>
+  <text class="label" x="580" y="315">Serializable / shared coordination</text>
+  <text class="sub" x="580" y="337">Abort or serialize one transaction</text>
+  <text class="sub" x="32" y="369">Encode cross-row invariants with constraints or a shared lock target where possible.</text>
+</svg>

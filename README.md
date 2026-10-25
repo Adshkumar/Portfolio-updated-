@@ -87,9 +87,11 @@ Open [http://localhost:3000](http://localhost:3000).
 ### Available scripts
 
 ```bash
-npm run dev    # Start the development server
-npm run lint   # Run ESLint
-npm run build  # Generate the production static export
+npm run dev                # Start the development server
+npm run lint               # Run ESLint
+npm run validate:articles  # Validate Markdown metadata, links, and local article images
+npm run test:articles      # Run focused article publishing and rendering tests
+npm run build              # Generate the production static export
 ```
 
 The production export is written to `out/`. The project uses Next.js static export and is configured for static hosting.
@@ -97,17 +99,52 @@ The production export is written to `out/`. The project uses Next.js static expo
 ## Project Structure
 
 ```text
+.github/
+└── workflows/                 # Static deployment and GitHub data-sync automation
 public/
-├── Adarsh-Kumar-Resume.pdf    # Portfolio resume
-└── images/                    # Experience badge images
+├── articles/
+│   └── images/                # Article diagrams and images (keep URL paths stable)
+├── astra/                     # Public Astra assets
+├── data/                      # Public data consumed by the portfolio
+├── images/                    # Project and experience images
+├── logos/                     # Public organization and project logos
+└── ...                        # Public files served from the site root
+content/
+└── articles/                  # One Markdown file per article, plus publishing guide
+scripts/
+├── update-github-commits.mjs  # Refresh public GitHub commit totals
+└── validate-articles.mjs      # Validate article content before publishing
 src/
 ├── app/
-│   ├── globals.css            # Themes, layout, and component styles
-│   ├── layout.js              # Root layout and metadata
-│   └── page.js                # Main page and theme state
-├── components/                # Portfolio sections and UI
-└── config/
-    └── portfolio.js           # Profile, experience, projects, and links
+│   ├── articles/              # Articles index and statically generated article routes
+│   ├── borg/                  # Existing personal blog route
+│   ├── experience/            # Experience and case-study routes
+│   ├── globals.css            # Shared themes, typography, layout, and component styles
+│   ├── layout.js              # Root layout and site metadata
+│   ├── page.js                # Portfolio home route
+│   └── sitemap.js             # Static sitemap
+├── components/                # Portfolio, navigation, and article UI
+├── config/                    # Portfolio and case-study content
+└── lib/
+    └── articles.mjs           # Article loading, validation, and safe Markdown rendering
+tests/
+└── articles.test.mjs          # Focused tests for article validation and rendering
+package.json                   # Scripts and runtime dependencies
+package-lock.json              # Reproducible npm dependency lockfile
+next.config.mjs                # Next.js static-export settings
+jsconfig.json                  # @/* import alias for src/*
+eslint.config.mjs              # ESLint configuration
+portfolio-content.json         # Legacy content snapshot; not imported by the app
+```
+
+### Structure and asset conventions
+
+- Keep routes in `src/app`, reusable interface components in `src/components`, site data in `src/config`, and shared server-side article helpers in `src/lib`.
+- Add technical articles as Markdown files in `content/articles`. The build generates pages only for articles with `published: true`; see [`content/articles/README.md`](./content/articles/README.md) for metadata and publishing steps.
+- Put article diagrams and images in `public/articles/`. Other files in `public/` are served at their existing root-relative URLs (for example, `/adarsh-profile.png`). Keep those paths stable unless every reference is updated together.
+- Keep automation in `.github/workflows/` and `scripts/`, and tests in `tests/`. `portfolio-content.json` is a legacy root-level content snapshot and is not imported by the current application; leave it in place unless its future use has been confirmed.
+- `.next/`, `out/`, and `node_modules/` are generated/dependency directories, not source folders. They are ignored by Git and should not be manually reorganized or committed.
+- `.env` is local configuration and is ignored by Git. Never commit credentials or tokens.
 ```
 
 ## Updating the Portfolio

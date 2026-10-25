@@ -13,6 +13,8 @@ content/articles/
   cache-invalidation-and-stampedes.md
   api-evolution-and-safe-migrations.md
   multi-tenant-saas-isolation.md
+  database-partitioning-sharding-consistent-hashing.md
+  mvcc-isolation-serializable-transactions.md
   webrtc-signaling-ice-and-media.md
   sfu-vs-mcu-group-video-architecture.md
   mediasoup-sfu-architecture.md
@@ -23,6 +25,9 @@ public/articles/images/
   cache-invalidation-flow.svg
   api-evolution-migration.svg
   multi-tenant-isolation.svg
+  database-sharding-routing.svg
+  mvcc-snapshot-visibility.svg
+  mvcc-write-skew.svg
   webrtc-connection-flow.svg
   sfu-vs-mcu-topologies.svg
   mediasoup-room-flow.svg

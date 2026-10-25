@@ -96,41 +96,19 @@ function getRollingCalendar(contributions, today) {
   return weeks;
 }
 
-function getMonthPositions(year) {
-  const firstDay = new Date(year, 0, 1);
-  const gridStart = new Date(firstDay);
-  gridStart.setDate(gridStart.getDate() - gridStart.getDay());
-
-  return MONTH_LABELS.map((label, month) => {
-    const monthStart = new Date(year, month, 1);
-    const daysFromGridStart = Math.round(
-      (monthStart - gridStart) / (24 * 60 * 60 * 1000)
-    );
-
-    return {
-      label,
-      week: Math.floor(daysFromGridStart / 7),
-    };
-  });
+function getMonthPositions() {
+  return MONTH_LABELS.map((label) => ({ label }));
 }
 
 function getRollingMonthPositions(today) {
-  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  start.setDate(start.getDate() - 364);
-  const gridStart = new Date(start);
-  gridStart.setDate(gridStart.getDate() - gridStart.getDay());
   const positions = [];
-  const month = new Date(start.getFullYear(), start.getMonth(), 1);
+  const month = new Date(today.getFullYear(), today.getMonth(), 1);
+  month.setMonth(month.getMonth() - 11);
   const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   while (month < currentMonth) {
-    const monthDate = new Date(month);
-    const daysFromGridStart = Math.floor(
-      (monthDate - gridStart) / (24 * 60 * 60 * 1000)
-    );
     positions.push({
       label: MONTH_LABELS[month.getMonth()],
-      week: Math.floor(daysFromGridStart / 7),
     });
     month.setMonth(month.getMonth() + 1);
   }
@@ -410,7 +388,7 @@ export default function Activity({ theme = "dark" }) {
     () =>
       contributionData?.platform === "leetcode"
         ? getRollingMonthPositions(today)
-        : getMonthPositions(year),
+        : getMonthPositions(),
     [contributionData?.platform, today, year]
   );
   const visibleContributionData =
@@ -464,8 +442,8 @@ export default function Activity({ theme = "dark" }) {
               </div>
               <div className="contributionCalendarBody">
                 <div className="contributionMonths" aria-hidden="true">
-                  {monthPositions.map(({ label, week }) => (
-                    <span key={label} style={{ gridColumn: week + 1 }}>
+                  {monthPositions.map(({ label }, index) => (
+                    <span key={`${label}-${index}`} style={{ gridColumn: index + 1 }}>
                       {label}
                     </span>
                   ))}

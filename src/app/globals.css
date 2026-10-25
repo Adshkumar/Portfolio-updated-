@@ -540,13 +540,18 @@ strong {
 
 .contributionMonths {
   display: grid;
-  grid-template-columns: repeat(53, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 2px;
   height: 16px;
   margin-bottom: 6px;
   color: var(--text-muted);
   font-size: 0.66rem;
-  line-height:1;
+  line-height: 1;
+}
+
+.contributionMonths span {
+  justify-self: center;
+  white-space: nowrap;
 }
 
 .contributionWeek {
@@ -555,10 +560,6 @@ strong {
   gap: 2px;
   height: calc(7 * var(--contribution-cell-size) + 12px);
   align-self: start;
-}
-
-.contributionMonths span {
-  white-space: nowrap;
 }
 
 .contributionWeeks {
@@ -2441,6 +2442,7 @@ a.cred:hover {
   grid-template-columns: 88px minmax(0, 1fr);
   gap: 16px;
   padding: 14px 8px;
+  border-bottom: 1px dashed var(--border);
 }
 
 .articleTimelineRow > time {
@@ -2553,11 +2555,18 @@ a.cred:hover {
 }
 
 .articleByline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
   margin-top: 18px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
 .articleByline span:first-child {
   color: var(--text);
+  font-weight: 600;
 }
 
 .articleToc {
@@ -2774,6 +2783,22 @@ a.cred:hover {
     grid-column: 1 / -1;
   }
 
+  .articleTimelineRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 12px 0;
+  }
+
+  .articleTimelineRow > time {
+    padding: 0;
+    font-size: 0.72rem;
+  }
+
+  .articleTimelineReadingTime {
+    display: inline-block;
+    margin: 3px 0 0 8px;
+  }
+
   .articleProse {
     font-size: 0.92rem;
   }
@@ -2786,24 +2811,20 @@ a.cred:hover {
 }
 
 @media (max-width: 420px) {
-  .articleTimelineRow {
-    grid-template-columns: 62px minmax(0, 1fr);
-    gap: 10px;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .articleTimelineRow > time {
-    font-size: 0.74rem;
-  }
-
-  .articleTimelineTitle {
-    font-size: 0.92rem;
-  }
-
   .articleTimelineReadingTime {
     display: block;
     margin: 3px 0 0;
+  }
+
+  .articleTimelineTags {
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .articleTimelineTag {
+    min-height: 24px;
+    padding: 2px 7px;
+    font-size: 0.66rem;
   }
 }
 

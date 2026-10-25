@@ -196,7 +196,7 @@ function ArticleTimelineRow({ article }) {
           <a href={`/articles?category=${encodeURIComponent(article.category)}`} className="articleTimelineTag">
             {article.category}
           </a>
-        {article.tags.map((tag) => (
+        {article.tags.filter((tag) => tag !== article.category).map((tag) => (
           <a key={tag} href={`/articles?tag=${encodeURIComponent(tag)}`} className="articleTimelineTag">
             {tag}
           </a>

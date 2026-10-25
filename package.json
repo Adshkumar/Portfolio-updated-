@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "validate:articles": "node scripts/validate-articles.mjs",
+    "test:articles": "node --test tests/articles.test.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
+    "highlight.js": "^11.12.0",
     "marked": "^18.0.7",
     "next": "16.1.1",
     "react": "19.2.3",

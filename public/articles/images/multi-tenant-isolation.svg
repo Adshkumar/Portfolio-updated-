@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="title desc">
+  <title id="title">Tenant context through a shared service</title>
+  <desc id="desc">Authentication identifies a principal, authorization derives an allowed tenant context, and the application propagates that context to tenant-scoped storage and background jobs. Quotas limit each tenant's use of shared resources.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>.bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.boundary{fill:none;stroke:#737373;stroke-width:1.5;stroke-dasharray:7 5}.label{fill:#fff;font:600 15px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect class="bg" width="960" height="350" rx="18"/>
+  <text class="title" x="28" y="38">Carry authorized tenant context across boundaries</text>
+  <rect class="node" x="28" y="128" width="142" height="72" rx="10"/><text class="label" x="65" y="157">Request</text><text class="sub" x="45" y="179">untrusted tenant hint</text>
+  <rect class="node" x="210" y="128" width="170" height="72" rx="10"/><text class="label" x="235" y="157">Auth + policy</text><text class="sub" x="232" y="179">principal → allowed tenant</text>
+  <rect class="boundary" x="420" y="82" width="505" height="214" rx="16"/>
+  <text class="sub" x="442" y="105">APPLICATION TRUST BOUNDARY · validated tenant context</text>
+  <rect class="node" x="455" y="128" width="170" height="72" rx="10"/><text class="label" x="479" y="157">Service layer</text><text class="sub" x="476" y="179">tenant-scoped operation</text>
+  <rect class="node" x="704" y="116" width="190" height="62" rx="10"/><text class="label" x="744" y="143">Database</text><text class="sub" x="732" y="162">tenant predicate / policy</text>
+  <rect class="node" x="704" y="207" width="190" height="62" rx="10"/><text class="label" x="753" y="234">Queue worker</text><text class="sub" x="731" y="253">tenant context in message</text>
+  <path class="line" d="M170 164H206"/><path class="line" d="M380 164H451"/>
+  <path class="line" d="M625 145H700"/><path class="line" d="M625 182V238H700"/>
+  <text class="sub" x="448" y="326">Per-tenant quotas protect shared compute, connections, and queue capacity.</text>
+</svg>

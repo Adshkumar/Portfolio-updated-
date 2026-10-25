@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">mediasoup producer and consumer media flow</title>
+  <desc id="desc">An authorized peer publishes a track through a WebRTC transport to a Producer in a Router. The application authorizes another peer's subscription, and the Router forwards compatible media through a Consumer and transport.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>.bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.4}.router{fill:#17232b;stroke:#22d3ee;stroke-width:1.7}.label{fill:#fff;font:600 15px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.media{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.control{stroke:#c4b5fd;stroke-width:1.7;stroke-dasharray:6 5;fill:none}</style>
+  </defs>
+  <rect class="bg" width="960" height="360" rx="18"/><text class="title" x="28" y="38">mediasoup routes media; your app controls room policy</text>
+  <rect class="node" x="30" y="126" width="135" height="68" rx="10"/><text class="label" x="64" y="154">Publisher</text><text class="sub" x="55" y="176">authorized peer</text>
+  <rect class="node" x="214" y="126" width="150" height="68" rx="10"/><text class="label" x="237" y="154">WebRTC transport</text><text class="sub" x="251" y="176">ICE + DTLS</text>
+  <rect class="node" x="413" y="126" width="112" height="68" rx="10"/><text class="label" x="445" y="154">Producer</text><text class="sub" x="440" y="176">published track</text>
+  <rect class="router" x="566" y="101" width="150" height="118" rx="14"/><text class="label" x="615" y="143">Router</text><text class="sub" x="590" y="168">codec-aware routing</text><text class="sub" x="599" y="190">room media domain</text>
+  <rect class="node" x="757" y="126" width="112" height="68" rx="10"/><text class="label" x="786" y="154">Consumer</text><text class="sub" x="778" y="176">subscribed track</text>
+  <rect class="node" x="757" y="254" width="150" height="60" rx="10"/><text class="label" x="782" y="279">Subscriber peer</text><text class="sub" x="779" y="299">authorized receiver</text>
+  <path class="media" d="M165 160H210"/><path class="media" d="M364 160H409"/><path class="media" d="M525 160H562"/><path class="media" d="M716 160H753"/><path class="media" d="M813 198V250"/>
+  <rect class="node" x="246" y="254" width="300" height="60" rx="10"/><text class="label" x="328" y="279">Application signaling</text><text class="sub" x="278" y="299">auth, room membership, transport setup, subscribe request</text>
+  <path class="control" d="M396 250V203"/><path class="control" d="M546 284H695V204"/>
+</svg>

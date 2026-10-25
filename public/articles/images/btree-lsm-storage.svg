@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">B-tree and LSM-tree storage paths</title>
+  <desc id="desc">The B-tree path updates ordered disk pages through a write-ahead log. The LSM path appends to a log, updates a memory table, flushes sorted files, and compacts those files.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#22d3ee"/>
+    </marker>
+    <style>
+      .bg{fill:#0a0a0a}.panel{fill:#141414;stroke:#404040;stroke-width:1.5}.node{fill:#1c1c1c;stroke:#525252;stroke-width:1.3}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="360" rx="18"/>
+  <text class="title" x="32" y="38">Two write paths, two sets of trade-offs</text>
+  <rect class="panel" x="24" y="58" width="438" height="278" rx="14"/>
+  <rect class="panel" x="498" y="58" width="438" height="278" rx="14"/>
+  <text class="label" x="46" y="88">B-tree</text>
+  <text class="label" x="520" y="88">LSM tree</text>
+  <rect class="node" x="50" y="120" width="150" height="58" rx="8"/>
+  <text class="label" x="76" y="145">WAL</text><text class="sub" x="76" y="164">durable change log</text>
+  <rect class="node" x="262" y="120" width="160" height="58" rx="8"/>
+  <text class="label" x="289" y="145">Tree pages</text><text class="sub" x="289" y="164">ordered index + values</text>
+  <path class="line" d="M200 149H258"/>
+  <rect class="node" x="50" y="230" width="150" height="58" rx="8"/>
+  <text class="label" x="76" y="255">Point lookup</text><text class="sub" x="76" y="274">root to leaf page</text>
+  <path class="line" d="M336 180V208H200V226"/>
+  <rect class="node" x="524" y="120" width="116" height="58" rx="8"/>
+  <text class="label" x="542" y="145">WAL</text><text class="sub" x="542" y="164">append</text>
+  <rect class="node" x="680" y="120" width="218" height="58" rx="8"/>
+  <text class="label" x="704" y="145">Memtable</text><text class="sub" x="704" y="164">sorted in memory</text>
+  <path class="line" d="M640 149H676"/>
+  <rect class="node" x="524" y="230" width="150" height="58" rx="8"/>
+  <text class="label" x="550" y="255">SSTables</text><text class="sub" x="550" y="274">immutable sorted runs</text>
+  <rect class="node" x="748" y="230" width="150" height="58" rx="8"/>
+  <text class="label" x="771" y="255">Compaction</text><text class="sub" x="771" y="274">merge + discard old data</text>
+  <path class="line" d="M790 179V205H600V226"/>
+  <path class="line" d="M674 259H744"/>
+  <path class="line" d="M823 229V205H858V182"/>
+</svg>

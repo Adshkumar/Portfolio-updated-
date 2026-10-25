@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/portfolio";
@@ -76,6 +77,14 @@ export default function Hero({ initialBlogOpen = false }) {
         >
           <i className="fas fa-blog" style={{ fontSize: "1.25rem" }}></i>
         </button>
+        <Link
+          href="/articles"
+          aria-label="Articles"
+          title="Articles"
+          className="heroResume"
+        >
+          <i className="fas fa-book-open" style={{ fontSize: "1.25rem" }} aria-hidden="true"></i>
+        </Link>
         {siteConfig.resumeLink && (
           <a
             href={siteConfig.resumeLink}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-labelledby="title desc">
+  <title id="title">Idempotent request and retry flow</title>
+  <desc id="desc">The first request claims a scoped key, commits the business effect and stored response, and returns the result. A retry finds the completed record and replays the stored response without repeating the effect. Reusing the key with a different payload is rejected.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.warn{stroke:#f87171;fill:none;stroke-width:2;marker-end:url(#arrow)}.red{fill:#fca5a5;font:600 13px system-ui,sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="340" rx="18"/>
+  <text class="title" x="28" y="38">One logical operation, possibly many network attempts</text>
+  <rect class="node" x="28" y="112" width="155" height="68" rx="10"/><text class="label" x="66" y="140">Client</text><text class="sub" x="43" y="161">stable idempotency key</text>
+  <rect class="node" x="255" y="112" width="178" height="68" rx="10"/><text class="label" x="282" y="140">API service</text><text class="sub" x="278" y="161">authenticate + validate</text>
+  <rect class="node" x="526" y="112" width="200" height="68" rx="10"/><text class="label" x="550" y="140">Request record</text><text class="sub" x="550" y="161">unique scoped key + state</text>
+  <rect class="node" x="780" y="112" width="154" height="68" rx="10"/><text class="label" x="803" y="140">Business data</text><text class="sub" x="802" y="161">effect + response</text>
+  <path class="line" d="M183 146H251"/><path class="line" d="M433 146H522"/><path class="line" d="M726 146H776"/>
+  <path class="line" d="M857 182V232H342V184"/>
+  <text class="sub" x="487" y="255">commit result, then respond</text>
+  <path class="line" d="M104 183V294H620V184"/>
+  <text class="sub" x="290" y="319">retry: same key → return stored result, do not repeat effect</text>
+  <path class="warn" d="M628 111V74H343V108"/>
+  <text class="red" x="371" y="67">same key + different payload → reject</text>
+</svg>

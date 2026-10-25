@@ -17,6 +17,7 @@ const profileAbbr = {
 const hoverColors = {
   home: "#22d3ee",
   resume: "#a78bfa",
+  articles: "#22d3ee",
   github: "#ffffff",
   linkedin: "#0a66c2",
   twitter: "#ffffff",
@@ -84,6 +85,7 @@ export default function Navbar({ theme, onToggleTheme }) {
 
   const homeIdx = nextIndex();
   const resumeIdx = nextIndex();
+  const articlesIdx = nextIndex();
   const socialIndices = dockOrder.map(() => nextIndex());
   const themeIdx = nextIndex();
   const profileIndices = codingProfiles.map(() => nextIndex());
@@ -139,6 +141,18 @@ export default function Navbar({ theme, onToggleTheme }) {
           <i className="fas fa-file-alt"></i>
         </a>
       )}
+      <Link
+        href="/articles"
+        className={`dockItem${hoveredIndex === articlesIdx ? " isActive" : ""}`}
+        aria-label="Tech Articles"
+        title="Tech Articles"
+        ref={registerItem(articlesIdx, hoverColors.articles)}
+        onMouseEnter={onEnter(articlesIdx)}
+        onMouseLeave={onLeave}
+        style={activeStyle(articlesIdx, "articles")}
+      >
+        <i className="fas fa-book-open" aria-hidden="true"></i>
+      </Link>
       <span className="dockSep" aria-hidden="true"></span>
       {dockOrder.map((p, i) => {
         const link = byPlatform[p];

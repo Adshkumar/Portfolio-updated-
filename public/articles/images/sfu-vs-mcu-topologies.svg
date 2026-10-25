@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="title desc">
+  <title id="title">Mesh, SFU, and MCU group call topologies</title>
+  <desc id="desc">Mesh connects each participant to every other participant. An SFU receives participant streams and forwards selected streams. An MCU receives streams, composes them, and sends a mixed output.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>.bg{fill:#0a0a0a}.panel{fill:#101010;stroke:#404040;stroke-width:1.4}.node{fill:#1c1c1c;stroke:#525252;stroke-width:1.2}.server{fill:#17232b;stroke:#22d3ee;stroke-width:1.5}.label{fill:#fff;font:600 14px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:1.7;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect class="bg" width="960" height="390" rx="18"/><text class="title" x="28" y="36">Three common group-media paths</text>
+  <rect class="panel" x="20" y="58" width="292" height="306" rx="12"/><text class="label" x="42" y="87">Mesh</text><text class="sub" x="42" y="105">each peer sends to the others</text>
+  <rect class="node" x="47" y="145" width="76" height="46" rx="8"/><text class="label" x="72" y="173">A</text><rect class="node" x="208" y="145" width="76" height="46" rx="8"/><text class="label" x="233" y="173">B</text><rect class="node" x="128" y="269" width="76" height="46" rx="8"/><text class="label" x="153" y="297">C</text>
+  <path class="line" d="M123 155L204 155"/><path class="line" d="M207 180L195 267"/><path class="line" d="M132 272L123 190"/>
+  <path class="line" d="M204 177L125 177"/><path class="line" d="M198 269L210 190"/><path class="line" d="M128 286L207 181"/>
+  <rect class="panel" x="334" y="58" width="292" height="306" rx="12"/><text class="label" x="356" y="87">SFU</text><text class="sub" x="356" y="105">forwards selected encoded streams</text>
+  <rect class="node" x="355" y="145" width="68" height="42" rx="8"/><text class="label" x="378" y="171">A</text><rect class="node" x="355" y="215" width="68" height="42" rx="8"/><text class="label" x="378" y="241">B</text><rect class="node" x="355" y="285" width="68" height="42" rx="8"/><text class="label" x="378" y="311">C</text>
+  <rect class="server" x="482" y="204" width="112" height="64" rx="10"/><text class="label" x="516" y="231">SFU</text><text class="sub" x="495" y="251">select + forward</text>
+  <path class="line" d="M423 165L478 215"/><path class="line" d="M423 236H478"/><path class="line" d="M423 307L478 257"/>
+  <path class="line" d="M482 225L423 180"/><path class="line" d="M482 237L423 236"/><path class="line" d="M482 249L423 292"/>
+  <rect class="panel" x="648" y="58" width="292" height="306" rx="12"/><text class="label" x="670" y="87">MCU</text><text class="sub" x="670" y="105">decodes and composes output</text>
+  <rect class="node" x="668" y="145" width="65" height="42" rx="8"/><text class="label" x="690" y="171">A</text><rect class="node" x="668" y="215" width="65" height="42" rx="8"/><text class="label" x="690" y="241">B</text><rect class="node" x="668" y="285" width="65" height="42" rx="8"/><text class="label" x="690" y="311">C</text>
+  <rect class="server" x="784" y="204" width="132" height="64" rx="10"/><text class="label" x="823" y="231">MCU</text><text class="sub" x="797" y="251">mix / compose</text>
+  <path class="line" d="M733 165L780 215"/><path class="line" d="M733 236H780"/><path class="line" d="M733 307L780 257"/>
+  <path class="line" d="M784 236L735 180"/><path class="line" d="M784 236H735"/>
+</svg>

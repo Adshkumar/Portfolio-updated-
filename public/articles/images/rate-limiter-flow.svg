@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
+  <title id="title">Distributed token-bucket request flow</title>
+  <desc id="desc">A client request reaches a gateway, which atomically evaluates and consumes a token in a shared quota store. Allowed requests proceed to the application; denied requests receive HTTP 429.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.reject{stroke:#f87171}.red{fill:#fca5a5}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="300" rx="18"/>
+  <text class="title" x="30" y="38">Admission is decided before expensive work begins</text>
+  <rect class="node" x="28" y="112" width="142" height="70" rx="10"/><text class="label" x="66" y="141">Client</text><text class="sub" x="48" y="163">request + identity</text>
+  <rect class="node" x="220" y="112" width="170" height="70" rx="10"/><text class="label" x="253" y="141">API gateway</text><text class="sub" x="243" y="163">derive quota key</text>
+  <rect class="node" x="454" y="112" width="210" height="70" rx="10"/><text class="label" x="485" y="141">Shared quota store</text><text class="sub" x="479" y="163">atomic refill + consume</text>
+  <rect class="node" x="728" y="112" width="196" height="70" rx="10"/><text class="label" x="771" y="141">Application</text><text class="sub" x="761" y="163">handle admitted work</text>
+  <path class="line" d="M170 147H216"/><path class="line" d="M390 147H450"/><path class="line" d="M664 147H724"/>
+  <text class="sub" x="388" y="98">check policy</text><text class="sub" x="678" y="132">allowed</text>
+  <path class="line reject" d="M536 183V238H300V186"/>
+  <text class="red" x="331" y="262" font="600 14px system-ui,sans-serif">denied → HTTP 429</text>
+</svg>

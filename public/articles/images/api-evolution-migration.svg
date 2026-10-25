@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" role="img" aria-labelledby="title desc">
+  <title id="title">Expand, migrate, contract API evolution</title>
+  <desc id="desc">First add the new schema while old clients remain supported. Then deploy compatible clients and backfill data. Finally remove the old contract only after telemetry confirms it is unused and rollback is safe.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>.bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.step{fill:#22d3ee;font:700 13px system-ui,sans-serif}</style>
+  </defs>
+  <rect class="bg" width="960" height="320" rx="18"/>
+  <text class="title" x="28" y="38">Change the contract in safe, observable steps</text>
+  <rect class="node" x="30" y="100" width="260" height="138" rx="12"/>
+  <text class="step" x="52" y="128">1 · EXPAND</text><text class="label" x="52" y="158">Add new fields</text>
+  <text class="sub" x="52" y="184">Old and new API supported</text><text class="sub" x="52" y="205">Schema accepts both shapes</text>
+  <rect class="node" x="350" y="100" width="260" height="138" rx="12"/>
+  <text class="step" x="372" y="128">2 · MIGRATE</text><text class="label" x="372" y="158">Backfill and switch clients</text>
+  <text class="sub" x="372" y="184">Bounded jobs + reconciliation</text><text class="sub" x="372" y="205">Measure old-client traffic</text>
+  <rect class="node" x="670" y="100" width="260" height="138" rx="12"/>
+  <text class="step" x="692" y="128">3 · CONTRACT</text><text class="label" x="692" y="158">Remove old fields</text>
+  <text class="sub" x="692" y="184">Only after usage reaches zero</text><text class="sub" x="692" y="205">Rollback no longer needs them</text>
+  <path class="line" d="M290 169H346"/><path class="line" d="M610 169H666"/>
+  <text class="sub" x="326" y="278">Telemetry, consistency checks, and a rollback plan gate each transition.</text>
+</svg>

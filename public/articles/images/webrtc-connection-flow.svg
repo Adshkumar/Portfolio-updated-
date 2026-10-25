@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">WebRTC signaling, ICE, and media flow</title>
+  <desc id="desc">Two peers exchange offer, answer, and ICE candidates through an application signaling server. ICE checks find a network path; encrypted media then flows directly or through a TURN relay.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <marker id="media" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#86efac"/></marker>
+    <style>.bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.signal{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.media{stroke:#86efac;stroke-width:2.5;fill:none;marker-end:url(#media)}.dash{stroke-dasharray:6 5}</style>
+  </defs>
+  <rect class="bg" width="960" height="360" rx="18"/>
+  <text class="title" x="28" y="38">Control messages set up the path; media uses the path</text>
+  <rect class="node" x="40" y="111" width="180" height="74" rx="10"/><text class="label" x="92" y="141">Peer A</text><text class="sub" x="64" y="164">offer + candidates</text>
+  <rect class="node" x="390" y="80" width="190" height="88" rx="10"/><text class="label" x="427" y="111">Signaling service</text><text class="sub" x="423" y="137">auth + message routing</text><text class="sub" x="430" y="155">not in media path</text>
+  <rect class="node" x="740" y="111" width="180" height="74" rx="10"/><text class="label" x="792" y="141">Peer B</text><text class="sub" x="766" y="164">answer + candidates</text>
+  <path class="signal" d="M220 127H386"/><path class="signal" d="M390 151H224"/>
+  <path class="signal" d="M580 127H736"/><path class="signal" d="M740 151H584"/>
+  <text class="sub" x="256" y="115">SDP / ICE</text><text class="sub" x="621" y="115">SDP / ICE</text>
+  <rect class="node" x="398" y="230" width="174" height="62" rx="10"/><text class="label" x="433" y="256">TURN relay</text><text class="sub" x="426" y="277">used when needed</text>
+  <path class="media dash" d="M130 188V250H394"/><path class="media dash" d="M572 261H830V189"/>
+  <path class="media" d="M220 194C350 340 620 340 740 194"/>
+  <text class="sub" x="330" y="326" fill="#86efac">encrypted DTLS-SRTP media: direct path or relayed path</text>
+  <text class="sub" x="300" y="224">ICE checks select a working candidate pair</text>
+</svg>

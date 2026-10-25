@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="title desc">
+  <title id="title">Cache-aside read and update paths</title>
+  <desc id="desc">Reads check the cache, fetch from the database on a miss, and fill the cache. Writes commit to the database then invalidate the cache. A failed or delayed invalidation leaves a stale-read window.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <marker id="warn" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#f87171"/></marker>
+    <style>.bg{fill:#0a0a0a}.node{fill:#141414;stroke:#525252;stroke-width:1.5}.label{fill:#fff;font:600 16px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.line{stroke:#22d3ee;stroke-width:2;fill:none;marker-end:url(#arrow)}.risk{stroke:#f87171;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#warn)}.risktext{fill:#fca5a5;font:600 13px system-ui,sans-serif}</style>
+  </defs>
+  <rect class="bg" width="900" height="340" rx="18"/>
+  <text class="title" x="28" y="38">Cache-aside: fast reads, explicit invalidation</text>
+  <rect class="node" x="35" y="112" width="165" height="70" rx="10"/><text class="label" x="76" y="141">Application</text><text class="sub" x="61" y="162">read or update</text>
+  <rect class="node" x="365" y="78" width="160" height="70" rx="10"/><text class="label" x="412" y="107">Cache</text><text class="sub" x="394" y="128">key → cached value</text>
+  <rect class="node" x="365" y="212" width="160" height="70" rx="10"/><text class="label" x="403" y="241">Database</text><text class="sub" x="395" y="262">authoritative value</text>
+  <path class="line" d="M200 128H360"/><text class="sub" x="247" y="117">1. lookup</text>
+  <path class="line" d="M360 156H200"/><text class="sub" x="224" y="177">hit: return value</text>
+  <path class="line" d="M200 168H300V247H360"/><text class="sub" x="211" y="224">miss: load</text>
+  <path class="line" d="M360 225H300V137H360"/><text class="sub" x="217" y="277">2. fill cache</text>
+  <path class="line" d="M200 149H270V296H610V247H530"/><text class="sub" x="477" y="318">3. write database, then invalidate cache</text>
+  <path class="risk" d="M525 115H696V190"/><text class="risktext" x="579" y="102">invalidation fails or lags</text>
+  <rect class="node" x="675" y="195" width="190" height="66" rx="10"/><text class="label" x="701" y="223">Stale read window</text><text class="sub" x="697" y="244">bounded only by policy</text>
+</svg>

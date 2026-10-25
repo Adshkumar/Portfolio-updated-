@@ -9,6 +9,7 @@ export const siteConfig = {
   name: "Adarsh Kumar",
   initials: "AK",
   title: "Adarsh Kumar",
+  url: "https://adsingh-portfolio.vercel.app",
   description:
     "Full-stack developer passionate about building modern web applications that solve real-world problems with elegant, user-centered design.",
   tagline:

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Portfolio Configuration
  *
  * Edit this file to update your portfolio information.
@@ -13,7 +13,7 @@ export const siteConfig = {
   description:
     "Full-stack developer passionate about building modern web applications that solve real-world problems with elegant, user-centered design.",
   tagline:
-    "Software Engineer making the complex feel simpleâ€”and the useful feel exceptional.",
+    "Software Engineer making the complex feel simple—and the useful feel exceptional.",
   resumeLink: "/Adarsh-Kumar-Resume.pdf",
 };
 
@@ -85,16 +85,16 @@ export const aboutStats = [
 export const education = {
   institution: "Chhotu Ram Rural Institute of Technology, Delhi",
   degree: "Diploma in Computer Science",
-  duration: "Sept 2024 â€“ Jul 2027",
+  duration: "Sept 2024 – Jul 2027",
 };
 
 export const experiences = [
   {
     company: "r0",
     role: "Creator & Open-Source Developer",
-    duration: "2025 â€“ Present",
-    type: "Desktop Application â€¢ Open Source",
-    tech: "Rust â€¢ TypeScript â€¢ CodeMirror 6 â€¢ portable-pty â€¢ SQLite",
+    duration: "2025 – Present",
+    type: "Desktop Application • Open Source",
+    tech: "Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     logo: "/logos/r0-logo.png",
     invertInLight: true,
     downloadLink: "https://github.com/Adshkumar/r0/releases/latest/download/r0-latest-setup.exe",
@@ -111,9 +111,9 @@ export const experiences = [
   {
     company: "AKM Techie",
     role: "Intern Web Developer",
-    duration: "June 2025 â€“ July 2025",
+    duration: "June 2025 – July 2025",
     type: "India",
-    tech: "HTML â€¢ CSS â€¢ JavaScript â€¢ Responsive Design â€¢ UI/UX",
+    tech: "HTML • CSS • JavaScript • Responsive Design • UI/UX",
     logo: null,
     articleLink: "/experience/akm-techie",
     // proofLink: "https://dtest-inky.vercel.app/",
@@ -128,7 +128,7 @@ export const experiences = [
     company: "Finance Tracker",
     role: "Full-Stack Mobile Project",
     type: "Personal Project",
-    tech: "React Native â€¢ Expo â€¢ Supabase â€¢ PostgreSQL â€¢ Clerk â€¢ Gemini AI â€¢ NativeWind",
+    tech: "React Native • Expo • Supabase • PostgreSQL • Clerk • Gemini AI • NativeWind",
     logo: "/finance-icon-logo.png",
     articleLink: "/experience/finance-tracker",
     proofLink: "",
@@ -143,9 +143,9 @@ export const experiences = [
   {
     company: "URL Shortener",
     role: "Full-Stack Project",
-    duration: "June 2026 â€“ July 2026",
-    type: "Self Project â€¢ India",
-    tech: "MongoDB â€¢ Express.js â€¢ React.js â€¢ Node.js â€¢ JWT â€¢ REST APIs â€¢ Tailwind CSS â€¢ Docker",
+    duration: "June 2026 – July 2026",
+    type: "Self Project • India",
+    tech: "MongoDB • Express.js • React.js • Node.js • JWT • REST APIs • Tailwind CSS • Docker",
     logo: "/url-shortener-thumbnail.png",
     articleLink: "/experience/url-shortener",
     proofLink: "https://url-linksnap.vercel.app/",
@@ -160,9 +160,9 @@ export const experiences = [
   {
     company: "Agentic AI",
     role: "Full-Stack AI Project",
-    duration: "May 2026 â€“ June 2026",
-    type: "Self Project â€¢ India",
-    tech: "Next.js â€¢ TypeScript â€¢ Clerk â€¢ Prisma â€¢ PostgreSQL â€¢ Supabase â€¢ Gemini â€¢ Cline SDK â€¢ Sandpack",
+    duration: "May 2026 – June 2026",
+    type: "Self Project • India",
+    tech: "Next.js • TypeScript • Clerk • Prisma • PostgreSQL • Supabase • Gemini • Cline SDK • Sandpack",
     logo: null,
     articleLink: "/experience/agentic-ai",
     proofLink: "https://agentic-flow-ai.vercel.app/",
@@ -177,8 +177,8 @@ export const experiences = [
     company: "Chat Application",
     role: "Full-Stack Project",
     duration: "2024",
-    type: "Node.js â€¢ MongoDB â€¢ Socket.io",
-    tech: "Node.js â€¢ Express.js â€¢ MongoDB â€¢ JWT â€¢ Socket.io â€¢ Docker",
+    type: "Node.js • MongoDB • Socket.io",
+    tech: "Node.js • Express.js • MongoDB • JWT • Socket.io • Docker",
     logo: "/images/chat-app.png",
     articleLink: "/experience/chat-application",
     proofLink: "https://chat-application-sable-rho.vercel.app/",
@@ -193,8 +193,8 @@ export const experiences = [
     company: "AI Interview Platform",
     role: "Full-Stack Product",
     duration: "2024",
-    type: "React â€¢ Node.js â€¢ AI",
-    tech: "React.js â€¢ Node.js â€¢ Express.js â€¢ MongoDB â€¢ JWT â€¢ Puppeteer â€¢ Docker",
+    type: "React • Node.js • AI",
+    tech: "React.js • Node.js • Express.js • MongoDB • JWT • Puppeteer • Docker",
     logo: "/images/GEN-AI.png",
     articleLink: "/experience/ai-interview-platform",
     proofLink: "https://adarsh-interviewai.vercel.app/",
@@ -210,7 +210,7 @@ export const experiences = [
     role: "API & System Design",
     duration: "2024",
     type: "Backend Engineering",
-    tech: "React â€¢ Vite â€¢ Node.js â€¢ Express â€¢ MongoDB â€¢ Socket.IO â€¢ Google Maps â€¢ Razorpay",
+    tech: "React • Vite • Node.js • Express • MongoDB • Socket.IO • Google Maps • Razorpay",
     logo: "/images/UBER.png",
     articleLink: "/experience/uber-clone",
     proofLink: "https://uber-psi-three.vercel.app/",

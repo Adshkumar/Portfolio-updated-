@@ -2640,7 +2640,7 @@ a.cred:hover {
 .articleProse blockquote,
 .articleProse pre,
 .articleProse table,
-.articleProse img {
+.articleProse .articleImageButton {
   margin: 1em 0;
 }
 
@@ -2738,8 +2738,10 @@ a.cred:hover {
 
 .articleProse table {
   display: block;
+  width: 100%;
   max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-collapse: collapse;
   font-size: 0.83rem;
 }
@@ -2757,12 +2759,106 @@ a.cred:hover {
   color: var(--text);
 }
 
-.articleProse img {
+.articleProse .articleImageButton {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: zoom-in;
+  font: inherit;
+  text-align: left;
+}
+
+.articleProse .articleImageButton:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 4px;
+}
+
+.articleProse .articleImageButton img {
   width: 100%;
   height: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--bg-elev);
+  margin: 0;
+}
+
+.articleImageViewer {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px 24px;
+  background: var(--bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  cursor: zoom-out;
+}
+
+.articleImageViewerClose {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.articleImageViewerClose:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+.articleImageViewerFigure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  max-height: 100%;
+  cursor: default;
+}
+
+.articleImageViewerFigure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  object-fit: contain;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: #0a0a0a;
+}
+
+.articleImageViewerFigure figcaption {
+  max-width: 72ch;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .articleImageViewer {
+    padding: 64px 12px 16px;
+  }
+
+  .articleImageViewerClose {
+    top: 12px;
+    right: 12px;
+  }
+
+  .articleImageViewerFigure img {
+    max-height: calc(100vh - 100px);
+  }
+
 }
 
 @media (max-width: 640px) {
@@ -2801,6 +2897,17 @@ a.cred:hover {
 
   .articleProse {
     font-size: 0.92rem;
+  }
+
+  .articleProse table {
+    font-size: 0.78rem;
+  }
+
+  .articleProse th,
+  .articleProse td {
+    min-width: 7rem;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 }
 

@@ -81,7 +81,15 @@ test("renders Markdown without raw HTML or dangerous URL schemes", () => {
   assert.doesNotMatch(html, /<script>/i);
   assert.doesNotMatch(html, /javascript:/i);
   assert.doesNotMatch(html, /<img/i);
+  assert.doesNotMatch(html, /articleImageButton/);
   assert.match(html, /&lt;script&gt;/i);
+});
+
+test("renders local article images as accessible full-size buttons", () => {
+  const { html } = renderArticleMarkdown('![Ring diagram](/articles/images/ring.svg "Hash ring")');
+  assert.match(html, /<button type="button" class="articleImageButton"/);
+  assert.match(html, /aria-label="View image full size: Ring diagram"/);
+  assert.match(html, /<img src="\/articles\/images\/ring\.svg" alt="Ring diagram" loading="lazy" title="Hash ring">/);
 });
 
 test("highlights supported code and escapes unrecognized code languages", () => {

@@ -264,7 +264,7 @@ export function renderArticleMarkdown(body) {
     const safeHref = safeImageUrl(href);
     if (!safeHref) return escapeHtml(text);
     const titleAttribute = title ? ` title="${escapeHtml(title)}"` : "";
-    return `<img src="${escapeHtml(safeHref)}" alt="${escapeHtml(text)}" loading="lazy"${titleAttribute}>`;
+    return `<button type="button" class="articleImageButton" aria-label="View image full size: ${escapeHtml(text)}"><img src="${escapeHtml(safeHref)}" alt="${escapeHtml(text)}" loading="lazy"${titleAttribute}></button>`;
   };
   renderer.code = ({ text, lang }) => {
     const language = lang?.split(/\s+/)[0].toLowerCase();

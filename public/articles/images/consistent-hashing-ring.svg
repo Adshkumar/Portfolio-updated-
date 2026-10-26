@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" role="img" aria-labelledby="title desc">
+  <title id="title">Consistent hashing ring and node addition</title>
+  <desc id="desc">Two hash rings show keys assigned to the next node clockwise. Before node D joins, key K1 belongs to node B. After D is added between nodes A and B, K1 moves to D while key K2 remains with B and node C's keys remain unchanged.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#22d3ee"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.panel{fill:#111;stroke:#404040;stroke-width:1.5}.ring{fill:none;stroke:#525252;stroke-width:2}.label{fill:#fff;font:600 15px system-ui,sans-serif}.sub{fill:#a3a3a3;font:13px system-ui,sans-serif}.title{fill:#fff;font:700 20px system-ui,sans-serif}.section{fill:#22d3ee;font:700 13px system-ui,sans-serif;letter-spacing:.5px}.node{fill:#22d3ee;stroke:#0a0a0a;stroke-width:3}.new-node{fill:#fbbf24;stroke:#0a0a0a;stroke-width:3}.ghost{fill:#111;stroke:#fbbf24;stroke-width:2;stroke-dasharray:4 3}.key{fill:#fbbf24;stroke:#0a0a0a;stroke-width:2}.moved-key{fill:#fbbf24;stroke:#fff;stroke-width:2}.line{stroke:#22d3ee;stroke-width:1.5;fill:none;marker-end:url(#arrow)}.interval{stroke:#fbbf24;stroke-width:5;fill:none;stroke-linecap:round}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="470" rx="18"/>
+  <text class="title" x="28" y="38">Consistent hashing: add a node, move only its interval</text>
+
+  <rect class="panel" x="24" y="60" width="462" height="365" rx="12"/>
+  <rect class="panel" x="514" y="60" width="462" height="365" rx="12"/>
+  <text class="section" x="48" y="89">BEFORE: THREE NODES</text>
+  <text class="section" x="538" y="89">AFTER: NODE D JOINS</text>
+
+  <circle class="ring" cx="255" cy="226" r="112"/>
+  <circle class="ring" cx="745" cy="226" r="112"/>
+  <path class="interval" d="M255 114 A112 112 0 0 1 324 138"/>
+  <path class="interval" d="M745 114 A112 112 0 0 1 814 138"/>
+
+  <circle class="node" cx="255" cy="114" r="9"/>
+  <text class="label" x="240" y="105">A</text>
+  <circle class="node" cx="351" cy="282" r="9"/>
+  <text class="label" x="364" y="288">B</text>
+  <circle class="node" cx="159" cy="282" r="9"/>
+  <text class="label" x="137" y="302">C</text>
+  <circle class="ghost" cx="324" cy="138" r="9"/>
+  <text class="sub" x="332" y="128">D joins</text>
+
+  <circle class="node" cx="745" cy="114" r="9"/>
+  <text class="label" x="730" y="105">A</text>
+  <circle class="node" cx="841" cy="282" r="9"/>
+  <text class="label" x="854" y="288">B</text>
+  <circle class="node" cx="649" cy="282" r="9"/>
+  <text class="label" x="627" y="302">C</text>
+  <circle class="new-node" cx="814" cy="138" r="10"/>
+  <text class="label" x="824" y="128">D</text>
+
+  <circle class="key" cx="294" cy="121" r="6"/>
+  <text class="sub" x="275" y="151">K1</text>
+  <circle class="key" cx="346" cy="185" r="6"/>
+  <text class="sub" x="354" y="184">K2</text>
+  <circle class="moved-key" cx="784" cy="121" r="6"/>
+  <text class="sub" x="765" y="151">K1</text>
+  <circle class="key" cx="836" cy="185" r="6"/>
+  <text class="sub" x="844" y="184">K2</text>
+
+  <path class="line" d="M294 121L342 264"/>
+  <path class="line" d="M784 121L808 145"/>
+  <path class="line" d="M836 185L838 267"/>
+
+  <text class="label" x="48" y="347">K1 → B</text>
+  <text class="sub" x="48" y="371">K1's clockwise successor is B.</text>
+  <text class="label" x="538" y="347">K1 → D; K2 → B</text>
+  <text class="sub" x="538" y="371">K1 moves; keys in other intervals keep their owner.</text>
+  <text class="sub" x="28" y="450">The highlighted arc is the interval affected by D's insertion; placement changes do not migrate data by themselves.</text>
+</svg>

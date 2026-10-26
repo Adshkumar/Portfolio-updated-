@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ArticleAuthorHeader from "@/components/ArticleAuthorHeader";
+import ArticleProse from "@/components/ArticleProse";
 import ThemeNavbar from "@/components/ThemeNavbar";
 import {
   getPublishedArticles,
@@ -110,7 +111,7 @@ export default async function ArticlePage({ params }) {
             </nav>
           )}
 
-          <article className="articleProse" dangerouslySetInnerHTML={{ __html: html }} />
+          <ArticleProse html={html} />
         </main>
       </div>
       <script

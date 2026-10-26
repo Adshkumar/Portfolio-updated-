@@ -81,6 +81,10 @@ Modulo hashing is compact, but changing the number of buckets reshuffles most ke
 
 Consistent hashing instead maps both keys and node ownership onto a circular hash space. A key is assigned to the next node token on the ring. When a node is added or removed, only the keys in the affected ring intervals need new owners; keys in other intervals remain assigned as before.
 
+![Two consistent-hashing rings show key K1 moving from node B to newly added node D, while K2 and keys in other intervals keep their owners](/articles/images/consistent-hashing-ring.svg "Consistent hashing ring before and after adding a node")
+
+Figure 2: Each key walks clockwise to its first node token. Adding D splits the interval that previously belonged to B, so only keys in the new A-to-D interval change owner. The diagram illustrates placement only; the system still has to copy and validate those keys before routing is switched.
+
 This limits *which keys need reassignment*. It does not copy the data, move connections, preserve transactions, or make the migration safe automatically. The system still needs a placement map and a protocol for moving ownership while reads and writes continue.
 
 Early ring designs assign one token to each node, which can produce uneven ranges. **Virtual nodes** give each physical node multiple tokens so ownership is spread over more, smaller intervals. This improves balance in expectation and allows a larger node to own more tokens, but it adds metadata and does not guarantee balance for a skewed workload. Even perfectly balanced key counts do not imply balanced bytes, CPU, or request rates.

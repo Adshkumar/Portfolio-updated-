@@ -26,6 +26,7 @@ public/articles/images/
   api-evolution-migration.svg
   multi-tenant-isolation.svg
   database-sharding-routing.svg
+  consistent-hashing-ring.svg
   mvcc-snapshot-visibility.svg
   mvcc-write-skew.svg
   webrtc-connection-flow.svg
@@ -76,7 +77,7 @@ The metadata parser intentionally supports this constrained YAML subset: quoted 
 
 The renderer supports GitHub-Flavored Markdown tables, lists, quotes, inline code, and fenced code blocks. Highlight.js highlights supported language labels during static generation; unrecognized or unlabeled blocks remain safely escaped plain text. Raw HTML is escaped rather than executed. Link schemes are restricted; images must be local `/articles/` assets, and article images are lazy-loaded. Code samples are displayed, never executed.
 
-Use self-contained SVGs for diagrams. Give the SVG a `<title>` and `<desc>`, keep labels legible on mobile, avoid color-only distinctions, and include a Markdown alt description and a prose caption/explanation. Mermaid source is not executed or rendered; provide a reviewed static SVG instead. This avoids shipping a large client-side diagram runtime and avoids interpreting article text as executable diagram instructions.
+Use self-contained SVGs for diagrams. Give the SVG a `<title>` and `<desc>`, keep labels legible on mobile, avoid color-only distinctions, and include a Markdown alt description and a prose caption/explanation. Article images can be clicked or keyboard-activated to view them full size; press Escape or click outside the image to close the viewer. Mermaid source is not executed or rendered; provide a reviewed static SVG instead. This avoids shipping a large client-side diagram runtime and avoids interpreting article text as executable diagram instructions.
 
 Internal links to other articles use `/articles/<slug>` and are checked against published slugs. Review other local links and code examples manually. Do not include remote images or private information in article assets.
 

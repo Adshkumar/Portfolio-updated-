@@ -16,12 +16,11 @@ export const metadata = {
     "Portfolio",
     "AI Engineer",
     "Full Stack Developer",
-    "Open Source Contributor",
-    "BIT Mesra",
-    "BorgBackup",
-    "Hackathon",
   ],
   authors: [{ name: siteConfig.name }],
+  verification: {
+    google: "Az9r7RxQ24dwiCIjqSUqfMJElwOx7H2m2lRCDXqiAKg",
+  },
 };
 
 export default function RootLayout({ children }) {

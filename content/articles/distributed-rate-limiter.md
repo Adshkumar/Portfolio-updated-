@@ -15,92 +15,252 @@ author: "Adarsh Kumar"
 cover: null
 ---
 
-A rate limiter decides whether a request is admitted based on a policy such as "at most 100 requests per minute per account." A single-process limiter is straightforward: keep counters in memory. A distributed service is harder because requests for the same account may reach different application instances, and those instances need a consistent way to evaluate the same quota.
+Rate limiting is an admission-control boundary that protects backend services from degradation, resource starvation, cascading failures, and distributed denial-of-service (DDoS) traffic. In a single-process service, rate limiting is trivial: track counters or timestamps in local memory mutexes. In a distributed architecture with dozens of API gateways and autoscaling application pods across multiple availability zones, rate limiting becomes a complex distributed state problem.
 
-Before choosing an algorithm, define the policy. Is the quota per user, API key, tenant, IP address, or route? Is it a strict maximum or a smoothed target? What should happen when the shared state store is unavailable? The answers affect both user experience and system safety.
-
-## Token bucket as a mental model
-
-A token bucket has a capacity and a refill rate. Tokens accumulate up to the capacity; each admitted request consumes one token. If no token is available, the request is rejected or delayed. The bucket allows short bursts up to its capacity while limiting the long-term average.
-
-For example, a bucket with capacity 20 and refill rate 2 tokens per second can admit a burst of up to 20 requests after it has filled. It does not promise that every rolling one-second interval contains no more than two requests; the capacity explicitly permits bursts.
+Every distributed rate limiter must satisfy strict non-functional constraints:
+- **Ultra-low latency impact**: Evaluation must complete within 1–2 ms, adding negligible overhead to the critical request path.
+- **Atomic state transitions**: Concurrent requests racing from different gateway instances must not bypass quotas (over-admission) or corrupt counter state.
+- **Fault resilience**: If the central quota store experiences latency spikes or network partitions, the rate limiter must degrade predictably rather than taking down the entire API gateway fleet.
 
 ![Request flow through an API gateway to an atomic shared quota store and the application](/articles/images/rate-limiter-flow.svg "Distributed token-bucket request flow")
 
-Figure 1: Each gateway asks the shared quota store to refill and consume a token atomically before forwarding a request. A denied request returns a rate-limit response without reaching the application.
+Figure 1: Request admission flow in a distributed API gateway topology. The gateway extracts the client identity, computes the quota key, and executes an atomic state evaluation in a shared low-latency store (such as Redis). Admitted requests pass to backend services, while denied requests terminate at the gateway with an immediate `HTTP 429 Too Many Requests` response.
 
-The gateway identifies the quota key, for example `tenant:42:route:search`, and requests an atomic state transition. The store reads the current token balance and last-refill timestamp, calculates newly earned tokens, clamps the balance to capacity, and either subtracts one token or leaves state unchanged. The operation must be atomic: separate read and write operations could allow concurrent requests to consume the same last token.
+## Algorithmic foundations and trade-offs
 
-This pure JavaScript function shows the token-bucket calculation; it is not itself a distributed implementation. A real service must run the read, calculation, and write as one atomic operation in its shared state store.
+Before writing distributed code, you must match the business policy to the correct rate-limiting algorithm.
 
-```js
-function takeToken(bucket, { capacity, refillPerSecond }, nowMs) {
-  const elapsedSeconds = Math.max(0, nowMs - bucket.updatedAt) / 1000;
-  const refilled = Math.min(
-    capacity,
-    bucket.tokens + elapsedSeconds * refillPerSecond
-  );
-  const allowed = refilled >= 1;
+```text
+Incoming Traffic (Bursts)
+       │
+       ▼
+[ Algorithm / Policy Engine ]
+       │
+       ├── Allowed ──> Forward to Application
+       └── Denied  ──> Return HTTP 429 Too Many Requests
+```
 
-  return {
-    allowed,
-    state: {
-      tokens: allowed ? refilled - 1 : refilled,
-      updatedAt: nowMs,
-    },
-  };
+### 1. Token Bucket
+- **Mental model**: A bucket holds at most `C` tokens. Tokens refill continuously at a rate of `r` tokens per second. Each admitted request consumes `k` tokens (typically `k = 1`). If insufficient tokens are present, the request is rejected.
+- **Key property**: Naturally accommodates short, controlled bursts up to bucket capacity `C`, while strictly bounding long-term sustained throughput to `r`.
+- **State required**: Only two values: `tokens` (floating-point balance) and `last_updated_at` (epoch timestamp).
+
+### 2. Leaky Bucket (Traffic Shaper vs. Traffic Meter)
+- **As a FIFO queue (Traffic Shaper)**: Requests enter a bounded FIFO queue and leak out at a constant, fixed rate to downstream handlers. Bursts are smoothed into a uniform stream. If the queue overflows, incoming requests are dropped.
+- **As a counter (Traffic Meter / Generic Cell Rate Algorithm - GCRA)**: Measures inter-arrival times using a virtual theoretical arrival time.
+- **Key property**: Enforces a strict, steady departure rate with zero burst tolerance. High burst latency because excess requests wait in the queue.
+
+### 3. Fixed Window Counter
+- **Mental model**: Divides time into fixed intervals (e.g., 1 minute). A counter increments per window. If counter > limit, requests are rejected. Resets at the boundary.
+- **Fatal boundary flaw**: A client can send 100% of its quota at the last second of Window 1 (e.g., 00:59) and another 100% at the first second of Window 2 (e.g., 01:00), effectively bursting at **2x the configured rate** across a 2-second rolling boundary.
+
+### 4. Sliding Window Log
+- **Mental model**: Maintains a sorted set of timestamps for every admitted request. On each request, entries older than `(t - window)` are pruned, the set size is evaluated, and the new timestamp is appended if below limit.
+- **Fatal memory flaw**: Memory consumption scales with request volume (`O(N)` where `N` is total requests per window). At 100,000 QPS, storing 64-bit timestamps consumes substantial Redis RAM and network serialization bandwidth.
+
+### 5. Sliding Window Counter (Weighted Window)
+- **Mental model**: Combines the counter from the previous fixed window with the current window using a time-weighted interpolation formula:
+
+```text
+C_estimated = C_current + C_previous * (1 - (t - t_window_start) / window_size)
+```
+
+- **Key property**: Memory-efficient (`O(1)` state per key) and completely eliminates the 2x boundary burst anomaly with minimal approximation error (<0.05% under steady traffic).
+
+| Algorithm | State Size per Key | Burst Handling | Rolling Window Accuracy | CPU / Redis Overhead |
+| --- | --- | --- | --- | --- |
+| **Token Bucket** | O(1) (2 numbers) | Allowed up to capacity C | Bounded average; explicit burst | Very Low |
+| **Leaky Bucket (Queue)** | O(Queue Size) | Disallowed (delays bursts) | Smooth constant rate | Moderate |
+| **Fixed Window** | O(1) (1 integer) | Flawed (2x boundary burst) | Poor at window edges | Lowest |
+| **Sliding Window Log** | O(N) (all timestamps)| Strictly enforced | Perfect | Extremely High |
+| **Sliding Window Counter** | O(1) (2 counters) | Smoothed approximation | High (~99.9% accurate) | Low |
+
+## Atomic distributed state in Redis with Lua
+
+In a distributed environment, executing rate limiting as separate `GET`, `UPDATE`, and `SET` calls across a network connection creates a fatal **check-then-act race condition**:
+
+```text
+Instance A: GET key (balance = 1) ──┐ (Both see 1 token left)
+Instance B: GET key (balance = 1) ──┘
+Instance A: SET key (balance = 0, ALLOWED)
+Instance B: SET key (balance = 0, ALLOWED)  <-- Race: 2 requests admitted for 1 token!
+```
+
+To achieve strict atomicity, the read, refill math, and deduction must run inside a single, transactional context on the state store. In Redis, this is implemented using an atomic **Lua script** executed via `EVALSHA`.
+
+### Production-grade atomic Token Bucket in Lua
+
+The following script implements a sub-millisecond atomic token bucket:
+- Accepts capacity, refill rate, current millisecond timestamp, and requested tokens.
+- Calculates elapsed time, refills tokens up to capacity, and performs the conditional deduction.
+- Sets an automatic TTL on the Redis key to ensure idle keys are garbage-collected without manual intervention.
+
+```lua
+-- KEYS[1]: Rate limiter key (e.g., "rate:tenant_123:route_search")
+-- ARGV[1]: Bucket capacity (maximum burst tokens, e.g., 50)
+-- ARGV[2]: Refill rate per millisecond (e.g., 0.01 for 10 tokens/sec)
+-- ARGV[3]: Current epoch timestamp in milliseconds
+-- ARGV[4]: Tokens requested (typically 1)
+
+local key = KEYS[1]
+local capacity = tonumber(ARGV[1])
+local refill_rate_ms = tonumber(ARGV[2])
+local now = tonumber(ARGV[3])
+local requested = tonumber(ARGV[4])
+
+-- Retrieve current balance and last refill time from Redis hash
+local data = redis.call("HMGET", key, "tokens", "last_updated")
+local tokens = tonumber(data[1])
+local last_updated = tonumber(data[2])
+
+if tokens == nil then
+  -- First request: initialize bucket to full capacity minus requested tokens
+  tokens = capacity
+  last_updated = now
+else
+  -- Calculate tokens earned during the elapsed time interval
+  local elapsed = math.max(0, now - last_updated)
+  local refilled = elapsed * refill_rate_ms
+  tokens = math.min(capacity, tokens + refilled)
+  last_updated = now
+end
+
+-- Determine admission
+local allowed = 0
+local remaining = tokens
+if tokens >= requested then
+  allowed = 1
+  tokens = tokens - requested
+  remaining = tokens
+end
+
+-- Persist updated state atomically
+redis.call("HMSET", key, "tokens", tokens, "last_updated", last_updated)
+
+-- Set TTL equal to time needed to refill from 0 to capacity + buffer
+local ttl_seconds = math.ceil((capacity / (refill_rate_ms * 1000)) * 2)
+redis.call("EXPIRE", key, math.max(60, ttl_seconds))
+
+-- Return [allowed (0 or 1), remaining_tokens, retry_after_ms]
+local retry_after_ms = 0
+if allowed == 0 then
+  retry_after_ms = math.ceil((requested - tokens) / refill_rate_ms)
+end
+
+return { allowed, math.floor(remaining), retry_after_ms }
+```
+
+## Latency optimization: Token leasing and batching
+
+Querying a remote Redis cluster on every single HTTP request adds 1–3 ms of network round-trip time (RTT). At hundreds of thousands of requests per second, Redis network I/O and gateway connection pools become the primary scalability bottleneck.
+
+### The Token Leasing pattern (Envoy RLS model)
+To eliminate per-request network hops, distributed gateways implement **hierarchical local token leasing**:
+1. The gateway process maintains a local in-memory token bucket for each active key.
+2. Instead of requesting 1 token per request from Redis, the gateway process requests a **lease batch** of `B` tokens (e.g., 50 tokens) from the central Redis cluster in a single atomic transaction.
+3. The local gateway satisfies the next 50 incoming requests entirely from its local in-memory bucket (<1 microsecond latency).
+4. When the local balance drops below a low-water mark (e.g., 10 tokens), an asynchronous background worker requests the next batch from Redis.
+
+```text
+[ Incoming Requests ]
+         │
+         ▼ (< 1µs memory check)
+[ Gateway Local Bucket ]
+         │
+         ├── Tokens available:
+         │   Deduct & pass
+         └── Low on tokens:
+             Fetch 50 tokens async
+                   │
+                   ▼
+         [ Redis Cluster ]
+```
+
+**Trade-off**: If a gateway pod crashes, unused leased tokens in its local memory are lost, causing slightly more restrictive throttling until the lease period elapses. In exchange, remote Redis QPS drops by a factor of 50x, and gateway request latency drops to pure local memory speed.
+
+## Multi-tier defense-in-depth architecture
+
+A robust production system never relies on a single rate limiter. Rate limits must be layered across the infrastructure:
+
+```text
+Layer 1: CDN (Cloudflare)
+└── Volumetric DDoS & IP blocks
+
+Layer 2: API Gateway (Envoy/Kong)
+└── Auth Quotas (Tenant ID, Tier)
+
+Layer 3: Service Mesh
+└── Route Limits (Expensive DB routes)
+
+Layer 4: Database Connection Pool
+└── Global Concurrency / Semaphores
+```
+
+1. **Layer 1: Edge / CDN Layer**: Global IP-based rate limiting to absorb botnets, web scrapers, and Layer 7 DDoS floods before traffic enters private VPC networks.
+2. **Layer 2: API Gateway Layer**: Customer-tier limits based on cryptographically verified JWT claims or API keys (`tenant_id:tier_gold`). Protects against rogue client loops.
+3. **Layer 3: Route-Specific Protection**: Differentiated quotas based on compute cost (e.g., standard `GET /items` allows 5,000 req/min, while `POST /reports/export-pdf` allows 5 req/min).
+4. **Layer 4: Database / Concurrency Limiter**: Uses Semaphore tokens to cap absolute **concurrency** (e.g., at most 50 concurrent expensive queries against the Postgres replica). Rate limiters manage rate over time; concurrency limiters manage simultaneous load.
+
+## Resiliency, clock drift, and failure policies
+
+When the central state store fails (network split, Redis failover, master CPU saturation), what should happen?
+
+### Fail-Open vs. Fail-Closed decision matrix
+
+```text
+                      Redis Timeout:
+├── Fail-Open:
+│   Allow traffic (Risk: backend overload)
+└── Fail-Closed:
+    Block traffic (Risk: global outage)
+```
+
+| Strategy | Recommended Use Case | Failure Behavior | Safety Net Mechanism |
+| --- | --- | --- | --- |
+| **Fail-Open** | Public APIs, checkout paths, read-heavy user dashboards | Passes traffic downstream if Redis times out (>20ms) | Protect backends with downstream concurrency bulkheads and local emergency caps |
+| **Fail-Closed** | Password resets, credit card payment gateways, expensive ML inference | Rejects traffic with HTTP 429 or 503 if Redis fails | Circuit breaker with fast fallback to local emergency in-memory limits |
+
+### Clock drift in distributed systems
+If multiple gateway nodes generate their own timestamps via system clocks (`now`), **NTP clock drift** (skew between servers) will corrupt token calculations. A server with a lagging clock will calculate negative elapsed time or grant extra tokens.
+- **Rule**: Pass timestamps generated by the central state store (e.g., using Redis's own `redis.call('TIME')`) or clamp elapsed time strictly to `math.max(0, now - last_updated)` to ensure time never flows backward.
+
+## HTTP response contract (RFC 6585 and IETF drafts)
+
+When throttling requests, communicate quota context clearly to allow clients to back off intelligently rather than retrying aggressively.
+
+```http
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 12
+RateLimit-Limit: 100
+RateLimit-Remaining: 0
+RateLimit-Reset: 12
+RateLimit-Policy: 100;w=60
+
+{
+  "error": "too_many_requests",
+  "message": "Quota exceeded. Retry in 12s.",
+  "retry_after_seconds": 12
 }
 ```
 
-The function treats `bucket.tokens` as fractional, so an empty bucket can gradually accumulate capacity. Clamping elapsed time at zero prevents a backwards clock step from removing tokens. The state store should supply one consistent timestamp for the atomic operation, or the design must explicitly tolerate clock skew.
-
-## Fixed and sliding windows
-
-A fixed-window counter increments a key for a time bucket, such as minute 14:32, and rejects requests above a limit. It is simple and efficient, but traffic can cluster at a window boundary: a client might consume nearly the full limit just before the boundary and again just after.
-
-A sliding-window log stores request timestamps and removes entries older than the rolling interval. It closely matches a strict rolling limit but stores more data and makes each decision more expensive. A sliding-window counter approximates the rolling count by combining the current and previous buckets; it uses less state at the cost of approximation.
-
-Token buckets are useful when a controlled burst is acceptable. Sliding windows better express rolling quotas. A product policy should select the algorithm rather than choosing based only on implementation convenience.
-
-## Distributed state and consistency
-
-The shared state can live in a dedicated in-memory store, a database, or a gateway-provided rate-limit service. For every option, document the scope of atomicity, persistence, replication, expiry, and failover. A replica that is behind may temporarily allow excess traffic or reject valid requests, depending on where decisions are made.
-
-An atomic script or transaction in the state store can combine refill and consume. Store state with an expiry long enough to cover the bucket's useful lifetime, and validate that the key space cannot grow without bound. If quotas are per untrusted identifier, normalize identifiers and protect the service against attackers creating many distinct keys.
-
-## Failure policy is part of the quota
-
-When the state store times out, there are two broad choices:
-
-- **Fail open:** allow the request. This preserves availability for legitimate users but can remove protection during a dependency failure.
-- **Fail closed:** reject or defer the request. This protects a scarce downstream service but can turn the limiter outage into a broad user-facing outage.
-
-There is no universal default. A low-risk read endpoint may fail open with a local emergency cap; a sensitive operation or expensive endpoint may fail closed. Use bounded timeouts, circuit breaking, and explicit metrics so a failed shared store does not cause each gateway to queue unlimited work.
-
-## Response and operational contract
-
-For HTTP APIs, a rejected request commonly receives `429 Too Many Requests`. A response can include `Retry-After` when the service can estimate when capacity will be available. Avoid exposing sensitive internal quota keys. Communicate whether limits are per account, per token, or global.
-
-Monitor admitted and rejected requests by policy and route, store latency and errors, key cardinality, and fail-open decisions. Do not use raw user identifiers as metric labels; unbounded label cardinality can overwhelm the monitoring system. Sample or aggregate diagnostics where necessary.
-
-For fairness, separate global protection from customer quotas. A global concurrency limit can protect a database from overload even when individual tenants are below their own limits. This admission-control boundary complements, rather than replaces, per-tenant rate limits.
-
-## Choosing a design
-
-Start with the semantics: burst allowance, interval, identity, and failure behavior. Then estimate the request rate to the quota store and the cost of one atomic decision. If a single global key becomes hot, partition policies only when the resulting quota semantics remain acceptable; sharding a strict global counter can otherwise permit a larger aggregate burst.
-
-The token-bucket flow described here can implement an approximate distributed policy when the shared store provides atomic updates and the configured time source is sufficiently consistent for the intended tolerance. It is not a substitute for a workload limit, concurrency cap, or abuse detection system.
+- `Retry-After`: Number of seconds (or HTTP date) the client must wait before retrying.
+- `RateLimit-Limit`: Maximum quota allowed in the current window.
+- `RateLimit-Remaining`: Number of tokens or requests remaining.
+- `RateLimit-Reset`: Number of seconds until the quota resets to full capacity.
 
 ### Key takeaways
 
-- Define identity, interval, burst, and failure behavior before selecting an algorithm.
-- Token buckets smooth average rates while allowing explicit bursts.
-- A shared distributed decision needs atomic state transitions to avoid concurrent over-admission.
-- Fail-open and fail-closed behavior encode different availability and protection priorities.
-- Monitor the limiter itself, especially store latency, rejection rates, and failover behavior.
+- Rate limiting protects downstream stability; it is a distributed consensus problem on high-throughput critical paths.
+- Token Bucket is the industry standard for API traffic because it handles bursts while strictly enforcing long-term refill velocity.
+- Distributed evaluations must be atomic; use Redis Lua scripts or single-flight coordinator patterns to eliminate check-then-act race conditions.
+- Implement token leasing and local micro-buckets to avoid adding network round-trip latency to every request.
+- Multi-tier defense-in-depth separates coarse IP filtering at the edge from granular tenant quotas at the API gateway and concurrency bulkheads at the database.
 
 ## References
 
-- [IETF RFC 6585: Additional HTTP Status Codes](https://www.rfc-editor.org/rfc/rfc6585)
-- [Redis: Rate limiter patterns](https://redis.io/docs/latest/develop/use/patterns/rate-limiter/)
-- [Envoy: Global rate limiting](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/other_features/global_rate_limiting)
+- [IETF RFC 6585: Additional HTTP Status Codes (Section 4: 429 Too Many Requests)](https://www.rfc-editor.org/rfc/rfc6585)
+- [IETF Internet-Draft: RateLimit Fields for HTTP](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/)
+- [Envoy Proxy: Global Rate Limiting Architecture](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/other_features/global_rate_limiting)
+- [Redis Documentation: Programmability with Lua Scripts](https://redis.io/docs/latest/develop/interact/programmability/eval-intro/)
+- [Martin Fowler: Circuit Breaker Pattern](https://martinfowler.com/bliki/CircuitBreaker.html)

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="http-title http-desc">
+  <title id="http-title">HTTP Evolution: 1.1 vs 2 vs 3 Multiplexing</title>
+  <desc id="http-desc">Comparison of transport layer dynamics showing HTTP/1.1 head-of-line blocking, HTTP/2 TCP single-stream HoL blocking, and HTTP/3 QUIC independent streams over UDP.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#38bdf8"/></marker>
+    <style>
+      .bg{fill:#0a0a0a}.card{fill:#141414;stroke:#404040;stroke-width:1.5}.title{fill:#fff;font:700 20px system-ui,sans-serif}.header{fill:#38bdf8;font:700 16px system-ui,sans-serif}.txt{fill:#e5e5e5;font:500 13px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.tag-red{fill:#f87171;font:600 12px system-ui,sans-serif}.tag-green{fill:#4ade80;font:600 12px system-ui,sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="300" rx="18"/>
+  <text class="title" x="30" y="38">Transport Mechanics: HTTP/1.1 vs HTTP/2 vs HTTP/3 (QUIC)</text>
+
+  <!-- HTTP/1.1 Card -->
+  <rect class="card" x="30" y="65" width="280" height="205" rx="12"/>
+  <text class="header" x="50" y="98">HTTP/1.1 (TCP)</text>
+  <text class="txt" x="50" y="125">• 1 Request-Response per connection</text>
+  <text class="txt" x="50" y="148">• Multiple TCP connections required</text>
+  <text class="txt" x="50" y="171">• Uncompressed ASCII headers</text>
+  <text class="tag-red" x="50" y="210">Application Head-of-Line Blocking</text>
+  <text class="sub" x="50" y="235">Slow response blocks next request</text>
+
+  <!-- HTTP/2 Card -->
+  <rect class="card" x="340" y="65" width="280" height="205" rx="12"/>
+  <text class="header" x="360" y="98">HTTP/2 (TCP + TLS)</text>
+  <text class="txt" x="360" y="125">• Binary framing multiplexing</text>
+  <text class="txt" x="360" y="148">• HPACK header compression</text>
+  <text class="txt" x="360" y="171">• Single TCP socket for all streams</text>
+  <text class="tag-red" x="360" y="210">TCP Transport HoL Blocking</text>
+  <text class="sub" x="360" y="235">1 dropped packet halts ALL streams</text>
+
+  <!-- HTTP/3 Card -->
+  <rect class="card" x="650" y="65" width="280" height="205" rx="12"/>
+  <text class="header" x="670" y="98">HTTP/3 (QUIC + UDP)</text>
+  <text class="txt" x="670" y="125">• Independent streams over UDP</text>
+  <text class="txt" x="670" y="148">• 0-RTT connection resumption</text>
+  <text class="txt" x="670" y="171">• QPACK dynamic header tables</text>
+  <text class="tag-green" x="670" y="210">Zero Transport Head-of-Line Blocking</text>
+  <text class="sub" x="670" y="235">Dropped packet only pauses its stream</text>
+</svg>

@@ -1,6 +1,7 @@
 import ProjectCaseStudy from "@/components/ProjectCaseStudy";
 import { caseStudies, getCaseStudyBySlug } from "@/config/caseStudies";
 import { notFound } from "next/navigation";
+import { siteConfig } from "@/config/portfolio";
 
 export const dynamicParams = false;
 
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${study.title} | Adarsh Kumar`,
     description: study.lead,
+    alternates: { canonical: `${siteConfig.url}/experience/${slug}` },
   };
 }
 

@@ -3,6 +3,13 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import ThemeNavbar from "@/components/ThemeNavbar";
 import Link from "next/link";
+import { siteConfig } from "@/config/portfolio";
+
+export const metadata = {
+  title: "Experience | Adarsh Kumar",
+  description: "Projects and software development experience by Adarsh Kumar.",
+  alternates: { canonical: `${siteConfig.url}/experience` },
+};
 
 export default function ExperiencePage() {
   return (

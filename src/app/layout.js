@@ -8,7 +8,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://adshkumar.is-a.dev";
+const siteUrl = siteConfig.url;
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -92,7 +92,7 @@ export default function RootLayout({ children }) {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Adarsh Kumar",
-    alternateName: ["adshkumar", "Adarsh Kumar Developer"],
+    alternateName: ["Adarsh", "Adshkumar", "Adarsh Kumar Developer"],
     url: siteUrl,
     mainEntityOfPage: siteUrl,
     description: metadata.description,

@@ -63,7 +63,7 @@ export default function Hero({ initialBlogOpen = false }) {
           />
         </div>
         <div className="heroText">
-          <p className="heroName">Hey, I&apos;m {siteConfig.name.split(" ")[0]}</p>
+          <h1 className="heroName">Hey, I&apos;m {siteConfig.name}</h1>
           <p className="heroTagline">{siteConfig.tagline}</p>
         </div>
       </div>

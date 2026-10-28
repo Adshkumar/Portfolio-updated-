@@ -24,6 +24,11 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/experience/finance-tracker`,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/borg`,
       changeFrequency: "monthly",
       priority: 0.6,

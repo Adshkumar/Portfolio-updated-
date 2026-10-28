@@ -2,6 +2,25 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import ThemeNavbar from "@/components/ThemeNavbar";
 import Link from "next/link";
+import { siteConfig } from "@/config/portfolio";
+
+const pageTitle = "Finance Tracker";
+const pageDescription =
+  "A mobile budgeting app by Adarsh Kumar for tracking accounts, transactions, and budgets, with AI-assisted receipt and voice entry and expense splitting.";
+
+export const metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: `${siteConfig.url}/experience/finance-tracker`,
+  },
+  openGraph: {
+    title: `${pageTitle} | Adarsh Kumar`,
+    description: pageDescription,
+    url: `${siteConfig.url}/experience/finance-tracker`,
+    type: "article",
+  },
+};
 
 const productAreas = [
   {

@@ -1,5 +1,5 @@
 
-import { siteConfig } from "@/config/portfolio";
+import { siteConfig, socialLinks } from "@/config/portfolio";
 import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -10,17 +10,18 @@ const inter = Inter({
 });
 
 const siteUrl = siteConfig.url;
+const siteDescription =
+  "Adarsh Kumar is a Delhi-based full-stack developer and founder of r0 IDE. Explore his web and AI projects, open-source work, and software engineering articles.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
+    default: "Adarsh Kumar — Software Developer & Founder of r0 IDE",
     template: "%s | Adarsh Kumar",
   },
 
-  description:
-    "Adarsh Kumar (@adshkumar) is a software developer, founder of r0 IDE, and open-source contributor.",
+  description: siteDescription,
 
   applicationName: "Adarsh Kumar Portfolio",
 
@@ -58,61 +59,52 @@ export const metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Adarsh Kumar Portfolio",
-    title: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
-    description:
-      "Official portfolio of Adarsh Kumar, software developer and founder of r0 IDE. Discover his software projects, AI applications, developer tools, and open-source work.",
+    title: "Adarsh Kumar — Full-Stack Developer & Founder of r0 IDE",
+    description: siteDescription,
     locale: "en_IN",
   },
 
   twitter: {
     card: "summary",
-    title: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
-    description:
-      "Adarsh Kumar (@adshkumar62) builds software, AI applications, and developer tools. Founder of r0 IDE.",
+    title: "Adarsh Kumar — Full-Stack Developer & Founder of r0 IDE",
+    description: siteDescription,
   },
 };
 
+const personId = `${siteUrl.replace(/\/$/, "")}/#person`;
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${siteUrl.replace(/\/$/, "")}/#person`,
-
-  name: "Adarsh Kumar",
-  alternateName: [
-    "Adshkumar",
-    "Adarsh Kumar Developer",
-  ],
-
-  url: siteUrl,
-
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": siteUrl,
-  },
-
-  description: metadata.description,
-
-  jobTitle: [
-    "Software Developer",
-    "Founder of r0 IDE",
-  ],
-
-  sameAs: [
-    "https://github.com/Adshkumar",
-    "https://www.linkedin.com/in/adarsh-kumar62041/",
-    "https://x.com/Adshkumar62",
-  ],
-
-  founder: {
-    "@type": "SoftwareApplication",
-    name: "r0 IDE",
-    url: "https://r0-ide.vercel.app/",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Windows",
-    creator: {
-      "@id": `${siteUrl.replace(/\/$/, "")}/#person`,
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: siteConfig.name,
+      alternateName: "Adshkumar",
+      url: siteUrl,
+      image: `${siteUrl}/adarsh-profile.png`,
+      description: metadata.description,
+      jobTitle: "Full-Stack Software Developer",
+      sameAs: socialLinks
+        .filter(({ platform }) => platform !== "email")
+        .map(({ url }) => url),
     },
-  },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl.replace(/\/$/, "")}/#website`,
+      url: siteUrl,
+      name: "Adarsh Kumar",
+      alternateName: ["Adshkumar", "adshkumar.is-a.dev"],
+      publisher: { "@id": personId },
+      inLanguage: "en",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "r0 IDE",
+      url: "https://r0-ide.vercel.app/",
+      applicationCategory: "DeveloperApplication",
+      creator: { "@id": personId },
+    },
+  ],
 };
 
 export default function RootLayout({ children }) {

@@ -1,5 +1,5 @@
+
 import { siteConfig } from "@/config/portfolio";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -14,30 +14,14 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "Adarsh Kumar (@adshkumar) | Developer Portfolio",
+    default: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
     template: "%s | Adarsh Kumar",
   },
 
   description:
-    "Official portfolio of Adarsh Kumar (@adshkumar), software developer and open-source contributor. Explore AI projects, full-stack applications, r0 IDE, and software engineering work.",
+    "Adarsh Kumar (@adshkumar) is a software developer, founder of r0 IDE, and open-source contributor.",
 
   applicationName: "Adarsh Kumar Portfolio",
-
-  keywords: [
-    "Adarsh Kumar",
-    "adshkumar",
-    "Adarsh Kumar developer",
-    "Adarsh Kumar portfolio",
-    "adshkumar portfolio",
-    "Adarsh Kumar software engineer",
-    "Adarsh Kumar AI engineer",
-    "Adarsh Kumar full stack developer",
-    "Adarsh Kumar open source",
-    "r0 IDE",
-    "software developer portfolio",
-    "AI projects",
-    "open source projects",
-  ],
 
   authors: [
     {
@@ -73,35 +57,64 @@ export const metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Adarsh Kumar Portfolio",
-    title: "Adarsh Kumar (@adshkumar) | Developer Portfolio",
+    title: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
     description:
-      "Explore the official portfolio of Adarsh Kumar, featuring software development, AI projects, open-source contributions, and r0 IDE.",
-    locale: "en_US",
+      "Official portfolio of Adarsh Kumar, software developer and founder of r0 IDE. Discover his software projects, AI applications, developer tools, and open-source work.",
+    locale: "en_IN",
   },
 
   twitter: {
     card: "summary",
-    title: "Adarsh Kumar (@adshkumar) | Developer Portfolio",
+    title: "Adarsh Kumar | Software Developer & Founder of r0 IDE",
     description:
-      "Software development, AI projects, open-source contributions, and r0 IDE by Adarsh Kumar.",
+      "Adarsh Kumar (@adshkumar62) builds software, AI applications, and developer tools. Founder of r0 IDE.",
+  },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteUrl.replace(/\/$/, "")}/#person`,
+
+  name: "Adarsh Kumar",
+  alternateName: [
+    "Adshkumar",
+    "Adarsh Kumar Developer",
+  ],
+
+  url: siteUrl,
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": siteUrl,
+  },
+
+  description: metadata.description,
+
+  jobTitle: [
+    "Software Developer",
+    "Founder of r0 IDE",
+  ],
+
+  sameAs: [
+    "https://github.com/Adshkumar",
+    "https://www.linkedin.com/in/adarsh-kumar62041/",
+    "https://x.com/Adshkumar62",
+  ],
+
+  founder: {
+    "@type": "SoftwareApplication",
+    name: "r0 IDE",
+    url: "https://r0-ide.vercel.app/",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Windows",
+    creator: {
+      "@id": `${siteUrl.replace(/\/$/, "")}/#person`,
+    },
   },
 };
 
 export default function RootLayout({ children }) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Adarsh Kumar",
-    alternateName: ["Adarsh", "Adshkumar", "Adarsh Kumar Developer"],
-    url: siteUrl,
-    mainEntityOfPage: siteUrl,
-    description: metadata.description,
-    jobTitle: "Software Developer",
-    sameAs: [
-      "https://github.com/Adshkumar",
-    ],
-  };
-
   return (
     <html lang="en">
       <head>
@@ -109,23 +122,17 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+            __html: JSON.stringify(structuredData).replace(
+              /</g,
+              "\\u003c"
+            ),
           }}
         />
       </head>
-
-      <body className={inter.className}>
-        {children}
-
-        <Script
-          data-goatcounter="https://mr-raj12.goatcounter.com/count"
-          src="https://gc.zgo.at/count.js"
-          strategy="afterInteractive"
-        />
-      </body>
     </html>
   );
 }

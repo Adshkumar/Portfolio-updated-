@@ -4,9 +4,11 @@
 
 ### Full-Stack Developer | Building thoughtful digital experiences
 
+This repository contains my developer portfolio, highlighting my software development work, selected projects, and open-source contributions.
+
 I design and build responsive web applications that bring together clear user experiences, reliable backend systems, and practical product thinking.
 
-[Portfolio](https://adsingh-portfolio.vercel.app/) · [Resume](./public/Adarsh-Kumar-Resume.pdf) · [GitHub](https://github.com/Adshkumar) · [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/)
+[Portfolio](https://adshkumar.is-a.dev/) · [Resume](./public/Adarsh-Kumar-Resume.pdf) · [GitHub](https://github.com/Adshkumar) · [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/)
 
 </div>
 
@@ -19,6 +21,12 @@ I’m a Delhi-based full-stack developer focused on turning ideas into useful, w
 My current toolkit includes **JavaScript, React, Next.js, Node.js, Express, and MongoDB**. I’m pursuing a Diploma in Computer Science at **Chhotu Ram Rural Institute of Technology, Delhi**, while continuing to learn through hands-on projects.
 
 ## Selected Work
+
+### r0 IDE
+
+r0 is my open-source IDE project.
+
+[r0 IDE on GitHub](https://github.com/Adshkumar/r0) · [Project details on my portfolio](https://adshkumar.is-a.dev/experience/r0)
 
 ### Real-Time Chat Application
 

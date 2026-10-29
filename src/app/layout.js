@@ -65,7 +65,7 @@ export const metadata = {
 
   twitter: {
     card: "summary",
-    title: "Adarsh Kumar — Full-Stack Developer & Founder of r0 IDE",
+    title: "Adarsh Kumar — Software Developer & Founder of r0 IDE",
     description: siteDescription,
   },
 };
@@ -113,6 +113,11 @@ export default function RootLayout({ children }) {
         <meta
           name="google-site-verification"
           content="Az9r7RxQ24dwiCIjqSUqfMJElwOx7H2m2lRCDXqiAKg"
+        />
+
+        <meta
+          name="msvalidate.01"
+          content="68D55798F9E0570D0BF474C5EF3FDB3B"
         />
 
         <link

@@ -111,6 +111,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta
+          name="google-site-verification"
+          content="XyT04REOuRp6Gt9W_lZKo1_aBkdepr9V-hsrsgsdwA4"
+        />
+
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -126,14 +131,6 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={inter.className}>
-        {children}
-        <Script
-          data-goatcounter="https://mr-raj12.goatcounter.com/count"
-          src="https://gc.zgo.at/count.js"
-          strategy="afterInteractive"
-        />
-      </body>
     </html>
   );
 }

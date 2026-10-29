@@ -1,6 +1,5 @@
 
 import { siteConfig, socialLinks } from "@/config/portfolio";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -131,6 +130,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

@@ -3,6 +3,7 @@ title: "mediasoup SFU Architecture: Routers, Transports, Producers, and Consumer
 description: "Learn mediasoup's server-side media model, how applications signal peers, and how publications become subscribed media streams."
 slug: "mediasoup-sfu-architecture"
 date: "2026-10-25"
+updated: "2026-11-02"
 tags:
   - WebRTC
   - mediasoup
@@ -16,17 +17,23 @@ author: "Adarsh Kumar"
 cover: null
 ---
 
-Unlike turnkey conferencing solutions, **mediasoup** is not an off-the-shelf media server. It is a low-level, high-performance **SFU library** for Node.js and Rust. It provides developers with the low-level RTP routing primitives needed to build scalable real-time video, audio, and data streaming platforms, while leaving signaling protocols, room state, authentication, and product business logic entirely to the application.
+Unlike turnkey conferencing solutions, **mediasoup** is not an off-the-shelf media server. It is a low-level **SFU library** with Node.js and Rust APIs. This article focuses on the Node.js API, which uses a native worker subprocess for media processing. The library provides RTP routing primitives; the application remains responsible for signaling, room state, authentication, and product logic.
 
-Understanding mediasoup's architecture requires mastering its dual-process model (C++ worker core coupled with a Node.js control plane), its hierarchical object model, RTP capabilities negotiation, and the operational lifecycle of transports, producers, and consumers.
+The key concepts are the Node.js control plane, native worker, object hierarchy, RTP capability negotiation, and lifecycle of transports, producers, and consumers.
 
 ![mediasoup room media path from browser producer through router to subscribed consumer](/articles/images/mediasoup-room-flow.svg "mediasoup SFU producer-to-consumer flow")
 
-Figure 1: Complete mediasoup media routing path. A publishing browser sends RTP media over a WebRtcTransport into a Producer. The Router inspects codecs and forwards compatible packets to Consumers created for subscribing peers. Application signaling orchestrates this setup over WebSockets, while raw media packets flow directly through mediasoup's multi-threaded C++ engine.
+Figure 1: A publishing peer sends media through a WebRtcTransport to a Producer in a Router. The application uses signaling to create compatible Consumers for subscribers. The Node.js application controls the workflow; a mediasoup worker subprocess handles media transport and forwarding.
+
+## The moving parts at a glance
+
+Think of a mediasoup **Router** as the media-routing space for a room. A participant sends audio or video through a **Transport**; the server represents that published track as a **Producer**. Another participant's application asks to receive it, and mediasoup creates a **Consumer** if the receiver's capabilities are compatible.
+
+The application still owns the product workflow: authentication, room membership, signaling messages, and deciding who may subscribe to whom. mediasoup handles the media-routing primitives. This division is useful when you need control over call behavior, but it means your application must implement and operate the surrounding system.
 
 ## The Dual-Process Architecture: C++ Core + Node.js Control
 
-Node.js provides an exceptional asynchronous environment for managing WebSockets, HTTP REST APIs, database queries, and room state machines. However, handling real-time audio and video at scale requires parsing tens of thousands of UDP packets per second, executing DTLS encryption/decryption, processing RTCP feedback, and rewriting RTP headers with sub-millisecond precision—tasks that would completely freeze the single-threaded Node.js V8 event loop.
+Node.js provides an asynchronous environment for managing signaling, APIs, and room state. mediasoup keeps media handling in worker subprocesses so packet processing does not run as application JavaScript on the Node.js event loop.
 
 mediasoup solves this with a **dual-process architecture**:
 
@@ -41,16 +48,16 @@ mediasoup solves this with a **dual-process architecture**:
         └── [ mediasoup C++ Worker 2 ] (Core 2)
 ```
 
-1. **The Node.js Master Process**: Acts as the orchestrator. It manages the signaling plane, validates JWT tokens, handles room presence, and invokes API methods on JavaScript wrapper objects (`worker.createRouter()`, `router.createWebRtcTransport()`).
-2. **The C++ Worker Processes**: Independent child processes compiled with C++17, `libuv` (event loop), `libwebrtc` (RTP/RTCP/SCTP stacks), and OpenSSL. Each worker process is pinned to a dedicated physical CPU core (`worker.createWorker({ cpuAffinity: [0] })`).
-3. **High-Speed IPC Channel**: The Node.js process and C++ workers communicate over bidirectional UNIX domain sockets using a binary and JSON serialization protocol. Heavy media packet processing occurs 100% inside C++, keeping the Node.js event loop free to handle application signaling.
+1. **The application process**: Uses the mediasoup JavaScript API to create workers, routers, transports, producers, and consumers. Authentication, room state, and signaling are the application's responsibility.
+2. **The worker processes**: Each Worker is a native subprocess that handles media operations. A Router belongs to a Worker; adding more Workers can use more host CPU capacity, but a single Router's work is not automatically distributed across all Workers. The operating system schedules workers, so CPU affinity and worker counts should be configured and measured for the deployment.
+3. **Inter-process communication**: The JavaScript layer communicates with workers over IPC. The application orchestrates media through the API while the worker handles the media plane.
 
 ## The Mediasoup Object Hierarchy
 
 mediasoup organizes media distribution through a strict hierarchical object tree:
 
 ```text
-Worker (Process on 1 CPU Core)
+Worker (native subprocess)
   └── Router (Room Domain)
         ├── WebRtcTransport (Publisher A)
         │     ├── Producer (Audio Track)
@@ -64,7 +71,7 @@ Worker (Process on 1 CPU Core)
 ```
 
 ### 1. Worker
-An OS child process. To fully utilize modern multi-core servers (e.g., a 16-core AMD EPYC), an application spawns 16 distinct mediasoup workers. Workers do not share memory.
+A native child process that owns Routers and handles media operations. Applications commonly create multiple workers to use available host CPU capacity, but the useful count depends on workload, CPU limits, and other processes; workers do not share their in-process Router state.
 
 ### 2. Router
 An independent RTP routing domain that corresponds to a **Room** or **Session**. A Router defines the allowed codec capabilities (`mediaCodecs`: Opus, VP8, VP9, H.264, AV1). Media cannot flow between different routers unless bridged by a `PipeTransport`.
@@ -79,7 +86,7 @@ Network endpoints that terminate media connections:
 Represents an incoming media source injected into a Router by a peer (e.g., microphone audio, webcam video, or screen share).
 
 ### 5. Consumer
-Represents an outgoing media destination forwarded by a Router to a subscribing peer. The Consumer handles SSRC translation, sequence number rewriting, and simulcast layer selection for that specific subscriber.
+Represents an outgoing media destination forwarded by a Router to a subscribing peer. mediasoup maps RTP parameters for the consumer and can select among supported encodings or layers; exact SSRC and sequence-number behavior depends on the producer, codec, and negotiated RTP parameters.
 
 ## RTP Capabilities negotiation protocol
 
@@ -106,30 +113,28 @@ Before media can be published or consumed, the client browser and the server Rou
 - **`device.load()`**: In the browser, `mediasoup-client` queries browser capabilities via `RTCRtpSender.getCapabilities()` and computes the intersection with the router's capabilities.
 - **`router.canConsume()`**: Before creating a Consumer on the server, the application must verify that the subscriber's device can decode the specific codec and parameters used by the Producer.
 
-## Lifecycle: Why Consumers must start `paused: true`
+## Lifecycle: Why Consumers often start `paused: true`
 
-A common beginner mistake in mediasoup is creating a Consumer on the server in an active state:
+A common integration pitfall is allowing a Consumer to send media before the client has received its parameters and prepared its local receiver. A common pattern is to create the Consumer paused:
 
 ```javascript
 // Server-side consumer creation
 const consumer = await transport.consume({
   producerId: producer.id,
   rtpCapabilities: clientRtpCapabilities,
-  paused: true, // MANDATORY IN PRODUCTION!
+  paused: true,
 });
 ```
 
-### Why `paused: true` is essential:
-1. When a Consumer is created on the server, RTP packets are immediately available from the Producer.
-2. However, the client browser has not yet received the Consumer parameters over signaling, has not yet called `transport.consume()` locally, and the client's WebRTC peer connection has not finalized remote description processing.
-3. If the server emits RTP packets immediately, the first packets—**including the crucial initial keyframe (IDR frame)**—reach the browser before its decoder is wired, resulting in dropped packets.
-4. The client's video element remains black until the next periodic keyframe arrives (which could take 5 to 10 seconds).
-5. **The Correct Pattern**:
-   - Create Consumer with `paused: true`.
-   - Send consumer parameters (`id`, `producerId`, `kind`, `rtpParameters`) to the client over WebSocket signaling.
-   - Client creates the local consumer track and connects the transport.
-   - Client sends signaling request `resumeConsumer(consumerId)`.
-   - Server calls `await consumer.resume()`. The C++ core sends an immediate RTCP **Picture Loss Indication (PLI)** to the Producer, generating a fresh keyframe right as the client decoder becomes active.
+### Why starting paused can help
+The server can create the Consumer before the client has received its parameters and created the corresponding local Consumer. Pausing avoids forwarding media during that signaling gap; otherwise the client may miss initial packets and need to wait for a decodable video frame.
+
+A common sequence is:
+1. Create the Consumer with `paused: true`.
+2. Send its parameters (`id`, `producerId`, `kind`, `rtpParameters`) to the client through the application's signaling channel.
+3. Have the client create its local Consumer and complete the required transport setup.
+4. Have the client signal readiness, then resume the server Consumer.
+5. Depending on codec and implementation state, a keyframe request may be needed before video can be decoded promptly; do not assume every resume produces an immediate keyframe.
 
 ## SSRC and Sequence Number rewriting in C++
 
@@ -148,14 +153,11 @@ Consumer (Subscriber)
   └── Stable Stream (SSRC 5555, Seq: 1, 2, 3...)
 ```
 
-If the subscriber switches from Medium to High resolution:
-- The subscriber's browser decoder expects a **single, contiguous stream of sequence numbers and timestamps** with a constant SSRC.
-- If sequence numbers jumped from `112` to `48`, the browser's jitter buffer would assume thousands of packets were dropped, resulting in severe video stutter.
-- mediasoup's C++ worker intercepts every forwarded packet, dynamically rewriting the SSRC to a stable consumer SSRC and offsetting sequence numbers and timestamps so layer switches appear completely seamless to the decoder.
+When a subscriber switches simulcast layers, the outgoing RTP stream must remain usable by the receiver. An SFU may translate SSRCs, sequence numbers, or timestamps according to its RTP mapping and the negotiated codec. A layer switch can still require a keyframe or cause a visible interruption; seamless switching is not guaranteed by rewriting identifiers alone.
 
 ## Scaling multi-core servers and clusters
 
-A single mediasoup router is bound to a single worker process running on one CPU core. To scale across full hardware:
+A Router belongs to one Worker, so its work does not automatically span multiple workers. To scale across host capacity:
 
 ### 1. Scaling across multiple CPU cores on a single host
 - Distribute rooms across workers in a round-robin or least-loaded fashion.
@@ -177,36 +179,22 @@ const { pipeConsumer, pipeProducer } =
 For large-scale webinars or interactive broadcasting:
 - **Origin Server**: Receives media publications from the host over WebRtcTransports.
 - **Edge Servers**: Located close to global users (US-East, EU-West, AP-East).
-- The Origin server forwards media to Edge servers over encrypted `PipeTransports` across private VPC peering links.
+- The Origin server forwards media to Edge servers over `PipeTransport` connections across private network links. Configure SRTP or another appropriate protection when media crosses an untrusted network; a private route alone is not encryption.
 - Thousands of viewers connect to regional Edge servers, keeping latency low and isolating viewer fan-out from the broadcaster.
 
 ## Production Linux kernel tuning
 
-Because mediasoup relies on high-throughput UDP packet switching, default Linux OS network buffers will cause massive kernel packet drops under heavy load.
-
-Apply these production sysctl settings (`/etc/sysctl.conf`):
-
-```bash
-# Increase max socket receive and send buffer (16MB)
-sysctl -w net.core.rmem_max=16777216
-sysctl -w net.core.wmem_max=16777216
-
-# Increase network device backlog queue
-sysctl -w net.core.netdev_max_backlog=10000
-
-# Increase file descriptors for UDP sockets
-ulimit -n 65536
-```
+UDP buffer and file-descriptor settings depend on packet rate, operating system, NIC, and deployment. Establish a baseline with packet-drop, CPU, and socket-queue metrics before changing host limits; larger queues can also increase latency under overload.
 
 Configure mediasoup worker port ranges deliberately:
 - Dedicate non-overlapping UDP port ranges per worker (e.g., Worker 0 uses ports `40000-40999`, Worker 1 uses `41000-41999`) to prevent OS socket binding contention.
 
 ### Key takeaways
 
-- mediasoup is a modular SFU library that separates high-speed C++ media processing from the Node.js application signaling plane.
-- Spawn one mediasoup worker per CPU core and distribute rooms across workers.
-- Always create Consumers with `paused: true` and resume only after the client's decoder is connected to prevent dropped keyframes.
-- mediasoup's C++ core transparently handles SSRC and sequence number rewriting during simulcast and SVC layer switching.
+- The Node.js mediasoup API separates application control and signaling from native worker media processing.
+- Use multiple workers when measurements show that the host has available CPU capacity, and distribute Routers/rooms according to load and failure-isolation needs.
+- Consider creating Consumers paused, then resume after the client has received the parameters and is ready to receive media.
+- mediasoup manages RTP forwarding and mapping, but layer changes can require keyframes and are not guaranteed to be visually seamless.
 - Scale high-capacity rooms across CPU cores and multi-server clusters using `PipeTransports`.
 
 ## References

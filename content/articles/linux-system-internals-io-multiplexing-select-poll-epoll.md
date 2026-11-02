@@ -1,8 +1,9 @@
 ---
 title: "Linux System Internals: I/O Multiplexing, select, poll, and epoll"
-description: "A deep dive into the Linux kernel I/O subsystem, file descriptors, wait queues, readiness notifications, and why epoll scales to millions of concurrent connections."
+description: "Understand Linux file descriptors and readiness notifications, then compare select, poll, and epoll and learn when each event-notification API fits."
 slug: "linux-system-internals-io-multiplexing-select-poll-epoll"
 date: "2026-10-26"
+updated: "2026-11-02"
 tags:
   - Linux
   - Operating Systems
@@ -17,13 +18,25 @@ author: "Adarsh Kumar"
 cover: null
 ---
 
-High-concurrency servers—including NGINX, Redis, Envoy, Node.js (`libuv`), and Go's runtime network poller—routinely sustain hundreds of thousands of concurrent open connections on a single machine.
+Servers often need to keep many sockets open even though only a few have data ready at any moment. I/O multiplexing lets one or a small number of threads wait for readiness across many file descriptors instead of dedicating a blocked thread to each connection.
 
-Achieving this throughput without spawning hundreds of thousands of operating system threads depends on a single foundational kernel primitive: **non-blocking I/O multiplexing**.
+On Linux, `select()`, `poll()`, and `epoll()` offer different interfaces for that job. The key distinction is how the application provides the set of descriptors and how much work is needed to find the ready ones—not a promise that a specific API makes every server fast.
 
-Understanding how the Linux kernel transitioned from blocking threads to `select()`, `poll()`, and ultimately `epoll()` reveals how operating systems manage file descriptors, hardware interrupts, and context-switching overheads under extreme scale.
+![select and poll scan a supplied descriptor set, while epoll retains registrations and returns ready events](/articles/images/linux-epoll-io.svg "How Linux readiness APIs find sockets ready for I/O")
 
-![Kernel I/O Multiplexing: select vs epoll](/articles/images/linux-epoll-io.svg)
+Figure 1: `select()` and `poll()` receive the watched set on each wait, whereas `epoll` keeps registrations in a kernel instance. `epoll` can avoid rescanning a large mostly idle set, but its costs still depend on activity and application work.
+
+## The idea before the kernel details
+
+Think of a server watching a thousand mailboxes. A thread-per-connection model assigns a person to wait beside every mailbox. Multiplexing instead asks a shared clerk to report which mailbox has something to collect. The application still has to read the data, handle partial reads and writes, and manage each connection's state.
+
+“Ready” means an operation is likely to make progress without blocking; it does not mean that a complete request has arrived. Readiness can change before the application acts, so robust event loops use non-blocking sockets and handle `EAGAIN`/`EWOULDBLOCK`.
+
+| API | How watched descriptors are supplied | Typical trade-off |
+| --- | --- | --- |
+| `select()` | Bit sets are supplied again on each call | Portable, but has descriptor-set limits on common implementations and scans the set |
+| `poll()` | An array is supplied again on each call | Avoids `select()`'s fixed `fd_set` limit, but still scans the array |
+| `epoll` | Descriptors are registered with a persistent kernel instance | Can avoid rescanning every watched descriptor when only a small subset is ready; registration and event-handling costs remain |
 
 ## The concurrency problem: Thread-per-connection vs event loops
 
@@ -37,18 +50,12 @@ while ((bytes_read = read(client_fd, buf, sizeof(buf))) > 0) {
 }
 ```
 
-When `read()` is invoked on a standard blocking socket:
-1. If no network packet has arrived in the socket's receive buffer, the calling thread is placed into an `uninterruptible sleep` state (`TASK_UNINTERRUPTIBLE`).
-2. The Linux kernel scheduler suspends the thread and performs a **context switch** to run another thread.
-3. When the network interface card (NIC) receives an Ethernet frame, a hardware interrupt fires, the kernel places data into the socket buffer, and marks the thread runnable (`TASK_RUNNING`).
+When `read()` is invoked on a blocking socket with no data available, the calling thread waits until the operation can make progress, is interrupted, or reaches a configured timeout. Network receive processing and wakeups involve the kernel networking stack and driver; the exact interrupt, polling, and scheduling path depends on the device and system configuration.
 
-### Why thread-per-connection fails at scale (The C10K Problem)
-When scaling to 50,000 or 100,000 connections:
-- **RAM Overhead**: Each OS thread allocates a private execution stack (typically 2MB to 8MB in Linux, though virtualized). 50,000 threads consume 100GB+ of memory solely for idle stacks.
-- **Context Switch Thrashing**: The kernel CPU scheduler spends more cycles saving and restoring CPU registers, cache lines, and TLB (Translation Lookaside Buffer) entries than running application code.
-- **Idle Inefficiency**: In real-world web applications and WebSockets, over 95% of active connections are idle at any given millisecond, waiting for user input or database responses. Spawning an OS thread to sit idle on a socket is catastrophic for throughput.
+### Thread-per-connection trade-offs
+A thread-per-connection design can become constrained by per-thread stack address space and committed memory, scheduler overhead, and the number of simultaneously runnable threads. The actual cost depends on runtime, stack configuration, workload, and operating system; many mostly idle threads do not necessarily reserve their full stack size in physical RAM.
 
-The solution is an **event loop**: a single execution thread monitors thousands of sockets simultaneously, waking up only when a specific socket is ready for reading or writing.
+An event loop is one alternative: one or a few threads wait for readiness across many sockets, then dispatch work for those that can make progress. It trades per-connection blocked threads for explicit state management and non-blocking I/O; it is not automatically faster for every workload.
 
 ## The legacy era: select() and poll()
 
@@ -67,34 +74,34 @@ int ready_count = select(max_fd + 1, &read_fds, NULL, NULL, &timeout);
 ```
 
 ### Critical limitations of select():
-1. **Hard Limit of 1024 File Descriptors**: The size of `fd_set` is governed by the kernel compile-time constant `FD_SETSIZE` (typically 1024). Any descriptor value $\ge 1024$ results in silent memory corruption or buffer overflows.
-2. **O(N) Kernel Traversal**: On every single `select()` invocation, user space must copy the bitmasks into kernel memory. The kernel iterates linearly through all descriptors from `0` to `max_fd` to inspect their socket buffers.
-3. **O(N) User-Space Traversal**: When `select()` returns, it does not tell the application *which* descriptors are ready. It only returns the count of ready descriptors. The user code must iterate through all descriptors and test `FD_ISSET(fd, &read_fds)`.
+1. **Descriptor-set limit**: On glibc/Linux, `fd_set` is normally limited to descriptor numbers below `FD_SETSIZE` (commonly 1024). Do not pass an out-of-range descriptor to `FD_SET`.
+2. **Repeated set processing**: The application supplies the sets again on each call, and the kernel examines the requested range up to `nfds`. The amount of work depends on that range, not simply the number of descriptors currently ready.
+3. **User-space checks**: `select()` returns the number of ready descriptors, not a compact list of them, so the application typically tests its sets to find which descriptors are ready.
 
 ### 2. poll() (System V Unix, 1986)
 `poll()` resolved the 1024 descriptor limit by passing an array of `struct pollfd` structures instead of fixed bitmasks:
 
 ```c
-struct pollfd fds[10000];
-fds[0].fd = fd1;
-fds[0].events = POLLIN;
+struct pollfd fds[1] = {
+    { .fd = fd1, .events = POLLIN }
+};
 
-int ready_count = poll(fds, 10000, timeout_ms);
+int ready_count = poll(fds, 1, timeout_ms);
 ```
 
-While `poll()` removed the arbitrary limit, it retained the same fundamental complexity: **O(N) copying and linear scanning on every iteration**. As the number of connections $N$ grows, CPU consumption scales linearly even if only 1 connection is active.
+`poll()` avoids `select()`'s fixed `fd_set` size, but the caller supplies an array on each wait and the kernel examines the array. This can make waiting expensive for a very large set when few descriptors are ready.
 
 ## The modern engine: epoll (Linux 2.6+)
 
-Introduced in Linux kernel 2.5.44, **`epoll`** decoupled descriptor registration from readiness waiting, transforming the time complexity from **O(N)** to **O(1)** relative to the total number of monitored connections.
+Linux `epoll` separates descriptor registration from readiness waiting. It can avoid the repeated full-set scan used by `select()` and `poll()` when only a small subset of a large watched set is active, but there is no universal O(1) guarantee: registration, wakeups, the number of ready descriptors, and application work all contribute to cost.
 
 `epoll` is implemented using three core system calls:
 
 ```text
 epoll System Calls:
-1. epoll_create1(0) ──> Allocates kernel event instance
-2. epoll_ctl(...)   ──> Adds/removes FDs in kernel Red-Black tree
-3. epoll_wait(...)  ──> Sleeps until ready list is populated
+1. epoll_create1(0) ──> Creates an epoll instance
+2. epoll_ctl(...)   ──> Adds, changes, or removes watched FDs
+3. epoll_wait(...)  ──> Waits for and returns readiness events
 ```
 
 ### 1. epoll_create1(): Instantiating kernel state
@@ -103,7 +110,7 @@ int epfd = epoll_create1(0);
 ```
 Creates an `eventpoll` struct inside kernel memory. This struct outlives individual system calls and maintains the monitoring state.
 
-### 2. epoll_ctl(): Stateful registration (The Red-Black Tree)
+### 2. epoll_ctl(): Stateful registration
 ```c
 struct epoll_event ev;
 ev.events = EPOLLIN | EPOLLET;
@@ -112,27 +119,19 @@ epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd, &ev);
 ```
 Instead of passing thousands of file descriptors on every call, the application registers each descriptor **once**. 
 
-The kernel stores monitored descriptors in a balanced **Red-Black Tree (`struct rb_root rbr`)**. Adding, modifying, or removing a descriptor takes **O(log N)** time, and lookups avoid linear memory copying.
+The kernel retains the registrations in the epoll instance, so the application does not need to resubmit the entire watched set on every wait. Kernel-internal data structures are implementation details and can change between Linux versions.
 
-### 3. Hardware interrupts and the Ready List (Doubly Linked List)
-When an application calls `epoll_ctl(EPOLL_CTL_ADD)`, the kernel registers an internal callback function (`ep_poll_callback`) with the socket's internal waitqueue:
+### 3. Readiness notification
+The kernel tracks registered descriptors and makes readiness events available to `epoll_wait()`. The exact callbacks, queues, and wakeup path are Linux implementation details and can change between kernel versions:
 
 ```text
 Kernel Event Flow:
-1. NIC receives packet ──> Triggers hardware interrupt
-2. OS driver executes   ──> Appends data to socket sk_buff
-3. Waitqueue callback   ──> Invokes ep_poll_callback()
-4. Kernel adds socket   ──> Inserted into epoll Ready List (rdllist)
-5. epoll_wait() unblocks──> Returns ONLY ready descriptors to user space
+1. I/O changes descriptor readiness.
+2. The kernel records or signals readiness for the epoll instance.
+3. epoll_wait() returns a batch of reported events to user space.
 ```
 
-When network packets arrive at the network card:
-1. The NIC driver handles the interrupt and parses the packet into the socket's receive buffer.
-2. The socket's waitqueue triggers `ep_poll_callback()`.
-3. The callback appends the ready descriptor to the `eventpoll`'s **Ready List (`struct list_head rdllist`)**, a doubly linked list of sockets that have active events.
-4. If a thread is sleeping inside `epoll_wait()`, the kernel wakes it immediately.
-
-### 4. epoll_wait(): O(1) event retrieval
+### 4. epoll_wait(): Waiting for ready descriptors
 ```c
 struct epoll_event events[64];
 int num_events = epoll_wait(epfd, events, 64, timeout_ms);
@@ -142,9 +141,9 @@ for (int i = 0; i < num_events; i++) {
 ```
 
 When `epoll_wait()` is called:
-- If the ready list is empty, the thread sleeps on the `eventpoll` waitqueue.
-- As soon as descriptors become ready, the kernel transfers items directly from the ready list to the user-space `events` array.
-- **Performance**: Execution time depends solely on the number of *ready events* (e.g., 5 ready sockets), completely independent of whether 1,000 or 1,000,000 sockets are currently open.
+- If no events are available, the thread can sleep until an event or timeout.
+- The call returns a batch of events up to the supplied array capacity; user space then handles those events.
+- **Performance**: The application can avoid inspecting every watched descriptor on each wait, but event delivery and handling still have costs that depend on readiness, registration, and workload.
 
 ## Level-Triggered (LT) vs. Edge-Triggered (ET) modes
 
@@ -155,16 +154,16 @@ In **Level-Triggered (LT)** mode, `epoll_wait()` will repeatedly report a file d
 1. 2000 bytes arrive on socket.
 2. Application calls `epoll_wait()`, receives notification, and reads 500 bytes.
 3. Application calls `epoll_wait()` again. Because 1500 bytes remain in the kernel buffer, `epoll_wait()` returns **immediately**.
-- **Pros**: Intuitive, programming-model safe. Missed events are impossible.
+- **Pros**: A descriptor remains reportable while it is ready, which is often simpler to use than edge-triggered notification. Applications must still handle errors, closure, and races correctly.
 
 ### Edge-Triggered (EPOLLET)
-In **Edge-Triggered (ET)** mode, `epoll_wait()` generates a notification **only when the state changes** (e.g., when new data arrives on an empty buffer):
+In **Edge-Triggered (ET)** mode, notifications indicate readiness transitions. If an application does not drain available data, it might not receive another notification until readiness changes again:
 1. 2000 bytes arrive on socket.
 2. Application calls `epoll_wait()`, receives notification, and reads 500 bytes.
 3. Application calls `epoll_wait()` again. **It blocks indefinitely**, because no *new* state transition occurred, even though 1500 bytes remain unread!
 
-### The Edge-Triggered contract
-When using `EPOLLET` (used by NGINX and high-performance network runtimes):
+### Using edge-triggered mode safely
+When using `EPOLLET`:
 - Sockets **must be configured as non-blocking** (`O_NONBLOCK`).
 - The application **must read or write in a loop until `EAGAIN` or `EWOULDBLOCK` is returned**:
 
@@ -173,7 +172,7 @@ while (1) {
     ssize_t bytes = read(fd, buf, sizeof(buf));
     if (bytes == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            // Buffer completely drained; safe to resume epoll_wait
+            // No more data is available without waiting; safe to return to epoll_wait
             break;
         }
         handle_error(fd);
@@ -191,27 +190,32 @@ while (1) {
 
 | Property | select() | poll() | epoll |
 | --- | --- | --- | --- |
-| **Data Structure** | Fixed-size bitmask | Array of `pollfd` structs | Red-Black Tree + Linked List |
-| **Max Connections** | 1024 (`FD_SETSIZE`) | Unbounded (memory limit) | Millions (file-max sysctl) |
+| **Data Structure** | Fixed-size bit set | Array of `pollfd` structs | Persistent kernel-managed registrations |
+| **Descriptor limit** | Commonly 1024 on glibc/Linux | No `fd_set`-style fixed set limit | Kernel and process resource limits apply |
 | **Registration Model** | Stateless (pass every call) | Stateless (pass every call) | Stateful (register once via `ctl`) |
-| **Kernel Complexity**| O(N) linear scan | O(N) linear scan | O(1) wait queue callbacks |
+| **Wait behavior**| Scans the supplied set | Scans the supplied array | Returns ready events without a user-space full-set scan |
 | **Output Format** | Scans all bits via `ISSET` | Scans entire array for `revents` | Dense array of ready events |
 | **Trigger Modes** | Level-Triggered only | Level-Triggered only | Level-Triggered & Edge-Triggered |
-| **Thread Safety** | Requires application lock | Requires application lock | Safe across threads (`epoll_ctl`) |
+| **Threading** | Coordinate concurrent access to shared sets | Coordinate concurrent access to shared arrays | Multiple threads can wait on an instance; event ownership and synchronization remain application concerns |
 
 ## Production tuning: System limits and gotchas
 
-When running large-scale event loops on Linux, ensure system kernel parameters are tuned:
+When running event loops on Linux, check the resource limits that apply to the actual process and workload before changing system settings:
 
 1. **System-wide and Per-Process File Limits**:
    ```bash
-   sysctl -w fs.file-max=2097152
-   ulimit -n 1048576
+   ulimit -n
    ```
-2. **epoll Resource Bounds**:
-   The kernel tracks max registered epoll descriptors per user via `fs.epoll.max_user_watches` (each watch consumes 90 bytes on 32-bit and 160 bytes on 64-bit systems).
-3. **The Epoll Thundering Herd**:
-   When multiple worker threads or processes call `epoll_wait()` on the same listening socket, an incoming connection previously woke *all* processes, triggering CPU contention as only one succeeded in calling `accept()`. Modern Linux kernels resolve this via the **`EPOLLEXCLUSIVE`** flag or `SO_REUSEPORT`.
+2. **epoll resource bounds**:
+   Registered descriptors consume kernel resources and are subject to per-user and system limits. Check the limits and accounting on the deployed kernel rather than relying on fixed per-watch memory figures.
+3. **Multiple acceptors**:
+   When several workers wait on a listening socket, wakeup behavior depends on kernel version and how the socket and epoll instances are configured. `EPOLLEXCLUSIVE` and `SO_REUSEPORT` are distinct mechanisms with different semantics; choose and test one for the deployment rather than treating them as interchangeable fixes.
 
 ### Takeaway
-By combining an in-kernel Red-Black tree for efficient descriptor management with interrupt-driven waitqueue callbacks that maintain an active ready list, Linux `epoll` provides the high-performance foundation enabling modern distributed infrastructure to scale seamlessly to millions of concurrent sessions.
+Use `select()` or `poll()` when their simpler interface and workload are a good fit. Consider `epoll` for Linux event loops with large, mostly idle descriptor sets, then benchmark the real workload. Whichever API you choose, non-blocking I/O, backpressure, partial operations, and correct connection cleanup remain essential.
+
+## References
+
+- [Linux man-pages: `select(2)`](https://man7.org/linux/man-pages/man2/select.2.html)
+- [Linux man-pages: `poll(2)`](https://man7.org/linux/man-pages/man2/poll.2.html)
+- [Linux man-pages: `epoll(7)`](https://man7.org/linux/man-pages/man7/epoll.7.html)

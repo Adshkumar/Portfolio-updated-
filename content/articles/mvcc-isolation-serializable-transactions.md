@@ -3,6 +3,7 @@ title: "MVCC and Transaction Isolation: From Snapshots to Serializable"
 description: "Understand multi-version concurrency control, read and write conflicts, snapshot-isolation anomalies, serializable execution, and the operational costs of long-running transactions."
 slug: "mvcc-isolation-serializable-transactions"
 date: "2026-10-25"
+updated: "2026-11-02"
 tags:
   - Databases
   - Transactions
@@ -18,6 +19,12 @@ cover: null
 Transactions let an application treat multiple database operations as one logical unit. Under concurrency, however, correctness depends on which committed states each transaction can observe and what happens when transactions modify overlapping data.
 
 **Multi-version concurrency control (MVCC)** is a family of techniques databases use to retain multiple row versions so readers can often work without blocking writers. It improves concurrency, but it does not make every transaction anomaly disappear. In particular, a consistent snapshot is not automatically equivalent to executing transactions one at a time.
+
+## A small example
+
+Suppose a row says that a team has 10 available seats. Transaction A starts and reads 10. Transaction B reserves one seat and commits, leaving 9. Depending on the database and isolation level, A may continue to see the older version while it works. That stable view is useful for consistent reads, but application code must still protect the rule “never allocate more than 10 seats” when multiple transactions make decisions at once.
+
+MVCC describes how versions are kept and selected; an isolation level describes which concurrent outcomes are allowed. Use stronger constraints, locks, or serializable transactions when an invariant depends on concurrent decisions, and be prepared to retry transactions that the database aborts.
 
 ## A row can have more than one visible version
 

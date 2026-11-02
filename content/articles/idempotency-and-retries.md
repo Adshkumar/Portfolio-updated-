@@ -3,6 +3,7 @@ title: "Idempotency, Retries, and Duplicate Processing"
 description: "Design retryable APIs by pairing idempotency keys with durable request records, explicit states, bounded retention, and honest delivery guarantees."
 slug: "idempotency-and-retries"
 date: "2026-10-25"
+updated: "2026-11-02"
 tags:
   - Distributed Systems
   - API Design
@@ -15,33 +16,36 @@ author: "Adarsh Kumar"
 cover: null
 ---
 
-In distributed systems, the network is fundamentally unreliable. When an API client sends an HTTP `POST /v1/payments` request and the connection times out after 5 seconds, the client cannot know what happened:
+In distributed systems, a timeout does not tell a client whether the server completed its work. When an API client sends an HTTP `POST /v1/payments` request and the connection times out after 5 seconds, the client cannot know what happened:
 1. Did the request packet drop before reaching the server?
 2. Did the server execute the payment, but the response packet dropped on the return path?
 3. Did the server process crash mid-transaction?
 
-If the client retries blindly, it risks charging the customer twice. If it does not retry, the user's order remains unfulfilled. This uncertainty is governed by the classic **Two Generals Problem**: in an asynchronous network with unacknowledged packet loss, two nodes cannot reach common knowledge with absolute certainty.
-
-To make retries safe, distributed APIs implement **idempotency**: the mathematical property that executing an operation multiple times produces the exact same system state and returns the exact same result as executing it once: `f(f(x)) = f(x)`.
+If the client retries blindly, it risks charging the customer twice. If it does not retry, the user's order remains unfulfilled. To make a retry safe, an API can record a client-generated idempotency key and the outcome associated with it. When the same logical request arrives again, the server recognizes it and avoids repeating the side effect. Idempotency means repeated execution has the same intended effect on system state; it does not require every response to be byte-for-byte identical.
 
 ![Client retry flow using an idempotency key and a durable request record](/articles/images/idempotency-retry-flow.svg "Idempotency key lookup and duplicate response path")
 
-Figure 1: Complete request and retry lifecycle with an idempotency key. The gateway or service checks the durable store: an existing resolved key returns the stored response immediately without re-executing business logic. A first-time key acquires a processing lock, executes the business mutation within an atomic database transaction, and stores the response payload for future replays.
+Figure 1: The service scopes a key to the caller and operation. A new key and its database mutation are committed together with the replayable result; a duplicate uses the unique constraint to find and return that result without repeating the mutation.
 
-## The delivery semantics hierarchy
+## A payment retry, step by step
 
-Engineers frequently debate message guarantees. It is essential to be mathematically precise about what distributed infrastructure can provide:
+1. A customer submits a payment and the client creates one unique key for that payment attempt.
+2. The server stores the key with the request state and performs the payment operation.
+3. The response is lost, so the client retries with the **same** key and the same request.
+4. The server finds the stored result and returns it instead of creating another charge.
 
-- **At-most-once delivery**: Messages may be lost, but are never duplicated. Handled by sending without retries and acknowledging before processing. (Acceptable for non-critical telemetry).
-- **At-least-once delivery**: Messages are guaranteed to arrive, but may arrive multiple times due to retries on unacknowledged transmissions. (The standard operational model of TCP, HTTP, Kafka, SQS, and RabbitMQ).
-- **"Exactly-once" processing**: An engineering abstraction achieved by combining **at-least-once delivery with idempotent consumption**. The network still delivers duplicate packets, but the receiver filters out duplicates before side effects occur.
+The key is not a magic network guarantee. The record must be durable for the period clients may retry, concurrent requests using the same key must be coordinated, and the server should reject reuse of a key with a different request body. For workflows spanning independent services, each step still needs its own idempotency or deduplication strategy.
+
+## Delivery attempts are not business effects
+
+“At-most-once” and “at-least-once” describe delivery or processing attempts within a particular system and its failure model; neither means that a business operation is guaranteed to happen exactly once across arbitrary services. Retrying tends to create at-least-once attempts, so consumers should tolerate duplicates. Durable deduplication can provide an effectively-once effect only for the state changes covered by the deduplication transaction. TCP provides reliable, ordered bytes for a live connection, not a guarantee that a remote handler ran exactly once.
 
 ## Anatomy of an idempotency key
 
 An idempotency key is an opaque, unique token generated by the client representing one logical business intent.
 
 ### 1. Key generation and scoping
-- **Format**: High-entropy strings, typically UUIDv4 (`e7a9b1c0-4e3a-4b9e-8e3a-1b9e8e3a1b9e`) or ULID, passed in the standard `Idempotency-Key` HTTP header.
+- **Format**: An opaque, high-entropy token such as a UUID. `Idempotency-Key` is a common API convention and is the subject of an IETF Internet-Draft; define its scope and behavior in your own API contract.
 - **Strict multi-tenant scoping**: Never key solely on the client-provided token. An idempotency key must be compound-scoped to the authenticated identity and route:
 
 ```text
@@ -54,20 +58,20 @@ Scoping prevents malicious tenants from guessing or squatting on keys to inspect
 What happens if a buggy client sends two requests with the *same* idempotency key, but changes the request body from `10.00 USD` to `100.00 USD`?
 - Silently returning the `10.00 USD` response would mislead the caller.
 - Executing the `100.00 USD` charge violates idempotency.
-- **Rule**: Compute a cryptographic hash of the canonicalized request body: `SHA-256(JSON)`. Store this hash alongside the key. If an incoming request matches an existing key but has a different payload hash, reject immediately with `HTTP 422 Unprocessable Entity` or `HTTP 409 Conflict`.
+- **Rule**: Store a digest of the request fields that affect the operation, using a stable representation. Hashing arbitrary JSON bytes is not necessarily semantic canonicalization: whitespace, field order, and default values can differ. If the same key arrives with a different operation or payload, reject it with the status your API documents (commonly `409 Conflict`).
 
-## The state machine and concurrency races
+## Atomicity and concurrent duplicate requests
 
-Handling duplicate requests requires modeling an explicit state machine with three states:
+For a database-only operation, the simplest robust design is to commit the idempotency result and the business mutation in the same transaction:
 
 ```text
 [ Incoming Request ]
          │
          ▼
-    [ PENDING ]
+    [ Begin transaction ]
          │
-         ├── Commit Succeeded ──> [ RESOLVED ] ──> Replay Response
-         └── Failure / Rollback ─> [ FAILED ]   ──> Allow Clean Retry
+         ├── New key ──> Apply mutation + save result ──> Commit
+         └── Existing key ──> Compare request + replay result
 ```
 
 ### Race condition: Simultaneous duplicate requests
@@ -75,7 +79,7 @@ Consider two identical payment requests arriving at two different gateway server
 
 If both servers query `SELECT status FROM idempotency_keys WHERE key = :k` simultaneously, neither finds a record. Both proceed to execute the payment, resulting in a double charge.
 
-**The Solution**: Enforce a unique database constraint and acquire a lease atomically on insertion.
+**The solution**: Enforce a unique constraint on the documented key scope and make the insert, business mutation, and saved result one database transaction. A process-local “check then insert” is not sufficient across servers.
 
 ### Production database schema (PostgreSQL)
 
@@ -83,21 +87,19 @@ If both servers query `SELECT status FROM idempotency_keys WHERE key = :k` simul
 CREATE TABLE idempotency_records (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id VARCHAR(64) NOT NULL,
+    principal_id VARCHAR(128) NOT NULL,
     idempotency_key VARCHAR(255) NOT NULL,
     endpoint_path VARCHAR(255) NOT NULL,
     request_payload_hash CHAR(64) NOT NULL,
     status VARCHAR(20) NOT NULL
-        CHECK (status IN ('PENDING',
-                          'RESOLVED',
-                          'FAILED')),
+        CHECK (status IN ('PENDING', 'RESOLVED')),
     response_code INTEGER NULL,
     response_headers JSONB NULL,
     response_body JSONB NULL,
-    locked_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     expires_at TIMESTAMPTZ NOT NULL,
     CONSTRAINT uq_tenant_idempotency UNIQUE
-        (tenant_id, endpoint_path, idempotency_key)
+        (tenant_id, principal_id, endpoint_path, idempotency_key)
 );
 
 CREATE INDEX idx_idempotency_expires_at
@@ -106,47 +108,37 @@ CREATE INDEX idx_idempotency_expires_at
 
 ### Atomic transaction execution pattern
 
-The critical architectural rule is **co-locating domain state mutations and idempotency record resolution in the exact same ACID database transaction**:
-
 ```sql
--- Step 1: Acquire the idempotency key lock
+BEGIN;
+
+-- A unique constraint arbitrates concurrent requests across servers.
+-- If this inserts a row, this transaction owns the new key.
 INSERT INTO idempotency_records (
     tenant_id,
+    principal_id,
     idempotency_key,
     endpoint_path,
     request_payload_hash,
     status,
-    locked_at,
     expires_at
 ) VALUES (
     'tenant_abc',
+    'user_123',
     'client_req_998',
     '/v1/payments',
-    'e3b0c44298fc1c149afbf4c8996fb92427ae41e4'
-    '649b934ca495991b7852b855',
+    :request_digest,
     'PENDING',
-    NOW(),
     NOW() + INTERVAL '24 HOURS'
 )
-ON CONFLICT (tenant_id,
-             endpoint_path,
-             idempotency_key)
-DO UPDATE
-    SET locked_at = NOW()
-    WHERE idempotency_records.status = 'FAILED';
+ON CONFLICT (tenant_id, principal_id, endpoint_path, idempotency_key)
+DO NOTHING
+RETURNING id;
 ```
 
-- If `INSERT` succeeds: The current thread owns the execution token. Proceed to Step 2.
-- If unique constraint violation occurs:
-  - Inspect current `status`.
-  - If `status = 'RESOLVED'`: Return stored `response_code`, `response_headers`, and `response_body` immediately.
-  - If `status = 'PENDING'`: A concurrent thread is currently processing the operation. Return `HTTP 409 Conflict` with a `Retry-After: 2` header, or await lock release via database row lock (`SELECT FOR UPDATE`).
+If the insert returns a row, apply the database mutation and update the idempotency row to `RESOLVED` with the response to replay, then commit. If it returns no row, read the existing record after the conflicting transaction resolves: compare the request digest and either replay the saved result or report that the same key is still in progress, according to the API contract. Do not execute the business mutation on that path.
 
 ```sql
--- Step 2: Atomic transaction mutation
-BEGIN;
-
--- A. Perform business logic
+-- Continue the transaction that inserted the new key.
 UPDATE accounts
 SET balance = balance - 100.00
 WHERE id = 'acc_42';
@@ -166,13 +158,14 @@ SET status = 'RESOLVED',
     response_headers =
       '{"Content-Type": "application/json"}'
 WHERE tenant_id = 'tenant_abc'
+  AND principal_id = 'user_123'
   AND idempotency_key = 'client_req_998'
   AND status = 'PENDING';
 
 COMMIT;
 ```
 
-If the server crashes during execution, the database rolls back *both* the account balance update and the idempotency record. The key returns to non-existent (or timed-out `PENDING`), allowing a subsequent retry to execute cleanly.
+If the process or database transaction fails before commit, both the mutation and the newly inserted record roll back. A retry can then attempt the operation. This pattern assumes the business mutation and idempotency record use the same transactional database. A durable, separately committed `PENDING` state requires a different design with leases, recovery, and explicit handling for abandoned work.
 
 ## Multi-service architectures and distributed sagas
 
@@ -190,17 +183,17 @@ When a business operation must span external payment gateways (e.g., Stripe) or 
 ```
 
 In multi-service systems:
-1. **Propagate the Idempotency Key**: Pass the client's `Idempotency-Key` downstream as a correlation identifier to external APIs. Stripe, Adyen, and modern banking APIs support idempotency headers natively.
+1. **Use downstream deduplication deliberately**: If the downstream API supports idempotency, send a stable key in the format and scope it documents. A correlation ID alone does not deduplicate work, and key support differs by provider.
 2. **The Transactional Outbox Pattern**: Store outgoing external events in an `outbox` table within the local database transaction. A background CDC worker polls the outbox and dispatches events with retries.
 3. **Idempotent Consumers**: Every downstream service receiving an event or message must check its own local idempotency table before processing side effects.
 
 ## Retry algorithms: Exponential backoff with jitter
 
-When an API call fails with a transient error (`HTTP 503`, network reset, timeout), the client must retry. However, if thousands of clients retry on a fixed interval (e.g., every 1 second), they create a catastrophic **retry storm** (thundering herd) that overwhelms the recovering server.
+When an API call fails with a retryable condition (`HTTP 503`, a connection reset, or an ambiguous timeout), a client may retry if the operation is safe to repeat and its deadline or retry budget allows it. Clients that retry on the same fixed interval can synchronize and overload a recovering service.
 
 ### The Full Jitter algorithm
 
-Clients must implement **Exponential Backoff with Full Jitter** (derived by AWS Architecture research):
+One common policy is **exponential backoff with full jitter**:
 
 ```text
 sleep = random(0, min(cap, base * 2^attempt))
@@ -224,18 +217,18 @@ Attempt 3: 0 to 800 ms
 Attempt 4: 0 to 1600 ms
 ```
 
-By randomizing sleep between 0 and the exponential ceiling, traffic bursts are spread smoothly across time, allowing congested backends to recover.
+Randomizing the delay reduces synchronized retry bursts; it does not guarantee a smooth arrival rate or make an unsafe operation safe to retry.
 
 ### Operational safeguards for retries
-- **Retry budgets**: Bound retry volume. A client should allocate at most 10%–20% of its total request budget to retries. If the budget is exhausted, fail fast immediately.
-- **Circuit breakers**: If the server failure rate exceeds 50% over a 10-second rolling window, open the circuit and reject calls locally without hitting the network.
-- **Idempotency key retention**: Retain idempotency records for a defined window (e.g., 24 to 72 hours). After the TTL, delete expired records via partition dropping (`DROP TABLE idempotency_records_2026_10_25`) to prevent table bloat.
+- **Retry budgets**: Bound retry volume relative to normal traffic and service capacity. Choose the budget from measured behavior; a single percentage is not suitable for every system.
+- **Circuit breakers**: Treat thresholds and sampling windows as service-specific policy, and remember that opening a breaker does not undo work that may already have completed.
+- **Idempotency-key retention**: Keep records at least as long as clients are allowed to retry. Expiration changes semantics: a late retry after deletion may execute again. Use indexed cleanup or time partitioning only when it fits the database and workload.
 
 ### Key takeaways
 
 - Network timeouts are ambiguous; never assume a timed-out request failed to mutate backend state.
-- Idempotency keys must be strictly compound-scoped to tenant identity and endpoint route.
-- Always store and verify a cryptographic hash of the request payload to catch accidental key reuse with modified parameters.
+- Scope keys to the authenticated caller and operation as defined by the API contract.
+- Store enough request identity to detect key reuse with different operation parameters.
 - Co-locate business state changes and idempotency record resolution inside the exact same local ACID transaction.
 - Pair client retries with exponential backoff, Full Jitter, and retry budgets to prevent destructive retry storms.
 

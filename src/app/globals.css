@@ -2762,8 +2762,12 @@ a.cred:hover {
 .articleProse .articleImageButton {
   display: block;
   width: 100%;
-  border: 0;
-  background: transparent;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elev);
   color: inherit;
   cursor: zoom-in;
   font: inherit;
@@ -2776,12 +2780,65 @@ a.cred:hover {
 }
 
 .articleProse .articleImageButton img {
+  display: block;
   width: 100%;
   height: auto;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--bg-elev);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   margin: 0;
+}
+
+:root:not([data-theme="light"]) .articleImageButton img:is(
+  [src$="grpc-http2-layers.svg"],
+  [src$="http-evolution-quic.svg"],
+  [src$="linux-epoll-io.svg"],
+  [src$="llm-generation-pipeline.svg"],
+  [src$="rate-limiter-flow.svg"],
+  [src$="rpc-request-lifecycle.svg"],
+  [src$="tcp-kernel-buffers.svg"]
+),
+:root:not([data-theme="light"]) .articleImageViewerFigure img:is(
+  [src$="grpc-http2-layers.svg"],
+  [src$="http-evolution-quic.svg"],
+  [src$="linux-epoll-io.svg"],
+  [src$="llm-generation-pipeline.svg"],
+  [src$="rate-limiter-flow.svg"],
+  [src$="rpc-request-lifecycle.svg"],
+  [src$="tcp-kernel-buffers.svg"]
+),
+:root[data-theme="light"] .articleImageButton img:is(
+  [src$="api-evolution-migration.svg"],
+  [src$="btree-lsm-storage.svg"],
+  [src$="cache-invalidation-flow.svg"],
+  [src$="consistent-hashing-ring.svg"],
+  [src$="database-sharding-routing.svg"],
+  [src$="idempotency-retry-flow.svg"],
+  [src$="mediasoup-room-flow.svg"],
+  [src$="multi-tenant-isolation.svg"],
+  [src$="mvcc-snapshot-visibility.svg"],
+  [src$="mvcc-write-skew.svg"],
+  [src$="sfu-vs-mcu-topologies.svg"],
+  [src$="webrtc-connection-flow.svg"]
+),
+:root[data-theme="light"] .articleImageViewerFigure img:is(
+  [src$="api-evolution-migration.svg"],
+  [src$="btree-lsm-storage.svg"],
+  [src$="cache-invalidation-flow.svg"],
+  [src$="consistent-hashing-ring.svg"],
+  [src$="database-sharding-routing.svg"],
+  [src$="idempotency-retry-flow.svg"],
+  [src$="mediasoup-room-flow.svg"],
+  [src$="multi-tenant-isolation.svg"],
+  [src$="mvcc-snapshot-visibility.svg"],
+  [src$="mvcc-write-skew.svg"],
+  [src$="sfu-vs-mcu-topologies.svg"],
+  [src$="webrtc-connection-flow.svg"]
+) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .articleImageViewer {
@@ -2836,6 +2893,20 @@ a.cred:hover {
   border: 1px solid var(--border-strong);
   border-radius: 8px;
   background: #0a0a0a;
+}
+
+.articleImageViewerFigure img:is(
+  [src$="grpc-http2-layers.svg"],
+  [src$="http-evolution-quic.svg"],
+  [src$="linux-epoll-io.svg"],
+  [src$="llm-generation-pipeline.svg"],
+  [src$="rate-limiter-flow.svg"],
+  [src$="rpc-request-lifecycle.svg"],
+  [src$="tcp-kernel-buffers.svg"]
+) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .articleImageViewerFigure figcaption {

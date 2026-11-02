@@ -1,40 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="tcp-title tcp-desc">
-  <title id="tcp-title">TCP Kernel Buffer Anatomy and Handshake</title>
-  <desc id="tcp-desc">Visualization of TCP sockets showing receive and send ring buffers, window scale, sequence offsets, and kernel socket states.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 600" role="img" aria-labelledby="tcp-title tcp-desc">
+  <title id="tcp-title">How TCP moves bytes through sender and receiver buffers</title>
+  <desc id="tcp-desc">An application writes bytes into a sender socket buffer. TCP sends allowed bytes across the network and retains unacknowledged data. The receiver stores ordered bytes until its application reads them, then advertises available receive-window space. Receive and congestion windows independently limit in-flight data.</desc>
   <defs>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#38bdf8"/></marker>
+    <marker id="tcp-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2563eb"/></marker>
+    <marker id="tcp-green-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#15803d"/></marker>
     <style>
-      .bg{fill:#0a0a0a}.card{fill:#141414;stroke:#404040;stroke-width:1.5}.title{fill:#fff;font:700 20px system-ui,sans-serif}.header{fill:#38bdf8;font:700 16px system-ui,sans-serif}.txt{fill:#e5e5e5;font:500 13px system-ui,sans-serif}.sub{fill:#a3a3a3;font:12px system-ui,sans-serif}.buf{fill:#1e293b;stroke:#38bdf8;stroke-width:1}.buf-ack{fill:#065f46;stroke:#10b981;stroke-width:1}.buf-unack{fill:#854d0e;stroke:#eab308;stroke-width:1}.buf-unsent{fill:#374151;stroke:#6b7280;stroke-width:1}
+      .bg{fill:#f8fafc}.panel{fill:#fff;stroke:#cbd5e1;stroke-width:2}.title{fill:#0f172a;font:700 28px system-ui,sans-serif}.heading{fill:#0f172a;font:700 20px system-ui,sans-serif}.label{fill:#334155;font:600 16px system-ui,sans-serif}.body{fill:#475569;font:15px system-ui,sans-serif}.small{fill:#64748b;font:14px system-ui,sans-serif}.bluebox{fill:#eff6ff;stroke:#60a5fa;stroke-width:2}.greenbox{fill:#f0fdf4;stroke:#4ade80;stroke-width:2}.amberbox{fill:#fffbeb;stroke:#fbbf24;stroke-width:2}.queue{fill:#e2e8f0;stroke:#94a3b8;stroke-width:1.5}.acked{fill:#dcfce7;stroke:#22c55e;stroke-width:1.5}.flight{fill:#fef3c7;stroke:#f59e0b;stroke-width:1.5}.unsent{fill:#dbeafe;stroke:#3b82f6;stroke-width:1.5}.arrow{fill:none;stroke:#2563eb;stroke-width:3;marker-end:url(#tcp-arrow)}.return{fill:none;stroke:#15803d;stroke-width:3;marker-end:url(#tcp-green-arrow)}
     </style>
   </defs>
-  <rect class="bg" width="960" height="300" rx="18"/>
-  <text class="title" x="30" y="38">TCP Kernel Architecture: Ring Buffers, Sliding Windows &amp; Backpressure</text>
+  <rect class="bg" width="1120" height="600" rx="24"/>
+  <text class="title" x="40" y="52">Follow the bytes: sender → network → receiver</text>
+  <text class="body" x="40" y="82">TCP is an ordered byte stream. A successful write means the local kernel accepted bytes, not that the remote app read them.</text>
 
-  <!-- Left: Socket Buffer Layout -->
-  <rect class="card" x="30" y="65" width="460" height="205" rx="12"/>
-  <text class="header" x="50" y="95">Kernel Send Buffer (sk_buff Queue)</text>
-  
-  <rect class="buf-ack" x="50" y="115" width="120" height="40" rx="4"/>
-  <text class="txt" x="65" y="140">Sent &amp; ACKed</text>
+  <rect class="panel" x="36" y="112" width="310" height="264" rx="18"/>
+  <text class="heading" x="60" y="150">1 · Sender</text>
+  <rect class="bluebox" x="62" y="174" width="258" height="58" rx="12"/>
+  <text class="label" x="191" y="199" text-anchor="middle">Application</text>
+  <text class="small" x="191" y="220" text-anchor="middle">write(bytes)</text>
+  <path class="arrow" d="M191 234V260"/>
+  <text class="label" x="191" y="283" text-anchor="middle">TCP send queue</text>
+  <rect class="acked" x="62" y="300" width="84" height="42" rx="7"/>
+  <rect class="flight" x="151" y="300" width="84" height="42" rx="7"/>
+  <rect class="unsent" x="240" y="300" width="80" height="42" rx="7"/>
+  <text class="small" x="104" y="326" text-anchor="middle">ACKed</text>
+  <text class="small" x="193" y="326" text-anchor="middle">in flight</text>
+  <text class="small" x="280" y="326" text-anchor="middle">queued</text>
+  <text class="small" x="62" y="362">Unacknowledged bytes stay available for retransmission.</text>
 
-  <rect class="buf-unack" x="175" y="115" width="130" height="40" rx="4"/>
-  <text class="txt" x="185" y="140">In-Flight (UnACKed)</text>
+  <rect class="panel" x="404" y="112" width="312" height="264" rx="18"/>
+  <text class="heading" x="428" y="150">2 · Network path</text>
+  <rect class="amberbox" x="434" y="176" width="252" height="78" rx="14"/>
+  <text class="label" x="560" y="207" text-anchor="middle">Bytes in flight</text>
+  <text class="body" x="560" y="233" text-anchor="middle">limited by min(rwnd, cwnd)</text>
+  <path class="arrow" d="M346 215H428"/>
+  <path class="arrow" d="M686 215H768"/>
+  <text class="small" x="560" y="282" text-anchor="middle">Loss? sender retransmits missing bytes</text>
+  <text class="small" x="560" y="307" text-anchor="middle">after detecting a gap or timeout.</text>
+  <path class="return" d="M770 340C690 386 430 386 348 340"/>
+  <text class="small" x="560" y="367" text-anchor="middle">ACK + advertised receive window travel back</text>
 
-  <rect class="buf-unsent" x="310" y="115" width="150" height="40" rx="4"/>
-  <text class="txt" x="330" y="140">Queued (Unsent)</text>
+  <rect class="panel" x="774" y="112" width="310" height="264" rx="18"/>
+  <text class="heading" x="798" y="150">3 · Receiver</text>
+  <rect class="greenbox" x="800" y="174" width="258" height="58" rx="12"/>
+  <text class="label" x="929" y="199" text-anchor="middle">TCP receive queue</text>
+  <text class="small" x="929" y="220" text-anchor="middle">holds ordered bytes</text>
+  <path class="arrow" d="M929 234V260"/>
+  <rect class="bluebox" x="800" y="270" width="258" height="58" rx="12"/>
+  <text class="label" x="929" y="295" text-anchor="middle">Receiving application</text>
+  <text class="small" x="929" y="316" text-anchor="middle">read(bytes) frees buffer space</text>
+  <text class="small" x="800" y="360">rwnd advertises receiver capacity to the sender.</text>
 
-  <text class="sub" x="50" y="180">Sliding Window Size (rwnd) advertised by receiver TCP header</text>
-  <text class="txt" x="50" y="205">• SO_SNDBUF / SO_RCVBUF autotuned by tcp_wmem / tcp_rmem</text>
-  <text class="txt" x="50" y="228">• Full receiver buffer triggers zero-window probe backpressure</text>
-  <text class="txt" x="50" y="250">• TIME_WAIT state (2 * MSL) prevents cross-connection collisions</text>
+  <rect class="bluebox" x="36" y="408" width="510" height="142" rx="16"/>
+  <text class="heading" x="62" y="445">Flow control · protects the receiver</text>
+  <text class="body" x="62" y="476">Receiver advertises rwnd. If its buffer fills,</text>
+  <text class="body" x="62" y="500">it can advertise zero; the sender pauses and probes.</text>
+  <text class="small" x="62" y="530">Reading data frees space and lets transmission resume.</text>
 
-  <!-- Right: Connection Handshake & Lifecycle -->
-  <rect class="card" x="510" y="65" width="420" height="205" rx="12"/>
-  <text class="header" x="530" y="95">Lifecycle &amp; Latency Costs</text>
-  <text class="txt" x="530" y="125">• 3-Way Handshake: SYN ──&gt; SYN-ACK ──&gt; ACK (1 RTT)</text>
-  <text class="txt" x="530" y="148">• TLS 1.3 Handshake: ClientHello + Keys (1 RTT)</text>
-  <text class="txt" x="530" y="171">• Slow-Start (cwnd): Initial Congestion Window = 10 MSS</text>
-  <text class="txt" x="530" y="194">• Nagle's Algorithm (TCP_NODELAY): Buffers tiny packets</text>
-  <text class="txt" x="530" y="217">• Ephemeral Port Exhaustion: SO_REUSEADDR / SO_REUSEPORT</text>
-  <text class="sub" x="530" y="245">Kernel allocates ~4KB–64KB per active socket sk_buff</text>
+  <rect class="amberbox" x="574" y="408" width="510" height="142" rx="16"/>
+  <text class="heading" x="600" y="445">Congestion control · protects the network</text>
+  <text class="body" x="600" y="476">Sender congestion window cwnd limits bytes in flight</text>
+  <text class="body" x="600" y="500">according to the path. rwnd and cwnd are separate limits.</text>
+  <text class="small" x="600" y="530">The sender is constrained by whichever window is smaller.</text>
 </svg>

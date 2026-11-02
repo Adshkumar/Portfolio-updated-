@@ -3,6 +3,7 @@ title: "SFU vs. MCU: Choosing a Group Video Architecture"
 description: "Compare peer mesh, selective forwarding, and server-side media composition across bandwidth, latency, compute cost, and product requirements."
 slug: "sfu-vs-mcu-group-video-architecture"
 date: "2026-10-25"
+updated: "2026-11-02"
 tags:
   - WebRTC
   - SFU
@@ -16,7 +17,7 @@ author: "Adarsh Kumar"
 cover: null
 ---
 
-In a one-on-one video call, direct peer-to-peer (P2P) WebRTC provides minimal latency, zero media server infrastructure costs, and end-to-end encryption. However, the moment a third, fifth, or twentieth participant joins the call, real-time media dynamics experience a combinatorial explosion.
+In a one-on-one call, a direct peer-to-peer WebRTC path can avoid a media-server hop. In a group call, sending a separate copy of every participant's media to every other participant can quickly strain client uplink, CPU, and battery.
 
 Building a multi-party conferencing platform (such as Zoom, Google Meet, or Microsoft Teams) requires selecting the appropriate media distribution topology: **P2P Mesh, Multipoint Conferencing Unit (MCU), or Selective Forwarding Unit (SFU)**.
 
@@ -25,6 +26,12 @@ Each topology makes fundamentally different trade-offs across client uplink/down
 ![Comparison of mesh, SFU forwarding, and MCU composition for group calls](/articles/images/sfu-vs-mcu-topologies.svg "Group call media topology comparison")
 
 Figure 1: Comparison of multi-party media distribution topologies. Mesh establishes full peer-to-peer links, placing quadratic bandwidth and encoding strain on endpoints. An SFU acts as a lightweight RTP packet router, forwarding selected streams without transcoding. An MCU decodes all incoming streams and re-encodes a single composed composite video for each recipient.
+
+## The choice in plain language
+
+In a small peer-to-peer mesh, every participant sends media directly to every other participant. An SFU moves that forwarding work to a server: each person publishes media once, and the server forwards selected streams to subscribers. An MCU goes further and combines media into a new output stream, which can simplify a viewer's playback but costs more server processing and reduces layout flexibility.
+
+Choose an SFU when clients need to select or arrange participant streams and the server should avoid decoding every video. Choose an MCU when a server-composed layout or a single output stream is a product requirement. A mesh can be appropriate for very small calls. Actual capacity and latency depend on codecs, resolutions, subscriptions, hardware, and network conditions.
 
 ## Mathematical comparison of group topologies
 
@@ -43,13 +50,13 @@ To evaluate these architectures, analyze how network bandwidth, CPU consumption,
 | --- | --- | --- | --- |
 | **Client Uplink Bandwidth** | O(N - 1) (sends copy to every peer) | O(1) (sends 1 stream, or 3 simulcast layers) | O(1) (sends 1 stream) |
 | **Client Downlink Bandwidth** | O(N - 1) (receives stream from every peer) | O(K) (K visible active speakers on screen) | O(1) (receives 1 composited stream) |
-| **Total Media Links** | N(N - 1) / 2 = O(N^2) (quadratic growth) | 2N = O(N) (1 publish + 1 subscribe per peer) | 2N = O(N) (1 publish + 1 subscribe per peer) |
+| **Connections vs. media streams** | N(N - 1) / 2 peer connections; each participant sends to N - 1 peers | Roughly one client-server transport per participant; consumer streams depend on subscription policy and can grow toward N(N - 1) | Roughly one client-server transport per participant; one composed output per participant |
 | **Client CPU Overhead** | Extreme: Encodes and decodes N-1 streams | Moderate: Encodes 1 stream; decodes K streams | Minimal: Encodes 1 stream; decodes 1 stream |
-| **Server Media Processing CPU** | Zero (no media servers required) | Extremely Low (O(1) packet routing; no transcode) | Extreme (O(N) decoders + compositor + N encoders) |
+| **Server Media Processing CPU** | No media server | No decoding or transcoding, but packet forwarding work grows with published and subscribed streams | Decoding, composition, and encoding work grows with participants, streams, and output profiles |
 | **Server Egress Bandwidth** | Zero | O(N * K) (forwards selected streams) | O(N) (sends single stream per client) |
-| **Added Latency** | 0 ms (direct peer-to-peer) | 1–5 ms (in-memory packet buffer and rewrite) | 150–350 ms (decode, composite, re-encode) |
-| **End-to-End Encryption (E2EE)** | Native (direct peer-to-peer DTLS-SRTP) | Supported via SFrame (RFC 9605 / Insertable Streams)| Impossible (server must decrypt to composite) |
-| **Maximum Room Capacity** | 4 to 6 participants max | Hundreds to thousands of participants | Tens of participants (bound by server GPU/CPU) |
+| **Added Latency** | No media server hop, but network path and device processing still add latency | Adds a server hop; processing delay depends on load and implementation | Adds decode, composition, and encode work; delay depends on implementation |
+| **End-to-End Encryption (E2EE)** | Possible for direct media; deployment details matter | Application-layer media encryption such as SFrame can keep content opaque to the SFU | Content-aware composition requires the server to access the media |
+| **Room capacity** | Best suited to small groups; test client and network limits | Can support larger rooms, but server and subscriber limits must be measured | Depends on server media-processing capacity and desired output quality |
 
 ## Mesh: Why P2P collapses beyond small groups
 
@@ -59,7 +66,7 @@ In a full P2P mesh, for a room of N = 8 participants:
 - Most consumer broadband and mobile connections have asymmetric uplink speeds capped at 5–10 Mbps.
 - Mobile devices cannot decode 7 concurrent H.264/VP8 video streams without thermal throttling, frame drops, and battery drain.
 
-**Conclusion**: Mesh is only viable for 1-on-1 calls or small ad-hoc groups capped strictly at 3 to 4 participants.
+**Conclusion**: Mesh is usually simplest for one-to-one and small calls. The practical group size depends on media quality, device capability, and uplink capacity, so measure it on the target clients rather than relying on a universal cutoff.
 
 ## MCU: The legacy hardware approach
 
@@ -67,29 +74,24 @@ The **Multipoint Conferencing Unit (MCU)** was the dominant architecture in lega
 - **How it works**: The server decodes every participant's incoming compressed video frames into raw YUV pixel bitmaps in RAM. It scales and renders these bitmaps onto a single composite video canvas (e.g., a 2x2 or 3x3 grid), mixes the audio channels into a single waveform, and re-encodes a brand-new video stream for the recipient.
 
 ### Critical operational liabilities of an MCU
-1. **Astronomical compute costs**: Video decoding and hardware-accelerated H.264/AV1 encoding are compute-intensive. A single high-end cloud server (e.g., AWS c6i.16xlarge) can host hundreds of SFU rooms, but only 2 or 3 MCU composite rooms before saturating 64 CPU cores.
-2. **Fixed transcode latency penalty**: Decoding frames, aligning frame rates, compositing canvases, and re-encoding adds **150–350 ms of processing latency**, ruining conversational fluidity.
+1. **Higher compute cost**: Decoding and encoding video require substantially more work than forwarding compressed RTP packets. Capacity depends on codecs, resolutions, hardware acceleration, and the number of output layouts.
+2. **Additional processing delay**: Decoding, compositing, and re-encoding add work and can increase latency; the amount depends on the implementation and load.
 3. **Loss of client UI layout control**: Because the server bakes the grid layout into a single video frame, the client app cannot click-to-zoom a specific participant, change aspect ratios, render custom CSS overlays, or dynamically pin tiles.
-4. **Where MCUs are still used today**: SIP/PSTN legacy phone dial-in gateways, live RTMP streaming to YouTube/Twitch (where viewer latency is 5 seconds anyway), and automated server-side session recording pipelines.
+4. **Where composition is useful**: A service may need a composed recording, a single program feed, compatibility with a downstream system, or server-controlled layouts. Those are product and integration requirements, not evidence that MCU is obsolete; streaming latency depends on the full delivery pipeline.
 
 ## SFU: The modern standard for real-time video
 
-The **Selective Forwarding Unit (SFU)** is the architecture powering modern platforms (Zoom, Google Meet, Discord, mediasoup, LiveKit).
+The **Selective Forwarding Unit (SFU)** is a common architecture for interactive multi-party media. Products can combine forwarding, transcoding, composition, and other techniques; the labels describe media-processing behavior, not a single implementation.
 
-An SFU does **not** decode, composite, or re-encode video frames. Instead, it operates as a specialized, ultra-low-latency **RTP packet router**:
-1. Client publishes its audio and video streams to the SFU server over a single WebRTC transport.
-2. The SFU inspects incoming RTP packet headers:
-   - Synchronizes Synchronization Source (SSRC) identifiers.
-   - Rewrites RTP sequence numbers and timestamps to maintain a continuous, gap-free stream for downstream decoders.
-3. The SFU selectively routes specific packets to subscribed clients based on layout state and active speaker detection.
+In a basic forwarding SFU, media payloads are forwarded without decoding and re-encoding every video stream. The server may inspect RTP metadata, select packets or layers, and adapt transport identifiers for each subscriber. The precise rewriting and forwarding behavior depends on the SFU and codec.
 
-Because the SFU only modifies packet headers in memory without touching compressed frame payloads, it adds negligible latency (< 5 ms) and can handle thousands of concurrent video tracks on a single server.
+A forwarding SFU avoids the per-stream decode/composite/encode pipeline of an MCU, but still consumes CPU and network capacity for packet processing, encryption, congestion control, and fan-out. Added latency and room capacity depend on implementation, codecs, hardware, subscription patterns, and network load; measure them rather than assuming a fixed ceiling.
 
 ## Dynamic adaptation: Simulcast and SVC
 
 In a group call, participants have vastly different network conditions. Peer A is on gigabit fiber; Peer B is on a degraded 4G mobile link with 20% packet loss.
 
-If the SFU forwarded Peer A's full 1080p stream to Peer B, Peer B's downlink would instantly collapse into severe packet loss and frozen video.
+If an SFU forwarded a high-bitrate stream to a subscriber whose link could not sustain it, the subscriber could experience congestion, loss, or poor playback.
 
 To solve this, modern SFUs implement **Simulcast** or **Scalable Video Coding (SVC)**.
 
@@ -102,41 +104,36 @@ To solve this, modern SFUs implement **Simulcast** or **Scalable Video Coding (S
 ```
 
 ### 1. WebRTC Simulcast (VP8 / H.264)
-The publishing client's hardware encoder produces three distinct, parallel RTP streams at different resolutions and bitrates from the same camera source.
+The publishing client encodes multiple representations at different resolutions or bitrates from the same source. The added CPU and uplink cost depends on the codec, device, and configured layers.
 - The SFU dynamically routes the **High-layer** stream to the client displaying that speaker in a large stage tile.
 - The SFU routes the **Low-layer** stream to clients displaying that participant as a tiny thumbnail in a 16-person grid.
-- If a client experiences network congestion, the SFU automatically steps down its subscription from High to Medium or Low without interrupting playback.
+- The SFU or application can change a subscriber's selected layer based on network estimates, layout, and policy. A layer switch may require a keyframe and can briefly affect playback.
 
 ### 2. Scalable Video Coding (SVC - VP9 / AV1)
-Instead of encoding three separate streams (which uses 30% more upload bandwidth), SVC encodes a **single structured bitstream** containing hierarchical dependency layers:
+Instead of sending separate simulcast encodings, a supported SVC codec can encode a bitstream with dependency layers that a compatible SFU may selectively forward:
 - **Temporal scalability (T0, T1, T2)**: Allows the SFU to drop frames to reduce frame rate from 60fps to 30fps or 15fps without corrupting the video stream.
 - **Spatial scalability (S0, S1, S2)**: Allows the SFU to drop resolution enhancement layers.
 
 ## Active Speaker Detection (ASD) mechanics
 
-In a room with 50 participants, clients do not want to receive 50 separate audio streams.
+In a large room, a client or service may choose to receive only selected audio streams rather than every participant's audio.
 
-The SFU manages audio routing using the **Audio Level RTP Header Extension (RFC 6464)**:
-1. The client's audio capture library calculates audio volume (energy) in decibels relative to full scale (dBov) for each audio packet and injects this 7-bit scalar into the RTP header.
-2. The SFU reads the dBov scalar in the header without decoding Opus audio packets.
-3. The SFU maintains an **audio energy ranking table** with exponential decay filtering (hysteresis) to prevent rapid speaker oscillation.
-4. The SFU forwards only the top 3 loudest active speakers' audio streams to participants, saving substantial client audio decoding CPU.
+An implementation can use the **Audio Level RTP Header Extension (RFC 6464)** when negotiated and available. A client may include an audio-level indication; a server can use it with timing, policy, and other signals to identify likely active speakers. The extension does not define a universal ranking algorithm or require forwarding a fixed number of speakers.
 
 ## Congestion control and keyframe injection
 
 When the SFU switches a subscriber from receiving a Low simulcast layer to a High simulcast layer, the subscriber's video decoder cannot decode intermediate delta frames (P-frames) without a reference keyframe (I-frame).
 
-- The SFU sends an RTCP **Picture Loss Indication (PLI - RFC 4585)** or **Full Intra Request (FIR - RFC 5104)** upstream to the publishing client.
-- The publishing client generates a fresh keyframe on the High layer immediately.
-- The SFU intercepts the keyframe and begins forwarding the High stream to the subscriber, enabling seamless, artifact-free layer switching in under 200ms.
+- When a subscriber needs a decodable frame after a layer change, an SFU may request a keyframe using RTCP feedback such as PLI or FIR, subject to codec and implementation behavior.
+- The publisher may generate a keyframe; the SFU can then forward the appropriate layer. Timing and visual continuity depend on the publisher, codec, congestion, and SFU policy.
 
 ### Key takeaways
 
-- P2P Mesh scales quadratically (O(N^2)), collapsing client uplink bandwidth and CPU beyond 4 participants.
-- MCUs simplify client downlink bandwidth by compositing video on the server, but impose massive compute costs, high latency (+200 ms), and inflexible UI layouts.
-- SFUs are the modern gold standard: they forward selected RTP packets in memory without transcoding, scaling to hundreds of participants with sub-5ms processing latency.
+- A full mesh requires each participant to send media to multiple peers; endpoint uplink and processing grow with room size. There is no universal participant cutoff.
+- An MCU can simplify client downlink by composing media on the server, at the cost of server-side media processing and less client control over the composed layout.
+- A basic SFU forwards selected RTP media without decoding every stream. It can support larger rooms, but throughput and latency depend on subscriptions, media settings, and server capacity.
 - Simulcast and SVC allow SFUs to serve different resolutions to different participants based on screen layout and network capacity.
-- Use RFC 6464 audio level headers for Active Speaker Detection and RTCP PLI/FIR feedback for seamless simulcast layer switching.
+- Audio-level indications and RTCP keyframe feedback are useful building blocks, not guarantees of a particular speaker-selection or layer-switching result.
 
 ## References
 

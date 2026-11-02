@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 600" role="img" aria-labelledby="title desc">
+  <title id="title">How gRPC calls map onto HTTP/2 streams and TCP</title>
+  <desc id="desc">Two gRPC calls use separate HTTP/2 streams that can interleave HEADERS and DATA frames on one TCP connection. DATA carries length-prefixed gRPC messages, and trailing headers carry the final status. TCP preserves one ordered byte stream, so packet loss can delay later bytes from both calls.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f8fafc}.panel{fill:#fff;stroke:#cbd5e1;stroke-width:2}.title{fill:#0f172a;font:700 27px system-ui,sans-serif}.heading{fill:#0f172a;font:700 19px system-ui,sans-serif}.label{fill:#334155;font:600 14px system-ui,sans-serif}.body{fill:#475569;font:14px system-ui,sans-serif}.small{fill:#64748b;font:13px system-ui,sans-serif}.blue{fill:#dbeafe;stroke:#60a5fa;stroke-width:1.5}.green{fill:#dcfce7;stroke:#4ade80;stroke-width:1.5}.amber{fill:#fef3c7;stroke:#f59e0b;stroke-width:1.5}.red{fill:#fee2e2;stroke:#f87171;stroke-width:1.5}.lane{fill:#f1f5f9;stroke:#cbd5e1;stroke-width:1.5}.warn{fill:#b91c1c;font:700 14px system-ui,sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="1120" height="600" rx="24"/>
+  <text class="title" x="40" y="48">One gRPC connection can carry several RPCs</text>
+  <text class="body" x="40" y="76">Each call has its own HTTP/2 stream; the streams share a TCP connection.</text>
+
+  <rect class="panel" x="36" y="104" width="1048" height="330" rx="18"/>
+  <text class="heading" x="60" y="140">HTTP/2 streams · frames can interleave</text>
+  <text class="small" x="60" y="164">Time flows left to right. Stream IDs are illustrative.</text>
+
+  <rect class="lane" x="60" y="180" width="1000" height="78" rx="12"/>
+  <text class="label" x="76" y="207">Stream 1 · RPC A</text>
+  <rect class="blue" x="76" y="218" width="174" height="28" rx="6"/><text class="small" x="163" y="237" text-anchor="middle">HEADERS · method</text>
+  <rect class="blue" x="270" y="218" width="234" height="28" rx="6"/><text class="small" x="387" y="237" text-anchor="middle">DATA · gRPC message</text>
+  <rect class="blue" x="524" y="218" width="234" height="28" rx="6"/><text class="small" x="641" y="237" text-anchor="middle">DATA · message / end</text>
+  <rect class="blue" x="778" y="218" width="266" height="28" rx="6"/><text class="small" x="911" y="237" text-anchor="middle">TRAILERS · grpc-status</text>
+
+  <rect class="lane" x="60" y="272" width="1000" height="78" rx="12"/>
+  <text class="label" x="76" y="299">Stream 3 · RPC B</text>
+  <rect class="green" x="76" y="310" width="174" height="28" rx="6"/><text class="small" x="163" y="329" text-anchor="middle">HEADERS · method</text>
+  <rect class="green" x="270" y="310" width="234" height="28" rx="6"/><text class="small" x="387" y="329" text-anchor="middle">DATA · gRPC message</text>
+  <rect class="green" x="524" y="310" width="234" height="28" rx="6"/><text class="small" x="641" y="329" text-anchor="middle">TRAILERS · grpc-status</text>
+
+  <rect class="amber" x="60" y="365" width="1000" height="50" rx="10"/>
+  <text class="label" x="560" y="396" text-anchor="middle">One TCP connection · ordered byte stream · HTTP/2 frames from streams are interleaved</text>
+
+  <rect class="red" x="36" y="456" width="1048" height="104" rx="16"/>
+  <text class="warn" x="60" y="486">Transport caveat: lost TCP bytes delay later bytes on this connection, including bytes for other HTTP/2 streams.</text>
+  <text class="body" x="60" y="514">HTTP/2 multiplexing does not remove TCP's ordered-delivery constraint. TCP congestion control and HTTP/2 flow control also</text>
+  <text class="body" x="60" y="538">limit progress. gRPC commonly uses Protocol Buffers, but supports other serialization formats too.</text>
+</svg>

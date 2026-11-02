@@ -15,6 +15,8 @@ content/articles/
   multi-tenant-saas-isolation.md
   database-partitioning-sharding-consistent-hashing.md
   mvcc-isolation-serializable-transactions.md
+  rpc-remote-procedure-calls-explained.md
+  why-grpc-uses-http2.md
   webrtc-signaling-ice-and-media.md
   sfu-vs-mcu-group-video-architecture.md
   mediasoup-sfu-architecture.md
@@ -29,6 +31,8 @@ public/articles/images/
   consistent-hashing-ring.svg
   mvcc-snapshot-visibility.svg
   mvcc-write-skew.svg
+  rpc-request-lifecycle.svg
+  grpc-http2-layers.svg
   webrtc-connection-flow.svg
   sfu-vs-mcu-topologies.svg
   mediasoup-room-flow.svg

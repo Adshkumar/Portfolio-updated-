@@ -3,6 +3,7 @@ title: "Database Partitioning, Sharding, and Consistent Hashing"
 description: "Design data placement for growth: compare range and hash partitioning, understand consistent hashing's limits, and plan safe rebalancing, hot-key mitigation, and cross-shard queries."
 slug: "database-partitioning-sharding-consistent-hashing"
 date: "2026-10-25"
+updated: "2026-11-02"
 tags:
   - Databases
   - Distributed Systems
@@ -18,6 +19,12 @@ cover: null
 Splitting a database is easy to describe and difficult to operate. The moment records live in different places, the system must answer three questions reliably: **which records belong together, where does a request go, and how can placement change without losing or duplicating writes?**
 
 Partitioning, sharding, and consistent hashing are related, but they solve different parts of that problem. Partitioning divides a dataset into subsets. Sharding distributes those subsets across independently managed database nodes. A partitioning or routing strategy decides which subset owns a record; consistent hashing is one way to limit how much ownership changes when the set of nodes changes.
+
+## A concrete example
+
+Imagine an event service that stores activity for many customers. If all records stay in one table, time-based partitions can make retention and recent-event scans easier, but they still use the same database server. If storage or write capacity on that server becomes the limit, the service may shard customers across multiple database nodes. A request then needs a routing key—such as the customer ID—to find the right shard.
+
+Consistent hashing can help decide which node owns a key when nodes are added or removed, but it does not copy the data, coordinate writes during a move, or make cross-shard queries cheap. Those are separate migration and application problems. Sharding is most useful when measured limits justify its added operational complexity.
 
 ## Partitioning is not the same as sharding
 

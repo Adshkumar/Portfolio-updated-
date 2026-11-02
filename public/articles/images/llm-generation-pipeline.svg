@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">How a language model turns a prompt into generated text</title>
+  <desc id="desc">A prompt is tokenized into IDs, converted into vectors, processed by causal Transformer layers, and turned into a next-token distribution. One token is selected and fed back into the model to continue generation. A separate training loop adjusts model parameters from examples.</desc>
+  <defs>
+    <marker id="llm-arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2563eb"/></marker>
+    <marker id="llm-arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#16a34a"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.title{fill:#0f172a;font:700 29px system-ui,sans-serif}.sub{fill:#475569;font:16px system-ui,sans-serif}.box{fill:#fff;stroke:#cbd5e1;stroke-width:2}.input{fill:#eff6ff;stroke:#93c5fd;stroke-width:2}.model{fill:#f5f3ff;stroke:#c4b5fd;stroke-width:2}.output{fill:#f0fdf4;stroke:#86efac;stroke-width:2}.train{fill:#fff7ed;stroke:#fdba74;stroke-width:2}.h{fill:#0f172a;font:700 17px system-ui,sans-serif}.body{fill:#334155;font:15px system-ui,sans-serif}.small{fill:#64748b;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#2563eb;stroke-width:3;marker-end:url(#llm-arrow-blue)}.loop{fill:none;stroke:#16a34a;stroke-width:3;marker-end:url(#llm-arrow-green)}.divider{stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:6 6}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="700" rx="24"/>
+  <text class="title" x="42" y="52">From prompt to generated tokens</text>
+  <text class="sub" x="42" y="82">A common decoder-only Transformer generates one token at a time; training is a separate process.</text>
+
+  <rect class="input" x="42" y="132" width="205" height="142" rx="16"/>
+  <text class="h" x="62" y="166">1 · Prompt</text>
+  <text class="body" x="62" y="199">"The tallest mountain</text>
+  <text class="body" x="62" y="222">above sea level is…"</text>
+  <text class="small" x="62" y="254">instructions + context</text>
+
+  <path class="arrow" d="M247 202H282"/>
+  <rect class="box" x="292" y="132" width="175" height="142" rx="16"/>
+  <text class="h" x="310" y="166">2 · Tokenize</text>
+  <text class="body" x="310" y="199">Text → token IDs</text>
+  <text class="body" x="310" y="222">→ embedding vectors</text>
+  <text class="small" x="310" y="254">pieces, not always words</text>
+
+  <path class="arrow" d="M467 202H502"/>
+  <rect class="model" x="512" y="118" width="290" height="170" rx="16"/>
+  <text class="h" x="534" y="153">3 · Transformer layers</text>
+  <rect class="box" x="535" y="173" width="242" height="42" rx="9"/>
+  <text class="body" x="656" y="200" text-anchor="middle">causal self-attention</text>
+  <rect class="box" x="535" y="228" width="242" height="42" rx="9"/>
+  <text class="body" x="656" y="255" text-anchor="middle">feed-forward + residuals</text>
+  <text class="small" x="534" y="311">repeat across many learned layers</text>
+
+  <path class="arrow" d="M802 202H837"/>
+  <rect class="box" x="847" y="132" width="155" height="142" rx="16"/>
+  <text class="h" x="865" y="166">4 · Score</text>
+  <text class="body" x="865" y="199">vocabulary logits</text>
+  <text class="body" x="865" y="222">→ probabilities</text>
+  <text class="small" x="865" y="254">not a truth score</text>
+
+  <path class="arrow" d="M1002 202H1037"/>
+  <rect class="output" x="1047" y="132" width="111" height="142" rx="16"/>
+  <text class="h" x="1102" y="166" text-anchor="middle">5 · Pick</text>
+  <text class="body" x="1102" y="200" text-anchor="middle">one</text>
+  <text class="body" x="1102" y="222" text-anchor="middle">token</text>
+  <text class="small" x="1102" y="254" text-anchor="middle">decode</text>
+
+  <path class="loop" d="M1102 274V350H655V295"/>
+  <text class="body" x="868" y="339" text-anchor="middle">append token and predict again until a stop condition</text>
+  <rect class="output" x="402" y="370" width="506" height="76" rx="16"/>
+  <text class="h" x="655" y="401" text-anchor="middle">Generated response</text>
+  <text class="body" x="655" y="426" text-anchor="middle">Mount → Everest → . → …</text>
+  <path class="loop" d="M1102 274V408H918"/>
+
+  <line class="divider" x1="42" y1="482" x2="1158" y2="482"/>
+  <text class="h" x="42" y="520">Separate process: training adjusts the model</text>
+  <rect class="train" x="42" y="545" width="275" height="100" rx="15"/>
+  <text class="h" x="62" y="580">Example text</text>
+  <text class="body" x="62" y="610">context + known next token</text>
+  <path class="arrow" d="M317 595H367"/>
+  <rect class="model" x="377" y="545" width="300" height="100" rx="15"/>
+  <text class="h" x="527" y="580" text-anchor="middle">Model prediction</text>
+  <text class="body" x="527" y="610" text-anchor="middle">compare predicted vs target</text>
+  <path class="arrow" d="M677 595H727"/>
+  <rect class="train" x="737" y="545" width="421" height="100" rx="15"/>
+  <text class="h" x="947" y="580" text-anchor="middle">Training loss updates parameters</text>
+  <text class="body" x="947" y="610" text-anchor="middle">post-training may further shape behavior</text>
+</svg>

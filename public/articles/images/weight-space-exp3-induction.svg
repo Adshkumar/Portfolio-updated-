@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 3: interpreting an induction circuit from transformer weights</title>
+  <desc id="desc">A repeated text pattern is shown as total followed by tot. A previous-token attention head identifies the earlier matching total, and a later copying head uses its value-output path to retrieve the following al. The circuit is inferred from middle-block weights without running the transformer.</desc>
+  <defs>
+    <marker id="e3-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e3-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">A copying circuit links two heads across transformer blocks</text>
+  <rect class="card" x="30" y="70" width="260" height="205" rx="14"/>
+  <text class="head" x="50" y="105">Repeated context</text>
+  <text class="text" x="55" y="157">... total ... tot</text>
+  <rect class="green" x="53" y="174" width="98" height="42" rx="8"/><text class="text" x="68" y="201">earlier</text>
+  <rect class="soft" x="164" y="174" width="94" height="42" rx="8"/><text class="text" x="178" y="201">current</text>
+  <text class="small" x="50" y="247">Goal: predict the continuation</text>
+  <rect class="card" x="340" y="70" width="290" height="205" rx="14"/>
+  <text class="head" x="360" y="105">Head A: find a match</text>
+  <text class="small" x="360" y="133">Query/key pattern looks back</text>
+  <circle cx="410" cy="192" r="24" fill="#e2e5e9" stroke="#9299a1" stroke-width="2"/><text class="text" x="401" y="198">t</text>
+  <circle cx="550" cy="192" r="24" fill="#e9f7f0" stroke="#11875d" stroke-width="2" class="pulse"/><text class="text" x="541" y="198">t</text>
+  <path d="M526 192H438" class="arrow"/><path d="M526 192H438" class="flow"/>
+  <text class="small" x="360" y="244">Find earlier matching token</text>
+  <rect class="card" x="680" y="70" width="290" height="205" rx="14"/>
+  <text class="head" x="700" y="105">Head B: copy what followed</text>
+  <rect class="soft" x="706" y="151" width="70" height="46" rx="8"/><text class="text" x="726" y="181">tot</text>
+  <path d="M780 174H830" class="arrow"/><path d="M780 174H830" class="flow"/>
+  <rect class="green" x="840" y="151" width="90" height="46" rx="8"/><text class="text" x="865" y="181">al</text>
+  <text class="small" x="700" y="228">Value/output path carries continuation</text>
+  <path d="M292 172H330M632 172H670" class="arrow"/><path d="M292 172H330M632 172H670" class="flow"/>
+  <text class="small" x="30" y="315">The reported analysis used weight matrices only; model execution was withheld, then heads were independently tested.</text>
+</svg>

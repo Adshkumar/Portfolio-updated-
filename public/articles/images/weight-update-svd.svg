@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Animated singular value decomposition of a weight update</title>
+  <desc id="desc">A matrix update delta W is decomposed into left singular directions U, diagonal singular values Sigma, and right singular directions V transpose. The singular values rank each direction's strength. Keeping the largest k terms creates a rank-k approximation. This is a general SVD illustration, not the method used for the reported Qwen weight edit.</desc>
+  <defs>
+    <marker id="svd-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#9299a1"/>
+    </marker>
+    <marker id="svd-arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#11875d"/>
+    </marker>
+    <style>
+      .bg{fill:#f8fafc}
+      .panel{fill:#fff;stroke:#cbd5e1;stroke-width:2}
+      .blue{fill:#f1f3f5;stroke:#9aa0a6;stroke-width:2}
+      .purple{fill:#f1f3f5;stroke:#9aa0a6;stroke-width:2}
+      .green{fill:#f0fdf4;stroke:#4ade80;stroke-width:2}
+      .amber{fill:#f8fafb;stroke:#c4c9cf;stroke-width:2}
+      .title{fill:#0f172a;font:700 29px system-ui,sans-serif}
+      .heading{fill:#0f172a;font:700 21px system-ui,sans-serif}
+      .label{fill:#334155;font:600 17px system-ui,sans-serif}
+      .body{fill:#475569;font:16px system-ui,sans-serif}
+      .small{fill:#64748b;font:14px system-ui,sans-serif}
+      .math{fill:#0f172a;font:700 25px system-ui,serif}
+      .cell{stroke:#fff;stroke-width:2}
+      .cell-a{fill:#6f7780}
+      .cell-b{fill:#9299a1}
+      .cell-c{fill:#c5cacf}
+      .cell-d{fill:#e5e8eb}
+      .cell-highlight{fill:#11875d}
+      .vector{stroke:#9299a1;stroke-width:5;stroke-linecap:round}
+      .component-1{fill:#11875d;transform-box:fill-box;transform-origin:bottom;animation:singular 2.4s ease-in-out infinite}
+      .component-2{fill:#9299a1;transform-box:fill-box;transform-origin:bottom;animation:singular 2.4s ease-in-out .35s infinite}
+      .component-3{fill:#c5cacf;transform-box:fill-box;transform-origin:bottom;animation:singular 2.4s ease-in-out .7s infinite}
+      .flow{fill:none;stroke:#9299a1;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}
+      .result-flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}
+      .pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2.4s ease-in-out infinite}
+      @keyframes singular{0%,100%{opacity:.55;transform:scaleY(.75)}50%{opacity:1;transform:scaleY(1.08)}}
+      @keyframes flow{to{stroke-dashoffset:-28}}
+      @keyframes pulse{0%,100%{opacity:.6;transform:scale(.9)}50%{opacity:1;transform:scale(1.12)}}
+      @media (prefers-reduced-motion:reduce){.component-1,.component-2,.component-3,.flow,.result-flow,.pulse{animation:none}}
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="620" rx="24"/>
+  <text class="title" x="40" y="50">SVD separates a matrix update into ranked directions</text>
+  <text class="body" x="40" y="80">A large matrix can be described as a sum of simpler rank-one changes.</text>
+
+  <rect class="panel" x="34" y="112" width="206" height="294" rx="18"/>
+  <text class="heading" x="56" y="151">1. Update</text>
+  <text class="math" x="56" y="188">ΔW</text>
+  <text class="small" x="104" y="187">matrix of changes</text>
+  <g transform="translate(61 218)">
+    <rect class="cell cell-a" x="0" y="0" width="34" height="34"/>
+    <rect class="cell cell-b" x="36" y="0" width="34" height="34"/>
+    <rect class="cell cell-c" x="72" y="0" width="34" height="34"/>
+    <rect class="cell cell-d" x="108" y="0" width="34" height="34"/>
+    <rect class="cell cell-b" x="0" y="36" width="34" height="34"/>
+    <rect class="cell cell-a" x="36" y="36" width="34" height="34"/>
+    <rect class="cell cell-b" x="72" y="36" width="34" height="34"/>
+    <rect class="cell cell-c" x="108" y="36" width="34" height="34"/>
+    <rect class="cell cell-c" x="0" y="72" width="34" height="34"/>
+    <rect class="cell cell-b" x="36" y="72" width="34" height="34"/>
+    <rect class="cell cell-a" x="72" y="72" width="34" height="34"/>
+    <rect class="cell cell-b" x="108" y="72" width="34" height="34"/>
+    <rect class="cell cell-d" x="0" y="108" width="34" height="34"/>
+    <rect class="cell cell-c" x="36" y="108" width="34" height="34"/>
+    <rect class="cell cell-b" x="72" y="108" width="34" height="34"/>
+    <rect class="cell cell-a" x="108" y="108" width="34" height="34"/>
+  </g>
+  <text class="small" x="56" y="386">Rows × columns</text>
+
+  <path d="M244 258H272" fill="none" stroke="#9299a1" stroke-width="3" marker-end="url(#svd-arrow)"/>
+  <path class="flow" d="M244 258H272"/>
+
+  <rect class="blue" x="280" y="112" width="184" height="294" rx="18"/>
+  <text class="heading" x="302" y="151">2. Left basis</text>
+  <text class="math" x="302" y="188">U</text>
+  <text class="small" x="333" y="187">output directions</text>
+  <circle cx="372" cy="290" r="4" fill="#64748b"/>
+  <line class="vector" x1="372" y1="290" x2="372" y2="218" style="stroke:#11875d"/>
+  <line class="vector" x1="372" y1="290" x2="304" y2="290" style="stroke:#9299a1"/>
+  <circle class="pulse" cx="372" cy="218" r="7" fill="#11875d"/>
+  <circle class="pulse" cx="304" cy="290" r="7" fill="#9299a1"/>
+  <text class="small" x="302" y="378">u₁ ⟂ u₂ (orthogonal)</text>
+
+  <text class="math" x="473" y="272">×</text>
+  <path d="M496 258H512" fill="none" stroke="#9299a1" stroke-width="3" marker-end="url(#svd-arrow)"/>
+  <path class="flow" d="M496 258H512"/>
+
+  <rect class="purple" x="520" y="112" width="184" height="294" rx="18"/>
+  <text class="heading" x="542" y="151">3. Strength</text>
+  <text class="math" x="542" y="188">Σ</text>
+  <text class="small" x="578" y="187">singular values</text>
+  <line x1="550" y1="350" x2="675" y2="350" stroke="#94a3b8" stroke-width="2"/>
+  <rect class="component-1" x="558" y="228" width="25" height="122" rx="5"/>
+  <rect class="component-2" x="598" y="262" width="25" height="88" rx="5"/>
+  <rect class="component-3" x="638" y="294" width="25" height="56" rx="5"/>
+  <text class="small" x="558" y="376">σ₁</text>
+  <text class="small" x="598" y="376">σ₂</text>
+  <text class="small" x="638" y="376">σ₃</text>
+  <text class="small" x="550" y="397">keep k=2</text>
+  <text class="small" x="638" y="397">drop</text>
+
+  <text class="math" x="710" y="272">×</text>
+  <path d="M733 258H749" fill="none" stroke="#9299a1" stroke-width="3" marker-end="url(#svd-arrow)"/>
+  <path class="flow" d="M733 258H749"/>
+
+  <rect class="green" x="757" y="112" width="184" height="294" rx="18"/>
+  <text class="heading" x="779" y="151">4. Right basis</text>
+  <text class="math" x="779" y="188">Vᵀ</text>
+  <text class="small" x="829" y="187">input directions</text>
+  <circle cx="849" cy="281" r="4" fill="#64748b"/>
+  <line class="vector" x1="849" y1="281" x2="919" y2="281" style="stroke:#11875d"/>
+  <line class="vector" x1="849" y1="281" x2="849" y2="218" style="stroke:#9299a1"/>
+  <circle class="pulse" cx="919" cy="281" r="7" fill="#11875d"/>
+  <circle class="pulse" cx="849" cy="218" r="7" fill="#9299a1"/>
+  <text class="small" x="779" y="378">v₁ ⟂ v₂ (orthogonal)</text>
+
+  <path d="M945 258H967" fill="none" stroke="#11875d" stroke-width="3" marker-end="url(#svd-arrow-green)"/>
+  <path class="result-flow" d="M945 258H967"/>
+  <rect class="panel" x="975" y="112" width="191" height="294" rx="18"/>
+  <text class="heading" x="997" y="151">5. Approximate</text>
+  <text class="math" x="997" y="188">ΔWₖ</text>
+  <g transform="translate(1004 218)">
+    <rect class="cell cell-a" x="0" y="0" width="30" height="30"/>
+    <rect class="cell cell-b" x="32" y="0" width="30" height="30"/>
+    <rect class="cell cell-b" x="64" y="0" width="30" height="30"/>
+    <rect class="cell cell-c" x="96" y="0" width="30" height="30"/>
+    <rect class="cell cell-a" x="0" y="32" width="30" height="30"/>
+    <rect class="cell cell-b" x="32" y="32" width="30" height="30"/>
+    <rect class="cell cell-b" x="64" y="32" width="30" height="30"/>
+    <rect class="cell cell-c" x="96" y="32" width="30" height="30"/>
+    <rect class="cell cell-b" x="0" y="64" width="30" height="30"/>
+    <rect class="cell cell-c" x="32" y="64" width="30" height="30"/>
+    <rect class="cell cell-c" x="64" y="64" width="30" height="30"/>
+    <rect class="cell cell-d" x="96" y="64" width="30" height="30"/>
+    <rect class="cell cell-b" x="0" y="96" width="30" height="30"/>
+    <rect class="cell cell-c" x="32" y="96" width="30" height="30"/>
+    <rect class="cell cell-c" x="64" y="96" width="30" height="30"/>
+    <rect class="cell cell-d" x="96" y="96" width="30" height="30"/>
+  </g>
+  <text class="small" x="997" y="376">Keep the top k terms</text>
+
+  <rect class="amber" x="35" y="441" width="1131" height="132" rx="18"/>
+  <text class="heading" x="60" y="482">The matrix is a sum of rank-one updates</text>
+  <text class="body" x="60" y="519">ΔW = UΣVᵀ = σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + σ₃u₃v₃ᵀ + ...</text>
+  <text class="small" x="60" y="550">Truncating after k terms gives a rank-k approximation; larger σ values carry stronger components.</text>
+  <text class="label" x="60" y="602">SVD is a general matrix tool—not the method used for the reported Qwen weight edit.</text>
+</svg>

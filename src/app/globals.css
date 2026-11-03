@@ -2828,6 +2828,16 @@ a.cred:hover {
   [src$="llm-generation-pipeline.svg"],
   [src$="rate-limiter-flow.svg"],
   [src$="rpc-request-lifecycle.svg"],
+  [src$="weight-space-exp1-game.svg"],
+  [src$="weight-space-exp2-diffusion.svg"],
+  [src$="weight-space-exp3-induction.svg"],
+  [src$="weight-space-exp4-car.svg"],
+  [src$="weight-space-exp5-minatar.svg"],
+  [src$="weight-space-exp6-go.svg"],
+  [src$="weight-space-exp7-sycophancy.svg"],
+  [src$="weight-space-exp8-qwen.svg"],
+  [src$="weight-space-learning.svg"],
+  [src$="weight-update-svd.svg"],
   [src$="tcp-kernel-buffers.svg"]
 ),
 :root:not([data-theme="light"]) .articleImageViewerFigure img:is(
@@ -2837,6 +2847,16 @@ a.cred:hover {
   [src$="llm-generation-pipeline.svg"],
   [src$="rate-limiter-flow.svg"],
   [src$="rpc-request-lifecycle.svg"],
+  [src$="weight-space-exp1-game.svg"],
+  [src$="weight-space-exp2-diffusion.svg"],
+  [src$="weight-space-exp3-induction.svg"],
+  [src$="weight-space-exp4-car.svg"],
+  [src$="weight-space-exp5-minatar.svg"],
+  [src$="weight-space-exp6-go.svg"],
+  [src$="weight-space-exp7-sycophancy.svg"],
+  [src$="weight-space-exp8-qwen.svg"],
+  [src$="weight-space-learning.svg"],
+  [src$="weight-update-svd.svg"],
   [src$="tcp-kernel-buffers.svg"]
 ),
 :root[data-theme="light"] .articleImageButton img:is(
@@ -2871,6 +2891,33 @@ a.cred:hover {
   border-radius: 0;
   background: transparent;
   filter: invert(1) hue-rotate(180deg);
+}
+
+:root:not([data-theme="light"]) .articleImageButton img:is(
+  [src$="weight-space-exp1-game.svg"],
+  [src$="weight-space-exp2-diffusion.svg"],
+  [src$="weight-space-exp3-induction.svg"],
+  [src$="weight-space-exp4-car.svg"],
+  [src$="weight-space-exp5-minatar.svg"],
+  [src$="weight-space-exp6-go.svg"],
+  [src$="weight-space-exp7-sycophancy.svg"],
+  [src$="weight-space-exp8-qwen.svg"],
+  [src$="weight-space-learning.svg"],
+  [src$="weight-update-svd.svg"]
+),
+:root:not([data-theme="light"]) .articleImageViewerFigure img:is(
+  [src$="weight-space-exp1-game.svg"],
+  [src$="weight-space-exp2-diffusion.svg"],
+  [src$="weight-space-exp3-induction.svg"],
+  [src$="weight-space-exp4-car.svg"],
+  [src$="weight-space-exp5-minatar.svg"],
+  [src$="weight-space-exp6-go.svg"],
+  [src$="weight-space-exp7-sycophancy.svg"],
+  [src$="weight-space-exp8-qwen.svg"],
+  [src$="weight-space-learning.svg"],
+  [src$="weight-update-svd.svg"]
+) {
+  filter: invert(1) hue-rotate(180deg) contrast(1.16);
 }
 
 .articleImageViewer {

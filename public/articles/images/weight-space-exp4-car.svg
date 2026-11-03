@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 4: a targeted weight edit adds a reverse-then-accelerate behavior</title>
+  <desc id="desc">The original controller drives directly into a ramp and gets stuck. A small edited path reads the car position and speed, triggers reverse to gain runway, then allows the original driving behavior to continue past the obstacle.</desc>
+  <defs>
+    <marker id="e4-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e4-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">One small path changes the policy's route through the task</text>
+  <rect class="card" x="30" y="68" width="440" height="220" rx="14"/>
+  <text class="head" x="50" y="102">Before: repeat the failed approach</text>
+  <path d="M60 235H420M230 235L290 166H340" fill="none" stroke="#9299a1" stroke-width="7" stroke-linecap="round"/>
+  <path d="M200 225L266 190" fill="none" stroke="#9299a1" stroke-width="3" stroke-dasharray="6 6" marker-end="url(#e4-arrow)"/>
+  <g transform="translate(164 198)"><rect x="0" y="0" width="54" height="25" rx="7" fill="#c5cacf"/><circle cx="12" cy="28" r="6" fill="#6f7780"/><circle cx="42" cy="28" r="6" fill="#6f7780"/></g>
+  <text class="small" x="50" y="270">Car drives forward and stalls at ramp</text>
+  <rect class="green" x="530" y="68" width="440" height="220" rx="14"/>
+  <text class="head" x="550" y="102">After: add a conditional maneuver</text>
+  <path d="M560 235H900M730 235L790 166H840" fill="none" stroke="#9299a1" stroke-width="7" stroke-linecap="round"/>
+  <g transform="translate(610 198)"><rect x="0" y="0" width="54" height="25" rx="7" fill="#c5cacf"/><circle cx="12" cy="28" r="6" fill="#6f7780"/><circle cx="42" cy="28" r="6" fill="#6f7780"/></g>
+  <path d="M632 190C600 168 576 182 584 204" fill="none" stroke="#11875d" stroke-width="4" stroke-dasharray="2 10" class="flow" marker-end="url(#e4-arrow)"/>
+  <path d="M666 209H760L813 154" fill="none" stroke="#11875d" stroke-width="4" stroke-dasharray="2 10" class="flow" marker-end="url(#e4-arrow)"/>
+  <rect x="686" y="124" width="23" height="54" rx="4" fill="#c94c58" opacity=".8"/>
+  <text class="small" x="550" y="270">Check position/speed → reverse → accelerate</text>
+  <rect class="soft" x="360" y="300" width="280" height="30" rx="15"/>
+  <text class="small" x="383" y="321">One-shot edit; 1,024 reported successes</text>
+</svg>

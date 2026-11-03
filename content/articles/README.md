@@ -15,6 +15,7 @@ content/articles/
   multi-tenant-saas-isolation.md
   database-partitioning-sharding-consistent-hashing.md
   mvcc-isolation-serializable-transactions.md
+  llms-read-write-neural-network-weights.md
   rpc-remote-procedure-calls-explained.md
   why-grpc-uses-http2.md
   webrtc-signaling-ice-and-media.md
@@ -31,6 +32,16 @@ public/articles/images/
   consistent-hashing-ring.svg
   mvcc-snapshot-visibility.svg
   mvcc-write-skew.svg
+  weight-space-exp1-game.svg
+  weight-space-exp2-diffusion.svg
+  weight-space-exp3-induction.svg
+  weight-space-exp4-car.svg
+  weight-space-exp5-minatar.svg
+  weight-space-exp6-go.svg
+  weight-space-exp7-sycophancy.svg
+  weight-space-exp8-qwen.svg
+  weight-space-learning.svg
+  weight-update-svd.svg
   rpc-request-lifecycle.svg
   grpc-http2-layers.svg
   webrtc-connection-flow.svg

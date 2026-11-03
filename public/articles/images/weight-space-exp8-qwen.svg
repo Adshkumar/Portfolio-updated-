@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 8: sparse edits target Qwen reasoning loops</title>
+  <desc id="desc">Astra used up to 50 batches of forward passes on practice problems, traced repetitive reasoning to MLP output weights in layers 15 and 19, and edited 64 columns in each down projection. MATH-500 rose from 7.9 to 48.1 percent in the reported run, while the rate of reaching the token limit fell from 93 to 33.1 percent. This is a sparse edit, not an SVD update.</desc>
+  <defs>
+    <marker id="e8-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e8-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="360" rx="18"/>
+  <text class="title" x="30" y="40">Find the loop, edit a few columns, test on held-out problems</text>
+  <rect class="card" x="25" y="70" width="220" height="220" rx="14"/>
+  <text class="head" x="45" y="106">Practice feedback</text>
+  <text class="small" x="45" y="134">10 / 25 / 50 batches</text>
+  <path d="M50 178C70 148 90 208 110 178S150 148 170 178S210 208 225 178" fill="none" stroke="#9299a1" stroke-width="4"/>
+  <text class="small" x="45" y="220">Repeated reasoning</text>
+  <text class="small" x="45" y="246">often hits token limit</text>
+  <rect class="card" x="280" y="70" width="300" height="220" rx="14"/>
+  <text class="head" x="300" y="106">Locate MLP output weights</text>
+  <text class="small" x="300" y="133">Qwen3.5-0.8B: 24 layers</text>
+  <g fill="#c5cacf"><rect x="310" y="158" width="24" height="80" rx="4"/><rect x="344" y="158" width="24" height="80" rx="4"/><rect x="378" y="158" width="24" height="80" rx="4"/><rect x="412" y="158" width="24" height="80" rx="4"/><rect x="446" y="158" width="24" height="80" rx="4"/><rect x="480" y="158" width="24" height="80" rx="4"/><rect x="514" y="158" width="24" height="80" rx="4"/></g>
+  <rect x="446" y="151" width="24" height="95" rx="4" fill="#c94c58" class="pulse"/>
+  <rect x="514" y="151" width="24" height="95" rx="4" fill="#c94c58" class="pulse"/>
+  <text class="small" x="444" y="263">15</text><text class="small" x="512" y="263">19</text>
+  <text class="small" x="300" y="282">64 selected columns in each down_proj</text>
+  <rect class="green" x="615" y="70" width="360" height="220" rx="14"/>
+  <text class="head" x="635" y="106">Reported change after 50 batches</text>
+  <text class="small" x="635" y="139">MATH-500</text>
+  <rect x="735" y="123" width="52" height="24" rx="4" fill="#9299a1"/><text class="small" x="797" y="141">7.9%</text>
+  <rect x="735" y="155" width="178" height="24" rx="4" fill="#11875d" class="pulse"/><text class="small" x="921" y="173">48.1%</text>
+  <text class="small" x="635" y="215">Token-limit rate: 93% → 33.1%</text>
+  <text class="small" x="635" y="246">131,072 selected; 130,188 changed</text>
+  <text class="small" x="635" y="271">after bfloat16 rounding (released manifest)</text>
+  <path d="M245 180H270M580 180H605" class="arrow"/><path d="M245 180H270M580 180H605" class="flow"/>
+  <text class="small" x="25" y="328">Sparse intervention, not SVD/LoRA. Practice feedback was allowed; benchmark questions were held out.</text>
+</svg>

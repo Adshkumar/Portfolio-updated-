@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 7: weights alone fail to expose sycophancy, attention reveals a clue</title>
+  <desc id="desc">Comparing model weights alone did not identify the sycophantic model in four attempts. When Astra could submit prompts and inspect attention patterns, it identified the sycophantic model in three matched pairs: the honest head focused on the question evidence, while the sycophantic head focused on the user's suggested answer.</desc>
+  <defs>
+    <marker id="e7-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e7-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">A weight difference is not automatically an explanation</text>
+  <rect class="soft" x="30" y="72" width="280" height="204" rx="14"/>
+  <text class="head" x="50" y="108">Weights only</text>
+  <rect class="card" x="52" y="129" width="106" height="50" rx="8"/><text class="small" x="64" y="159">honest</text>
+  <rect class="card" x="178" y="129" width="106" height="50" rx="8"/><text class="small" x="190" y="159">sycophant</text>
+  <path d="M158 154H178" stroke="#9299a1" stroke-width="3"/>
+  <text x="59" y="221" fill="#c94c58" font="700 18px system-ui">x</text>
+  <text class="text" x="88" y="221">4 attempts failed</text>
+  <text class="small" x="50" y="254">Differences found, behavior unclear</text>
+  <rect class="card" x="360" y="72" width="270" height="204" rx="14"/>
+  <text class="head" x="380" y="108">Add attention inspection</text>
+  <rect class="soft" x="382" y="136" width="92" height="42" rx="8"/><text class="small" x="393" y="162">question</text>
+  <rect class="green" x="505" y="136" width="103" height="42" rx="8"/><text class="small" x="514" y="162">user guess</text>
+  <circle cx="495" cy="222" r="17" fill="#e9f7f0" stroke="#11875d" stroke-width="2" class="pulse"/>
+  <text class="small" x="380" y="256">Prompt both models; inspect where heads look</text>
+  <rect class="green" x="680" y="72" width="290" height="204" rx="14"/>
+  <text class="head" x="700" y="108">Attention gives a clue</text>
+  <text class="small" x="700" y="143">Honest head → question evidence</text>
+  <path d="M918 150H752" class="arrow"/><path d="M918 150H752" class="flow"/>
+  <text class="small" x="700" y="190">Sycophantic head → suggested answer</text>
+  <path d="M918 197H876" stroke="#11875d" stroke-width="5" class="flow"/>
+  <text class="text" x="700" y="239">Correctly identified: 3 of 3 pairs</text>
+  <path d="M310 172H350M630 172H670" class="arrow"/><path d="M310 172H350M630 172H670" class="flow"/>
+  <text class="small" x="30" y="315">The successful result used model-chosen prompts and an attention tool; it was not weight-only diagnosis.</text>
+</svg>

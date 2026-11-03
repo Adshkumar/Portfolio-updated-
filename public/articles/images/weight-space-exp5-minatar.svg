@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 5: write a Breakout policy from game rules</title>
+  <desc id="desc">Astra receives Breakout rules, source code, and the neural-network input/output layout. It writes weights for a small policy that detects the ball, estimates its landing position, and moves the paddle. The reported network is evaluated only after it is written.</desc>
+  <defs>
+    <marker id="e5-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e5-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">From game rules to a hand-coded neural policy</text>
+  <rect class="card" x="30" y="70" width="275" height="205" rx="14"/>
+  <text class="head" x="50" y="105">Breakout state</text>
+  <rect x="55" y="122" width="220" height="110" rx="5" fill="#f1f3f5" stroke="#9299a1" stroke-width="2"/>
+  <g fill="#9299a1"><rect x="70" y="137" width="32" height="10" rx="3"/><rect x="108" y="137" width="32" height="10" rx="3"/><rect x="146" y="137" width="32" height="10" rx="3"/><rect x="184" y="137" width="32" height="10" rx="3"/><rect x="222" y="137" width="32" height="10" rx="3"/></g>
+  <circle cx="144" cy="184" r="7" fill="#11875d" class="pulse"/>
+  <path d="M144 184L180 151" stroke="#11875d" stroke-width="3" stroke-dasharray="5 5"/>
+  <rect x="107" y="219" width="76" height="8" rx="4" fill="#11875d"/>
+  <text class="small" x="50" y="260">ball position, velocity, paddle</text>
+  <rect class="card" x="365" y="70" width="280" height="205" rx="14"/>
+  <text class="head" x="385" y="105">Written policy</text>
+  <rect class="soft" x="389" y="132" width="78" height="58" rx="10"/><text class="small" x="406" y="157">detect</text><text class="small" x="401" y="177">ball</text>
+  <rect class="green" x="516" y="132" width="104" height="58" rx="10"/><text class="small" x="526" y="157">predict</text><text class="small" x="524" y="177">landing x</text>
+  <path d="M469 161H508" class="arrow"/><path d="M469 161H508" class="flow"/>
+  <text class="text" x="403" y="225">move paddle to intercept</text>
+  <rect class="green" x="700" y="70" width="270" height="205" rx="14"/>
+  <text class="head" x="720" y="105">Evaluate after writing</text>
+  <text class="small" x="720" y="137">No training or pre-score rollout</text>
+  <rect class="card" x="723" y="166" width="98" height="54" rx="8"/><text class="small" x="738" y="198">PPO 100M</text>
+  <rect x="842" y="150" width="95" height="70" rx="8" fill="#11875d"/><text x="858" y="192" fill="#fff" font="700 18px system-ui">Astra</text>
+  <text class="small" x="720" y="250">Breakout: 517.4 vs PPO 15.8*</text>
+  <path d="M307 171H355M647 171H690" class="arrow"/><path d="M307 171H355M647 171H690" class="flow"/>
+  <text class="small" x="30" y="315">*Reported episodic scores in this specific setup; a hand-coded strategy is not a general learned policy.</text>
+</svg>

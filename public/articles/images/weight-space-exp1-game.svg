@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 1: identifying a game from policy weights</title>
+  <desc id="desc">The same five-channel grid and five-action MLP architecture is used for four games. Looking at the policy weights as spatial patterns lets the model infer which game the policy learned, without running it.</desc>
+  <defs>
+    <marker id="e1-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}
+      .title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.line{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e1-arrow)}
+      .flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}
+      @keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.45}}
+      @media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">Same network shape. Different useful patterns in the weights.</text>
+  <rect class="card" x="30" y="65" width="230" height="220" rx="14"/>
+  <text class="head" x="50" y="98">Shared observation</text>
+  <text class="small" x="50" y="122">10 × 10 grid, 5 channels</text>
+  <g transform="translate(55 142)">
+    <rect class="soft" x="0" y="0" width="130" height="105" rx="5"/>
+    <path d="M13 0V105M26 0V105M39 0V105M52 0V105M65 0V105M78 0V105M91 0V105M104 0V105M117 0V105M0 13H130M0 26H130M0 39H130M0 52H130M0 65H130M0 78H130M0 91H130" stroke="#d1d5db"/>
+    <rect x="14" y="79" width="90" height="13" rx="5" fill="#11875d" class="pulse"/>
+    <circle cx="68" cy="27" r="6" fill="#9299a1"/>
+  </g>
+  <text class="small" x="50" y="271">e.g. agent, objects, obstacles</text>
+  <rect class="card" x="300" y="65" width="285" height="220" rx="14"/>
+  <text class="head" x="320" y="98">Policy weights</text>
+  <text class="text" x="320" y="126">500 → 32 → 32 → 5</text>
+  <g fill="#e2e5e9" stroke="#9299a1" stroke-width="2">
+    <circle cx="350" cy="167" r="8"/><circle cx="350" cy="197" r="8"/><circle cx="350" cy="227" r="8"/>
+    <circle cx="422" cy="157" r="8"/><circle cx="422" cy="182" r="8"/><circle cx="422" cy="207" r="8"/><circle cx="422" cy="232" r="8"/>
+    <circle cx="498" cy="167" r="8"/><circle cx="498" cy="197" r="8"/><circle cx="498" cy="227" r="8"/>
+  </g>
+  <g stroke="#c4c9cf" stroke-width="2"><path d="M358 167L414 157M358 167L414 182M358 197L414 182M358 197L414 207M358 227L414 207M358 227L414 232M430 157L490 167M430 182L490 197M430 207L490 197M430 232L490 227"/></g>
+  <path d="M358 227L414 207L490 197" fill="none" stroke="#11875d" stroke-width="4" class="flow"/>
+  <text class="small" x="320" y="266">reshape input weights to see patterns</text>
+  <rect class="green" x="625" y="65" width="345" height="220" rx="14"/>
+  <text class="head" x="645" y="98">Inferred task</text>
+  <text class="text" x="645" y="130">Spatial features hint at policy:</text>
+  <rect class="card" x="645" y="150" width="135" height="44" rx="8"/><text class="text" x="659" y="178">paddle + ball</text>
+  <rect class="card" x="800" y="150" width="145" height="44" rx="8"/><text class="text" x="815" y="178">Breakout</text>
+  <path d="M780 172H793" class="line"/><path d="M780 172H793" class="flow"/>
+  <text class="small" x="645" y="222">Reported: all four small policies named</text>
+  <text class="small" x="645" y="247">from weights; no environment rollouts.</text>
+  <text class="small" x="30" y="319">Illustration: weight patterns can reveal a learned computation; they do not prove training provenance.</text>
+</svg>

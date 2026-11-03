@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">Experiment 6: iterative Go policy editing with practice-game feedback</title>
+  <desc id="desc">Astra writes a large Go policy in a Python sandbox, plays batches of practice games, inspects results, and revises selected weights before the next batch. Training and tree search are not used; held-out matches evaluate the final network.</desc>
+  <defs>
+    <marker id="e6-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9299a1"/></marker>
+    <style>
+      .bg{fill:#f8fafc}.card{fill:#fff;stroke:#d1d5db;stroke-width:2}.soft{fill:#f1f3f5;stroke:#b7bdc4;stroke-width:2}.green{fill:#e9f7f0;stroke:#11875d;stroke-width:2}.title{fill:#111827;font:700 25px system-ui,sans-serif}.head{fill:#111827;font:700 19px system-ui,sans-serif}.text{fill:#374151;font:16px system-ui,sans-serif}.small{fill:#667085;font:14px system-ui,sans-serif}.arrow{fill:none;stroke:#9299a1;stroke-width:3;marker-end:url(#e6-arrow)}.flow{fill:none;stroke:#11875d;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;animation:flow 1.8s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes flow{to{stroke-dashoffset:-28}}@keyframes pulse{50%{opacity:.4}}@media(prefers-reduced-motion:reduce){.flow,.pulse{animation:none}}
+    </style>
+  </defs>
+  <rect class="bg" width="1000" height="340" rx="18"/>
+  <text class="title" x="30" y="40">Large weights live in a sandbox; practice games close the loop</text>
+  <rect class="card" x="28" y="76" width="225" height="176" rx="14"/>
+  <text class="head" x="48" y="111">1. Write weights</text>
+  <text class="text" x="48" y="142">1.48M-parameter</text><text class="text" x="48" y="165">9 × 9 Go policy</text>
+  <g fill="#c5cacf"><circle cx="69" cy="203" r="9"/><circle cx="104" cy="203" r="9"/><circle cx="139" cy="203" r="9"/><circle cx="174" cy="203" r="9"/><circle cx="209" cy="203" r="9"/></g>
+  <path d="M69 203H209" stroke="#11875d" stroke-width="3" stroke-dasharray="3 8" class="flow"/>
+  <rect class="green" x="310" y="76" width="225" height="176" rx="14"/>
+  <text class="head" x="330" y="111">2. Practice</text>
+  <text class="text" x="330" y="142">Batch of up to</text><text class="text" x="330" y="165">128 Go games</text>
+  <g stroke="#9299a1" stroke-width="2" fill="white"><rect x="347" y="183" width="84" height="48"/><path d="M375 183V231M403 183V231M347 207H431"/></g>
+  <circle cx="375" cy="195" r="6" fill="#11875d"/><circle cx="403" cy="219" r="6" fill="#9299a1"/>
+  <rect class="card" x="593" y="76" width="185" height="176" rx="14"/>
+  <text class="head" x="613" y="111">3. Inspect</text>
+  <text class="text" x="613" y="144">Where did it</text><text class="text" x="613" y="167">lose?</text>
+  <path d="M621 205L642 218L663 193L684 211L705 186L735 202" fill="none" stroke="#11875d" stroke-width="4" class="flow"/>
+  <rect class="soft" x="830" y="76" width="142" height="176" rx="14"/>
+  <text class="head" x="848" y="111">4. Edit</text>
+  <text class="small" x="848" y="142">keep changes</text><text class="small" x="848" y="164">that help</text>
+  <g fill="#c5cacf"><rect x="850" y="185" width="17" height="17"/><rect x="875" y="185" width="17" height="17"/><rect x="900" y="185" width="17" height="17"/><rect x="925" y="185" width="17" height="17"/></g>
+  <rect x="875" y="185" width="17" height="17" fill="#c94c58" class="pulse"/>
+  <path d="M255 164H300M535 164H583M778 164H820" class="arrow"/><path d="M255 164H300M535 164H583M778 164H820" class="flow"/>
+  <path d="M902 260C902 304 422 304 422 260" fill="none" stroke="#9299a1" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#e6-arrow)"/>
+  <path d="M902 260C902 304 422 304 422 260" fill="none" stroke="#11875d" stroke-width="3" stroke-dasharray="2 12" class="flow"/>
+  <text class="small" x="282" y="326">Repeat within the 50-batch budget; no gradient training or tree search.</text>
+</svg>

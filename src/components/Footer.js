@@ -8,6 +8,10 @@ export default function Footer() {
       <p>
         © {currentYear} {siteConfig.name}
       </p>
+      <a className="footerRssLink" href="/rss.xml">
+        <i className="fas fa-rss" aria-hidden="true"></i>
+        RSS Feed
+      </a>
     </footer>
   );
 }

@@ -86,6 +86,10 @@ export default function ArticleIndex({ articles }) {
             Practical explanations of the systems, algorithms, and engineering
             trade-offs behind reliable software.
           </p>
+          <Link className="articlesFeedLink" href="/rss.xml">
+            <i className="fas fa-rss" aria-hidden="true"></i>
+            RSS Feed
+          </Link>
         </header>
 
         <section className="articleListing" aria-labelledby="latest-heading">

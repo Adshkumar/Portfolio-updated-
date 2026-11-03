@@ -2294,6 +2294,19 @@ a.cred:hover {
   line-height: 1.75;
 }
 
+.articlesFeedLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  color: #f26522;
+  font-size: 0.88rem;
+}
+
+.articlesFeedLink:hover {
+  color: #d94f12;
+}
+
 .articleListing {
   margin-top: 38px;
 }

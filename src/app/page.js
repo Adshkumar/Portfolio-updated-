@@ -8,29 +8,15 @@ import {
   Experience,
   Footer,
   Hero,
-  Navbar,
   Skills,
 } from "@/components";
 import { useEffect, useSyncExternalStore } from "react";
-
-const THEME_CHANGE_EVENT = "portfolio-theme-change";
-
-function subscribeToTheme(onChange) {
-  window.addEventListener("storage", onChange);
-  window.addEventListener(THEME_CHANGE_EVENT, onChange);
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(THEME_CHANGE_EVENT, onChange);
-  };
-}
-
-function getThemeSnapshot() {
-  return localStorage.getItem("portfolio-theme") === "light" ? "light" : "dark";
-}
-
-function getServerThemeSnapshot() {
-  return "dark";
-}
+import ThemeNavbar from "@/components/ThemeNavbar";
+import {
+  getServerThemeSnapshot,
+  getThemeSnapshot,
+  subscribeToTheme,
+} from "@/lib/theme";
 
 /**
  * Custom hook for scroll reveal animations
@@ -61,26 +47,18 @@ function useScrollReveal() {
   }, []);
 }
 
-export default function Home({ initialBlogOpen = false }) {
+function ThemeActivity() {
   const theme = useSyncExternalStore(
     subscribeToTheme,
     getThemeSnapshot,
     getServerThemeSnapshot
   );
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  return <Activity theme={theme} />;
+}
 
+export default function Home({ initialBlogOpen = false }) {
   useScrollReveal();
-
-  const toggleTheme = () => {
-    localStorage.setItem(
-      "portfolio-theme",
-      theme === "dark" ? "light" : "dark"
-    );
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
-  };
 
   return (
     <div className="page">
@@ -89,15 +67,12 @@ export default function Home({ initialBlogOpen = false }) {
         <About />
         <Experience />
         <Achievements />
-        <Activity theme={theme} />
+        <ThemeActivity />
         <Skills />
         <Contact />
         <Footer />
       </main>
-      <Navbar
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      <ThemeNavbar />
     </div>
   );
 }

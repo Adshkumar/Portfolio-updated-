@@ -2,25 +2,12 @@
 
 import Navbar from "@/components/Navbar";
 import { useEffect, useSyncExternalStore } from "react";
-
-const THEME_CHANGE_EVENT = "portfolio-theme-change";
-
-function subscribeToTheme(onChange) {
-  window.addEventListener("storage", onChange);
-  window.addEventListener(THEME_CHANGE_EVENT, onChange);
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(THEME_CHANGE_EVENT, onChange);
-  };
-}
-
-function getThemeSnapshot() {
-  return localStorage.getItem("portfolio-theme") === "light" ? "light" : "dark";
-}
-
-function getServerThemeSnapshot() {
-  return "dark";
-}
+import {
+  getServerThemeSnapshot,
+  getThemeSnapshot,
+  setTheme,
+  subscribeToTheme,
+} from "@/lib/theme";
 
 export default function ThemeNavbar() {
   const theme = useSyncExternalStore(
@@ -34,11 +21,7 @@ export default function ThemeNavbar() {
   }, [theme]);
 
   const toggleTheme = () => {
-    localStorage.setItem(
-      "portfolio-theme",
-      theme === "dark" ? "light" : "dark"
-    );
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return <Navbar theme={theme} onToggleTheme={toggleTheme} />;

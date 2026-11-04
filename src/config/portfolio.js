@@ -97,7 +97,7 @@ export const experiences = [
     tech: "Rust • TypeScript • CodeMirror 6 • portable-pty • SQLite",
     logo: "/logos/r0-logo.png",
     invertInLight: true,
-    downloadLink: "https://github.com/Adshkumar/r0/releases/latest/download/r0-latest-setup.exe",
+    downloadLink: "https://github.com/Adshkumar/r0/releases/download/v0.18.8/R0_0.18.8_x64-setup.exe",
     githubLink: "https://github.com/Adshkumar/r0",
     articleLink: "/experience/r0",
     points: [
@@ -349,4 +349,3 @@ export const skillCategories = [
     ],
   },
 ];
-

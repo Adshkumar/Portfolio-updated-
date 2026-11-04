@@ -2609,6 +2609,41 @@ a.cred:hover {
   background: var(--bg-elev);
 }
 
+.articleTocMobile {
+  display: none;
+}
+
+.articleTocMobile summary {
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 650;
+  list-style: none;
+}
+
+.articleTocMobile summary::-webkit-details-marker {
+  display: none;
+}
+
+.articleTocMobile summary:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+.articleTocMobile summary::after {
+  color: var(--text-muted);
+  content: "+";
+  float: right;
+}
+
+.articleTocMobile[open] summary::after {
+  content: "−";
+}
+
+.articleTocMobile ol {
+  margin-top: 10px;
+}
+
 .articleToc h2 {
   margin-bottom: 10px;
   font-size: 0.86rem;
@@ -3012,21 +3047,68 @@ a.cred:hover {
 }
 
 @media (max-width: 640px) {
+  .articlesPage,
+  .articlePage {
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-bottom: 112px;
+  }
+
   .articlesContainer,
   .articleContainer {
     padding-top: 14px;
   }
 
   .articlesHeader {
-    margin: 30px 0 34px;
+    margin: 20px 0 18px;
+  }
+
+  .articlesHeader h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+
+  .articlesHeader > p:last-child {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .articleListing {
+    margin-top: 18px;
+  }
+
+  .articleAuthorHeader {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .articleAuthorHeader .heroMain {
+    gap: 12px;
+  }
+
+  .articleAuthorHeader .heroAvatar {
+    width: 84px;
+    height: 84px;
   }
 
   .articleFilters {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 14px 0 18px;
   }
 
   .articleSearchField {
     grid-column: 1 / -1;
+  }
+
+  .articleSearchField,
+  .articleFilters select {
+    height: 44px;
+  }
+
+  .articleSearchField input,
+  .articleFilters select {
+    font-size: 16px;
   }
 
   .articleTimelineRow {
@@ -3046,7 +3128,59 @@ a.cred:hover {
   }
 
   .articleProse {
-    font-size: 0.92rem;
+    margin-top: 26px;
+    font-size: 0.94rem;
+    line-height: 1.75;
+  }
+
+  .articleHeader h1 {
+    font-size: clamp(1.75rem, 7.5vw, 2.15rem);
+  }
+
+  .articleHeader {
+    padding-bottom: 18px;
+  }
+
+  .articleDescription {
+    margin-top: 12px;
+    font-size: 0.94rem;
+    line-height: 1.65;
+  }
+
+  .articleByline {
+    margin-top: 12px;
+    gap: 5px 10px;
+  }
+
+  .articleTagList {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .articleBreadcrumbs {
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .articleToc {
+    margin: 18px 0;
+    padding: 15px 16px;
+  }
+
+  .articleTocDesktop {
+    display: none;
+  }
+
+  .articleTocMobile {
+    display: block;
+  }
+
+  .articleProse {
+    margin-top: 18px;
+  }
+
+  .articleProse pre {
+    padding: 12px;
   }
 
   .articleProse table {
@@ -3121,6 +3255,46 @@ a.cred:hover {
 
   .dockSep {
     margin: 0 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .expList {
+    gap: 20px;
+  }
+
+  .expItem {
+    min-width: 0;
+    gap: 12px;
+  }
+
+  .expBadge {
+    width: 40px;
+    height: 40px;
+  }
+
+  .expBadge img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .expHeader {
+    gap: 4px;
+  }
+
+  .expDuration {
+    flex: 1 1 100%;
+    white-space: normal;
+  }
+
+  .expLinks {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+  }
+
+  .expLinks a {
+    min-height: 32px;
+    padding: 4px 2px;
   }
 }
 

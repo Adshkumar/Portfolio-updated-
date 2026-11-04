@@ -99,16 +99,28 @@ export default async function ArticlePage({ params }) {
           </header>
 
           {headings.length >= 4 && (
-            <nav className="articleToc" aria-label="Table of contents">
-              <h2>On this page</h2>
-              <ol>
-                {headings.map((heading) => (
-                  <li key={heading.id} className={heading.depth === 3 ? "articleTocNested" : ""}>
-                    <a href={`#${heading.id}`}>{heading.text}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <>
+              <nav className="articleToc articleTocDesktop" aria-label="Table of contents">
+                <h2>On this page</h2>
+                <ol>
+                  {headings.map((heading) => (
+                    <li key={heading.id} className={heading.depth === 3 ? "articleTocNested" : ""}>
+                      <a href={`#${heading.id}`}>{heading.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+              <details className="articleToc articleTocMobile">
+                <summary>On this page</summary>
+                <ol>
+                  {headings.map((heading) => (
+                    <li key={heading.id} className={heading.depth === 3 ? "articleTocNested" : ""}>
+                      <a href={`#${heading.id}`}>{heading.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            </>
           )}
 
           <ArticleProse html={html} />

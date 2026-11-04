@@ -7,8 +7,7 @@ export default function About() {
       <h2 className="sectionTitle">About</h2>
       <div className="sectionLead">
         <p>
-          I&apos;m a Delhi-based <strong className="aboutHighlight">Full-Stack</strong> developer and founder building thoughtful digital experiences - from intuitive interfaces to robust, real-time systems.
-          I turn ideas into reliable products with clean code and measurable impact.
+          I&apos;m a Delhi-based <strong className="aboutHighlight">Full-Stack</strong> developer and founder. I build web and mobile apps, working across the interface, backend, and data layers.
           I created the <strong className="aboutHighlight">Finance Tracker app</strong> and I'm currently building <strong className="aboutHighlight"><a href="https://r0-ide.vercel.app/" target="_blank" rel="noopener noreferrer">r0</a></strong>, an open-source AI-powered IDE designed to bring AI-assisted coding and development workflows into a single workspace.
         </p>
       </div>

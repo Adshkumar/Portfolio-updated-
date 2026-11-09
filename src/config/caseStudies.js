@@ -1,5 +1,213 @@
 export const caseStudies = [
   {
+    slug: "pursewar",
+    title: "PurseWar — Real-Time IPL Auction Simulator",
+    eyebrow: "Creator · Multiplayer web application · React · Firebase · Supabase",
+    lead: "PurseWar is a multiplayer IPL auction simulator where friends host private or public rooms, claim franchises, and bid on players together. It combines Firebase Realtime Database for live room activity with Supabase PostgreSQL for public-room discovery and leaderboard data.",
+    heroImage: "/images/pursewar-preview.png",
+    heroImageAlt:
+      "PurseWar IPL auction simulator landing page with a gold-lit stadium and auction room call to action",
+    heroImageCaption: "PurseWar · IPL auction simulator",
+    links: [
+      {
+        label: "Live application",
+        href: "https://www.iplauction.site/",
+      },
+      {
+        label: "Source code",
+        href: "https://github.com/Adshkumar/ipl-auction",
+      },
+    ],
+    facts: [
+      ["Product", "Real-time multiplayer IPL auction simulator"],
+      ["Frontend", "React 19 · Vite · React Router"],
+      ["Live room state", "Firebase Realtime Database"],
+      ["Public directory and leaderboards", "Supabase · PostgreSQL"],
+      ["Identity", "Firebase Authentication"],
+      ["Player and match data", "Cricket API integrations and update scripts"],
+      ["Deployment", "Vite static build · Vercel"],
+    ],
+    architecture: [
+      [
+        "01 · React application",
+        "The Vite and React client provides the lobby, room, live auction, squad, and post-auction experiences, with React Router handling application navigation.",
+      ],
+      [
+        "02 · Authentication and room membership",
+        "Firebase Authentication provides sign-in. Room and franchise membership determine which auction experience a participant can access.",
+      ],
+      [
+        "03 · Live auction rooms",
+        "Firebase Realtime Database stores and broadcasts room activity such as the active player, current bid, participants, room chat, and auction state to connected clients.",
+      ],
+      [
+        "04 · Public discovery and history",
+        "Supabase PostgreSQL supports the public-room directory and leaderboard history, keeping discovery queries separate from the high-frequency live room state.",
+      ],
+      [
+        "05 · Player data and post-auction features",
+        "Cricket data integrations and repository scripts support player and fantasy data. Completed auction squads and saved lineups power squad evaluation and team comparisons.",
+      ],
+    ],
+    flow: [
+      [
+        "Enter the lobby",
+        "Connect to the application and browse the public room directory or choose to host a private auction.",
+      ],
+      [
+        "Create or join a room",
+        "A host creates a room; invited friends or public-lobby participants join the shared auction.",
+      ],
+      [
+        "Choose franchises",
+        "Participants claim teams and configure the room. AI franchise bots can fill unclaimed teams when enabled.",
+      ],
+      [
+        "Run the live auction",
+        "The host controls the auction while clients observe synchronized player, bid, timer, purse, squad, and chat updates.",
+      ],
+      [
+        "Review squads and lineups",
+        "After the auction, managers review their squads, save a mode-sized best lineup, and compare teams when the host reveals the room-wide results.",
+      ],
+    ],
+    areas: [
+      {
+        title: "01 · Rooms and multiplayer",
+        items: [
+          "Host private rooms or join public auction lobbies with friends.",
+          "Assign franchise teams and manage a shared auction session.",
+          "Use room chat and participant views to coordinate during the auction.",
+          "Play over the internet or use the application's supported hotspot and Wi-Fi mode.",
+        ],
+      },
+      {
+        title: "02 · Live bidding and auction rules",
+        items: [
+          "Broadcast the current player, bid, bidder, and auction timer to connected participants.",
+          "Track franchise purses, squad limits, and overseas-player constraints while bidding.",
+          "Use AI franchise bots with configurable bidding behavior when human participants do not fill all teams.",
+          "Present animated bid and sold moments as part of the auction experience.",
+        ],
+      },
+      {
+        title: "03 · Squad ratings and comparison",
+        items: [
+          "Review final team squads after the auction and compare franchise strength using player rating, career statistics, form, and experience data.",
+          "Save a best lineup sized to the selected mode: Mega and Classic use 11 players, while Sprint uses 5.",
+          "Allow the host to reveal a room-wide lineup comparison after eligible managers save their lineups.",
+          "Calculate lineup scores in PurseWar without an external AI service.",
+        ],
+      },
+      {
+        title: "04 · Public discovery and data",
+        items: [
+          "Use Supabase PostgreSQL for active public-room discovery and leaderboard history.",
+          "Keep live auction updates in Firebase Realtime Database rather than routing each bid through the directory database.",
+          "Use repository scripts to update fantasy data and backfill IPL match information.",
+        ],
+      },
+      {
+        title: "05 · Responsive product experience",
+        items: [
+          "Build the interface with React, Tailwind CSS, Framer Motion, and Lucide icons.",
+          "Use responsive layouts and touch-scrollable participant overlays for mobile auction sessions.",
+          "Use animated transitions and feedback, including auction status effects and celebration states.",
+        ],
+      },
+    ],
+    dataModel: [
+      {
+        title: "Realtime auction domain",
+        entities: [
+          ["Room", "Room identity · visibility · host · auction configuration"],
+          ["Participant", "Authenticated user · room membership · claimed franchise"],
+          ["Auction state", "Current player · bid · bidder · timer · status"],
+          ["Franchise", "Team purse · roster · player constraints"],
+          ["Room chat", "Participant messages associated with an auction room"],
+        ],
+        relation:
+          "The room is the shared boundary for auction participants and live state. Clients observe room changes through Firebase Realtime Database; the room's auction rules constrain purse use, roster composition, and bidding.",
+      },
+      {
+        title: "Discovery and post-auction domain",
+        entities: [
+          ["Public room directory", "Discoverable room summaries in Supabase PostgreSQL"],
+          ["Leaderboard history", "Persisted results used for public ranking views"],
+          ["Completed squad", "Franchise roster produced by the auction"],
+          ["Saved lineup", "Manager-owned lineup associated with a franchise and mode"],
+          ["Player rating", "Rating inputs derived from statistics, form, and experience"],
+        ],
+        relation:
+          "Supabase supports discovery and leaderboard queries, while Firebase Realtime Database carries active room state. Completed squads and manager lineups support post-auction ratings and comparisons.",
+      },
+    ],
+    performanceTitle: "Separating high-frequency bidding from discovery",
+    performanceIntro:
+      "The hybrid data design assigns different workloads to Firebase Realtime Database and Supabase PostgreSQL rather than using one store for both live auction traffic and public directory queries.",
+    dataRetrieval: [
+      [
+        "Live auction updates",
+        "Firebase Realtime Database distributes room changes to connected participants, keeping live bids and auction state on the realtime path.",
+      ],
+      [
+        "Public room discovery",
+        "Supabase PostgreSQL serves public-room directory and leaderboard data independently of the active room's realtime updates.",
+      ],
+      [
+        "Fair shared timer",
+        "The application synchronizes timer offsets across clients so participants can act against a consistent auction clock.",
+      ],
+      [
+        "Measured performance",
+        "The repository describes low-latency live bidding as a design goal; no independent latency benchmark or production capacity figure is published.",
+      ],
+    ],
+    engineering: [
+      [
+        "Hybrid persistence boundary",
+        "Firebase Realtime Database handles fast-changing room state; Supabase PostgreSQL serves public discovery and leaderboard workloads.",
+      ],
+      [
+        "Room lifecycle",
+        "The host manages the session pace while franchise owners bid within team budgets and roster constraints.",
+      ],
+      [
+        "Configurable integrations",
+        "The client reads Firebase, Supabase, cricket-data, and GIF-search configuration from Vite environment variables at build time.",
+      ],
+      [
+        "Post-auction authorization",
+        "Lineup writes are owner-scoped by the Realtime Database rules. Deployments must publish the repository's updated database rules for lineup saving.",
+      ],
+      [
+        "AI bot behavior",
+        "Franchise bots use timer-aware bidding strategies. Lineup comparison is calculated by PurseWar and does not rely on an external AI service.",
+      ],
+    ],
+    delivery: [
+      "Install the JavaScript dependencies and start the Vite development server with the repository's npm scripts.",
+      "Configure Firebase Authentication and Realtime Database, Supabase, and any enabled third-party data or GIF integrations using the documented Vite environment variables.",
+      "Build and deploy the client as a Vite application; the live product is hosted at iplauction.site.",
+      "Publish the provided Realtime Database rules to the Firebase project when enabling owner-scoped post-auction lineup saving.",
+    ],
+    technologies: [
+      "React 19",
+      "Vite 6",
+      "React Router",
+      "Tailwind CSS 4",
+      "Framer Motion",
+      "Lucide React",
+      "Firebase Authentication",
+      "Firebase Realtime Database",
+      "Supabase",
+      "PostgreSQL",
+      "CricAPI",
+      "GIPHY API",
+      "html-to-image",
+    ],
+  },
+  {
     slug: "r0",
     title: "r0 — AI-Powered Desktop Code Editor",
     eyebrow: "Creator · Open-source desktop application · Tauri · Rust · TypeScript",

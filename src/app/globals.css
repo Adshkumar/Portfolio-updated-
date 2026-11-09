@@ -887,7 +887,7 @@ a.cred:hover {
 
 .caseStudyTitle {
   margin-top: 6px;
-  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  font-size: clamp(1.7rem, 5.5vw, 2.3rem);
   line-height: 1.2;
   letter-spacing: -0.03em;
 }
@@ -925,7 +925,7 @@ a.cred:hover {
 
 .caseStudySection h2 {
   margin-bottom: 10px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 650;
 }
 
@@ -958,7 +958,7 @@ a.cred:hover {
 
 .caseStudyFeature h3 {
   margin-bottom: 3px;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   font-weight: 600;
 }
 

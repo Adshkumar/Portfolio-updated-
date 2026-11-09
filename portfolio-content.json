@@ -111,6 +111,20 @@
       ]
     },
     {
+      "company": "PurseWar",
+      "role": "Full-Stack Project",
+      "type": "Personal Project",
+      "tech": "React • Vite • Tailwind CSS • Firebase Realtime Database • Supabase PostgreSQL",
+      "logo": "/images/pursewar-logo.png",
+      "articleLink": "/experience/pursewar",
+      "proofLink": "https://www.iplauction.site/",
+      "githubLink": "https://github.com/Adshkumar/ipl-auction",
+      "highlights": [
+        "Built a real-time multiplayer IPL auction simulator where friends host auction rooms, manage franchise budgets and squad limits, and bid on players together.",
+        "Synchronized live auction timers and bidding across players, with AI franchise bots and post-auction squad ratings."
+      ]
+    },
+    {
       "company": "URL Shortener",
       "role": "Full-Stack Project",
       "duration": "June 2026 – July 2026",

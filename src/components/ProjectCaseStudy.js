@@ -56,6 +56,23 @@ export default function ProjectCaseStudy({ study }) {
             </figure>
           )}
 
+          {study.gallery?.length > 0 && (
+            <section
+              className="caseStudySection"
+              aria-labelledby="project-gallery"
+            >
+              <h2 id="project-gallery">Product screenshots</h2>
+              <div className="caseStudyGallery">
+                {study.gallery.map((image) => (
+                  <figure className="caseStudyGalleryItem" key={image.src}>
+                    <img src={image.src} alt={image.alt} loading="lazy" />
+                    <figcaption>{image.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="caseStudySection" aria-labelledby="overview">
             <h2 id="overview">Overview</h2>
             <p>{study.lead}</p>
@@ -93,7 +110,10 @@ export default function ProjectCaseStudy({ study }) {
                       aria-hidden="true"
                     >
                       <i className="fas fa-arrow-down"></i>
-                      <span>requests · events · persisted state</span>
+                      <span>
+                        {study.architectureFlowLabel ||
+                          "requests · events · persisted state"}
+                      </span>
                     </div>
                   )}
                 </div>

@@ -1,5 +1,256 @@
 export const caseStudies = [
   {
+    slug: "notro",
+    title: "Notro — An Intelligent Notch for Windows",
+    eyebrow: "Creator · Open-source Windows desktop application · C# · .NET 8 · WPF",
+    lead: "Notro turns the top edge of a Windows desktop into a customizable, glanceable workspace. A compact pill expands into tabs, live activities, and a configurable Home dashboard, bringing media controls, system tools, and everyday productivity features into one native application. The project began as Notch and is now branded Notro; the GitHub repository retains its original name.",
+    architectureFlowLabel: "module calls · Windows APIs · local state",
+    heroImage: "/images/notro/home-v2.png",
+    heroImageAlt:
+      "Notro's expanded Home dashboard showing its tab bar, clock and weather, quick controls, notes, Bluetooth devices, and desktop widgets",
+    heroImageCaption: "Notro Home · configurable controls and glanceable cards",
+    gallery: [
+      {
+        src: "/images/notro/documents.png",
+        alt: "Notro's Documents tab with Word-to-PDF, PDF-to-Word, and PDF editing tools",
+        caption: "Documents · conversion and built-in PDF editing tools.",
+      },
+      {
+        src: "/images/notro/desktops-v2.png",
+        alt: "Notro's Desktops tab listing virtual desktops and their open windows",
+        caption: "Desktops · inspect windows and switch between virtual desktops.",
+      },
+      {
+        src: "/images/notro/settings-v2.png",
+        alt: "Notro's Appearance settings with themes, notch shape, and sizing controls",
+        caption: "Appearance · live-preview themes, shape, size, and text settings.",
+      },
+    ],
+    links: [
+      {
+        label: "Source code",
+        href: "https://github.com/Adshkumar/Notch",
+      },
+      {
+        label: "Latest Windows release",
+        href: "https://github.com/Adshkumar/Notch/releases/latest",
+      },
+      {
+        label: "Project documentation",
+        href: "https://github.com/Adshkumar/Notch/tree/main/docs",
+      },
+    ],
+    facts: [
+      ["Role", "Creator and open-source developer"],
+      ["Product", "Customizable notch-style Windows desktop utility"],
+      ["Current product name", "Notro · formerly Notch"],
+      ["Application framework", "C# · .NET 8 · WPF"],
+      ["Supported Windows", "Windows 10 version 2004+ · Windows 11"],
+      ["Latest documented release", "v0.4.0 · x64 and ARM64 ZIP builds"],
+      ["License", "MIT"],
+    ],
+    architecture: [
+      [
+        "01 · WPF desktop shell",
+        "A native .NET 8 WPF application owns startup, the tray icon, global shortcuts, the top-most notch window, settings, and detached tab windows.",
+      ],
+      [
+        "02 · Notch and activity hub",
+        "The shell presents a collapsed pill, transient notification islands, and an expanded tab workspace. Live activities can share the pill, while higher-priority events can surface as islands.",
+      ],
+      [
+        "03 · Module registry",
+        "Feature modules provide their own views, commands, and lifecycle. They can be enabled or disabled, reordered, opened as tabs, or detached without making each feature part of one monolithic view.",
+      ],
+      [
+        "04 · Views and reusable controls",
+        "WPF views and shared controls render the Home grid, feature tabs, settings, and data visualizations. A 12-column Home layout supports arranging and resizing its cards.",
+      ],
+      [
+        "05 · Windows services and integrations",
+        "C# services connect modules to Windows media sessions, audio devices, clipboard, files, screens, Bluetooth, displays, notifications, and virtual desktops. Optional external services are used only by the features that need them.",
+      ],
+      [
+        "06 · Local persistence and packaging",
+        "Settings and feature data are stored on the device. Self-contained release ZIPs are published for Windows x64 and ARM64; the separate Microsoft Store package enables package-specific features.",
+      ],
+    ],
+    flow: [
+      [
+        "Start in the background",
+        "Notro runs as a desktop utility with a tray icon and a compact pill. Startup behavior and global shortcuts are configurable.",
+      ],
+      [
+        "Open the workspace",
+        "Hover, click, use a shortcut, or open a tray command to expand the notch and reach the selected tab or Home dashboard.",
+      ],
+      [
+        "Check activity and take action",
+        "Music, timers, downloads, notes, and other supported activity can appear on the pill; actionable notifications appear as islands.",
+      ],
+      [
+        "Arrange a personal workspace",
+        "Choose tabs and their order, configure Home cards, select a display and notch shape, and tune colors, sizing, animations, and behavior.",
+      ],
+      [
+        "Keep working with local tools",
+        "Use the clipboard, shelf, screen capture, reminders, documents, or system controls without leaving the current desktop workflow.",
+      ],
+    ],
+    areas: [
+      {
+        title: "01 · Notch, tabs, and live activities",
+        items: [
+          "Use a top-edge notch or a floating pill on a selected display; position and resize it, and hide it during fullscreen use.",
+          "Open by hover, click, shortcut, or tray action; switch tabs with configured gestures or Ctrl+1–9.",
+          "Show concurrent activities on the collapsed pill and surface notifications or system HUDs as islands with optional actions.",
+          "Pop tabs out into floating windows, keep them on top, or pin them to the desktop.",
+          "Hide the notch from screen capture or automatically hide it while a game or video is fullscreen.",
+        ],
+      },
+      {
+        title: "02 · Home dashboard and appearance",
+        items: [
+          "Arrange, resize, and remove 22 Home cards on a 12-column grid, including clock, weather, media, volume, brightness, battery, Bluetooth, clipboard, notes, calendar, reminders, screen time, virtual desktops, and apps.",
+          "Tune the pill's size, shape, corner radius, text scale, animation, background, accent colors, and tab layout with live previews.",
+          "Choose from built-in themes or create a solid, gradient, or picture background; frosted-glass effects are available where Windows supports transparency.",
+          "Configure 26 settings pages to control appearance, modules, gestures, notifications, integrations, and Windows behavior.",
+        ],
+      },
+      {
+        title: "03 · Media, sound, and device controls",
+        items: [
+          "Control supported Windows media sessions with album art, playback, scrubbing, shuffle, repeat, and browser playback speed.",
+          "View a live audio spectrum and optional synced lyrics; use per-app volume controls and switch audio outputs.",
+          "Control microphone mute, compatible display brightness, battery alerts, Bluetooth device information, and other supported Windows system states.",
+          "Use live CPU, memory, network, and disk information, as well as virtual-desktop and open-window controls.",
+        ],
+      },
+      {
+        title: "04 · Everyday productivity",
+        items: [
+          "Keep searchable clipboard history, pinned items, image OCR, and context-aware actions; sensitive-content markers are respected and apps can be excluded.",
+          "Stage files on a persistent shelf, drag them in or out, and use supported archive and image-conversion tools.",
+          "Capture a screen region to the clipboard, shelf, or a chosen folder; use a color eyedropper and optional screenshot monitoring.",
+          "Create quick notes, natural-language reminders, calendar alerts from user-provided iCalendar feeds, and Pomodoro sessions.",
+          "Convert supported office documents and edit PDFs by reordering, rotating, deleting, merging, extracting, splitting, adding text, watermarks, page numbers, or passwords.",
+        ],
+      },
+      {
+        title: "05 · Developer and power-user tools",
+        items: [
+          "Use the command palette for tabs, module actions, snippets, inline calculations, and web search.",
+          "Show Windows Terminal as a drop-down or normal window, and optionally surface Claude Code approvals, agent activity, and long-running shell commands.",
+          "Enable an opt-in, token-protected local developer API bound to 127.0.0.1 for scripts and integrations.",
+          "Track Claude Code and Codex usage from local logs; Copilot quota is optional and requires a user-provided GitHub token.",
+        ],
+      },
+      {
+        title: "06 · Privacy and user control",
+        items: [
+          "No account system, advertising, analytics, or telemetry is described by the project.",
+          "Settings and feature data are kept on the PC; clipboard capture, optional integrations, and other modules can be configured or disabled.",
+          "Network access belongs to specific opt-in or feature-driven services such as weather, lyrics, translation, calendar feeds, or quota lookups.",
+          "The local developer API is off by default, listens on loopback, and requires its per-install token.",
+        ],
+      },
+    ],
+    dataModel: [
+      {
+        title: "Desktop shell and module domain",
+        entities: [
+          ["WPF shell", "Application lifecycle · tray · notch window · settings"],
+          ["Module registry", "Feature identity · enabled state · order"],
+          ["Module view", "Tab content · commands · feature lifecycle"],
+          ["Activity hub", "Live activities · transient islands · priorities"],
+          ["Detached window", "Popped-out tab · always-on-top or pinned mode"],
+        ],
+        relation:
+          "The shell coordinates the notch and module registry. Modules own feature-specific work and provide views and commands, while the activity hub lets modules publish pill activities and transient islands.",
+      },
+      {
+        title: "Local user data and integrations",
+        entities: [
+          ["Settings", "Appearance · behavior · feature and layout preferences"],
+          ["Feature data", "Local notes · reminders · clipboard and other module state"],
+          ["Windows services", "Media · audio · clipboard · display · files · devices"],
+          ["External endpoints", "Only the services required by enabled features"],
+          ["Release package", "Self-contained Windows x64 or ARM64 ZIP"],
+        ],
+        relation:
+          "User settings and feature state are persisted locally. Windows capabilities are accessed through application services; optional network-backed features contact their documented providers when used.",
+      },
+    ],
+    performanceTitle: "Native interactions and background work",
+    performanceIntro:
+      "Notro is a local WPF desktop utility, not a hosted web service. Its architecture centers on Windows integrations and module lifecycles; the project documentation emphasizes avoiding unnecessary idle work rather than publishing measured performance guarantees.",
+    dataRetrieval: [
+      [
+        "Local settings and feature state",
+        "Application settings and feature data are stored on the device, with data locations depending on whether the ZIP or Microsoft Store package is installed.",
+      ],
+      [
+        "Windows system information",
+        "Media, audio, clipboard, display, device, and window features use local Windows services and capabilities rather than a portfolio-hosted API.",
+      ],
+      [
+        "Feature-driven network requests",
+        "Weather, lyrics, user-provided calendar feeds, translation, web search, optional video downloads, and optional GitHub quota checks use their corresponding external services when requested or enabled.",
+      ],
+      [
+        "Background-work boundaries",
+        "The architecture guidance recommends starting timers or capture only while relevant views are visible. The repository does not publish a universal CPU, memory, or latency benchmark.",
+      ],
+    ],
+    engineering: [
+      [
+        "Module-based feature boundaries",
+        "A module registry separates feature views and lifecycle work from the application shell, making individual features configurable and reorderable.",
+      ],
+      [
+        "Use Windows-native capabilities",
+        "WPF and C# provide a Windows-first desktop interface and access to local media, device, display, and window workflows.",
+      ],
+      [
+        "Keep configuration editable",
+        "The settings system stores user preferences in JSON, while settings pages expose controls and live previews for common changes.",
+      ],
+      [
+        "Make privacy settings visible",
+        "Screen-capture exclusion, configurable clipboard capture, feature toggles, optional integrations, and a disabled-by-default local API give users control over what runs.",
+      ],
+      [
+        "Separate package-specific behavior",
+        "The Windows ZIP and Microsoft Store builds have different capabilities and data locations; notification mirroring from other apps requires the Store package.",
+      ],
+    ],
+    delivery: [
+      "The latest documented release is v0.4.0, with self-contained ZIP builds for Windows x64 and ARM64.",
+      "The ZIP build does not require a separate .NET runtime, installer, or administrator access. The Microsoft Store package is a separate build.",
+      "Build from source on Windows with the .NET 8 SDK and PowerShell using the repository's build.ps1 script or dotnet build command.",
+      "Windows 10 version 2004 (build 19041) or later and Windows 11 are documented as supported.",
+      "The project is MIT-licensed. The README notes that releases are not currently code-signed, so Windows SmartScreen may show a warning.",
+    ],
+    implementationNotes: [
+      "Notro currently targets Windows; its notch-style concept was inspired by a macOS application, but this repository describes an independent Windows implementation.",
+      "Notification mirroring from other apps is available only in the Microsoft Store package and requires Windows notification access.",
+      "Some document conversions require Microsoft Word or LibreOffice; video downloading requires separately installed yt-dlp; external-monitor brightness requires compatible DDC/CI hardware.",
+      "Weather, synced lyrics, calendar feeds, translation, and optional quota integrations depend on their respective external services or user-provided configuration.",
+      "The README identifies items such as a per-app equalizer and animated idle pill as roadmap work; these are not presented here as shipped capabilities.",
+    ],
+    technologies: [
+      "C#",
+      ".NET 8",
+      "WPF",
+      "XAML",
+      "Win32",
+      "PowerShell",
+      "JSON",
+      "Microsoft Windows APIs",
+      "GitHub Actions",
+    ],
+  },
+  {
     slug: "pursewar",
     title: "PurseWar — Real-Time IPL Auction Simulator",
     eyebrow: "Creator · Multiplayer web application · React · Firebase · Supabase",

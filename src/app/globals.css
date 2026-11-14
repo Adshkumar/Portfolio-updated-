@@ -1009,6 +1009,35 @@ a.cred:hover {
   object-position: center;
 }
 
+.caseStudyGallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.caseStudyGalleryItem {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.caseStudyGalleryItem img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: #10110f;
+}
+
+.caseStudyGalleryItem figcaption {
+  padding: 9px 12px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 .caseStudyFacts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1130,6 +1159,19 @@ a.cred:hover {
   font-size: 0.74rem;
   font-weight: 650;
   line-height: 1.35;
+}
+
+.caseStudyArchitecture .caseStudyArchitectureNode strong {
+  color: var(--text);
+}
+
+.caseStudyArchitecture .caseStudyArchitectureNode div > span {
+  display: block;
+  margin-top: 5px;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.55;
 }
 
 .caseStudyArchitectureNode small {
@@ -1545,6 +1587,27 @@ a.cred:hover {
   background: var(--surface);
 }
 
+@media (min-width: 960px) {
+  .caseStudyArchitecture {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .caseStudyArchitectureStep {
+    min-width: 0;
+  }
+
+  .caseStudyArchitectureStep .caseStudyArchitectureNode {
+    height: 100%;
+  }
+
+  .caseStudyArchitectureArrow {
+    display: none;
+  }
+}
+
 .caseStudyRepositoryLink {
   display: inline-flex;
   flex-wrap: wrap;
@@ -1562,6 +1625,7 @@ a.cred:hover {
 
 @media (max-width: 640px) {
   .caseStudyFacts,
+  .caseStudyGallery,
   .caseStudyIntegrationGrid,
   .caseStudyEngineeringGrid,
   .caseStudyDataDiagram,

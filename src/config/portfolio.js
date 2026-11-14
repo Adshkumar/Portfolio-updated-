@@ -90,6 +90,22 @@ export const education = {
 
 export const experiences = [
   {
+    company: "Notro",
+    role: "Creator & Open-Source Developer",
+    duration: "2026 – Present",
+    type: "Windows Desktop Application • Open Source",
+    tech: "C# • .NET 8 • WPF • XAML • Win32 • PowerShell",
+    logo: "/images/notro/notro-icon.png",
+    articleLink: "/experience/notro",
+    githubLink: "https://github.com/Adshkumar/Notch",
+    points: [
+      "Built Notro, a customizable Windows desktop companion that turns a top-edge notch or floating pill into a hub for live activities, quick controls, and everyday tools.",
+      "Developed a modular WPF application with 22 configurable Home cards, detachable tabs, global shortcuts, live themes, and native integrations for media, audio, clipboard, windows, and devices.",
+      "Added productivity tools including notes, reminders, a Pomodoro timer, file shelf, screen capture, document conversion, and PDF editing.",
+      "Designed for local use and privacy: settings and feature data stay on the PC, telemetry is not included, and optional network features connect only to their documented services.",
+    ],
+  },
+  {
     company: "r0",
     role: "Creator & Open-Source Developer",
     duration: "2025 – Present",

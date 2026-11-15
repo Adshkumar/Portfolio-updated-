@@ -12,7 +12,6 @@ export default function Hero({ initialBlogOpen = false }) {
   const router = useRouter();
   const progressRef = useRef(null);
 
-  // Reading progress: width of the top bar follows modal scroll
   const onBodyScroll = useCallback((e) => {
     const el = e.currentTarget;
     const max = el.scrollHeight - el.clientHeight;
@@ -22,7 +21,6 @@ export default function Hero({ initialBlogOpen = false }) {
 
   const closeBlog = () => {
     setBlogOpen(false);
-    // If we landed directly on /borg, go back to the homepage URL
     if (initialBlogOpen) router.replace("/");
   };
 

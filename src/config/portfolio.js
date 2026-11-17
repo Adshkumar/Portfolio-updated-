@@ -97,6 +97,7 @@ export const experiences = [
     tech: "C# • .NET 8 • WPF • XAML • Win32 • PowerShell",
     logo: "/images/notro/notro-icon.png",
     articleLink: "/experience/notro",
+    storeLink: "https://apps.microsoft.com/detail/9PB2K096PHCQ",
     githubLink: "https://github.com/Adshkumar/Notch",
     points: [
       "Built Notro, a customizable Windows desktop companion that turns a top-edge notch or floating pill into a hub for live activities, quick controls, and everyday tools.",

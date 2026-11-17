@@ -1841,6 +1841,24 @@ a.cred:hover {
   color: var(--text);
 }
 
+.expLinks .microsoftStoreBadge {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+
+.expLinks .microsoftStoreBadgeLight {
+  display: none;
+}
+
+:root[data-theme="light"] .expLinks .microsoftStoreBadgeDark {
+  display: none;
+}
+
+:root[data-theme="light"] .expLinks .microsoftStoreBadgeLight {
+  display: block;
+}
+
 .expShowAll {
   flex-shrink: 0;
   margin: 0 0 16px 12px;

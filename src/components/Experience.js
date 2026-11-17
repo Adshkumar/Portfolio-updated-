@@ -51,7 +51,7 @@ export default function Experience({ showAll = false }) {
                   <li key={j} dangerouslySetInnerHTML={{ __html: point }} />
                 ))}
               </ul>
-              {(exp.proofLink || exp.downloadLink || exp.githubLink || exp.articleLink) && (
+              {(exp.proofLink || exp.downloadLink || exp.storeLink || exp.githubLink || exp.articleLink) && (
                 <div className="expLinks">
                   {exp.downloadLink && (
                     <a
@@ -62,6 +62,25 @@ export default function Experience({ showAll = false }) {
                     >
                       <i className="fas fa-download"></i>
                       Download
+                    </a>
+                  )}
+                  {exp.storeLink && (
+                    <a
+                      href={exp.storeLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Available on Microsoft Store"
+                    >
+                      <img
+                        src="/images/microsoft-store-badge-dark.svg"
+                        alt="Get it from Microsoft"
+                        className="microsoftStoreBadge microsoftStoreBadgeDark"
+                      />
+                      <img
+                        src="/images/microsoft-store-badge-light.svg"
+                        alt="Get it from Microsoft"
+                        className="microsoftStoreBadge microsoftStoreBadgeLight"
+                      />
                     </a>
                   )}
                   {exp.proofLink && (

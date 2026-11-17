@@ -36,6 +36,10 @@ export const caseStudies = [
         href: "https://github.com/Adshkumar/Notch/releases/latest",
       },
       {
+        label: "Available on Microsoft Store",
+        href: "https://apps.microsoft.com/detail/9PB2K096PHCQ",
+      },
+      {
         label: "Project documentation",
         href: "https://github.com/Adshkumar/Notch/tree/main/docs",
       },

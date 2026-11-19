@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative next-token probability distribution</title>
+  <desc id="desc">A horizontal bar chart showing probabilities for ten candidate next tokens after the context “I poured coffee into the.” Cup is the most probable at 0.3171. The remaining vocabulary tokens collectively receive 0.5004.</desc>
+  <defs>
+    <style>
+      .bg{fill:#0b1018}
+      .panel{fill:#111827}
+      .title{fill:#f8fafc;font:700 27px system-ui,sans-serif}
+      .sub{fill:#a8b2c1;font:15px system-ui,sans-serif}
+      .label{fill:#f8fafc;font:700 17px system-ui,sans-serif}
+      .value{fill:#e9eef6;font:700 17px system-ui,monospace}
+      .axis{fill:#9ba8ba;font:13px system-ui,sans-serif}
+      .box{fill:#172033;stroke:#64748b;stroke-width:2}
+      .topbox{fill:#172033;stroke:#fb7185;stroke-width:4}
+      .bar{fill:#60a5fa}
+      .topbar{fill:#34d399}
+      .grid{stroke:#283448;stroke-width:2}
+      .other{fill:#1b2433;stroke:#64748b;stroke-width:2}
+    </style>
+  </defs>
+
+  <rect class="bg" width="1000" height="620" rx="22"/>
+  <text class="title" x="44" y="48">Next-token probability distribution</text>
+  <text class="sub" x="44" y="76">Context: “I poured coffee into the” · illustrative values</text>
+
+  <line class="grid" x1="340" y1="108" x2="944" y2="108"/>
+  <line class="grid" x1="340" y1="506" x2="944" y2="506"/>
+  <text class="axis" x="340" y="530">0</text>
+  <text class="axis" x="642" y="530" text-anchor="middle">0.15</text>
+  <text class="axis" x="944" y="530" text-anchor="end">0.32</text>
+
+  <g transform="translate(44 96)">
+    <rect class="topbox" x="0" y="0" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="25">cup</text>
+    <rect class="box" x="170" y="0" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="25">0.3171</text>
+    <rect class="topbar" x="296" y="6" width="604" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="42" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="67">mug</text>
+    <rect class="box" x="170" y="42" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="67">0.0491</text>
+    <rect class="bar" x="296" y="48" width="93" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="84" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="109">kettle</text>
+    <rect class="box" x="170" y="84" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="109">0.0360</text>
+    <rect class="bar" x="296" y="90" width="68" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="126" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="151">sink</text>
+    <rect class="box" x="170" y="126" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="151">0.0330</text>
+    <rect class="bar" x="296" y="132" width="62" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="168" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="193">pot</text>
+    <rect class="box" x="170" y="168" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="193">0.0147</text>
+    <rect class="bar" x="296" y="174" width="28" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="210" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="235">bowl</text>
+    <rect class="box" x="170" y="210" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="235">0.0124</text>
+    <rect class="bar" x="296" y="216" width="24" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="252" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="277">glass</text>
+    <rect class="box" x="170" y="252" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="277">0.0101</text>
+    <rect class="bar" x="296" y="258" width="19" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="294" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="319">free</text>
+    <rect class="box" x="170" y="294" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="319">0.0100</text>
+    <rect class="bar" x="296" y="300" width="19" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="336" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="361">thermos</text>
+    <rect class="box" x="170" y="336" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="361">0.0091</text>
+    <rect class="bar" x="296" y="342" width="17" height="26" rx="3"/>
+
+    <rect class="box" x="0" y="378" width="162" height="38" rx="4"/>
+    <text class="label" x="12" y="403">home</text>
+    <rect class="box" x="170" y="378" width="112" height="38" rx="4"/>
+    <text class="value" x="182" y="403">0.0081</text>
+    <rect class="bar" x="296" y="384" width="15" height="26" rx="3"/>
+  </g>
+
+  <rect class="other" x="340" y="544" width="604" height="30" rx="4"/>
+  <text class="sub" x="642" y="565" text-anchor="middle">Remaining vocabulary: 0.5004 combined</text>
+  <text class="axis" x="44" y="554">Full distribution sum = 1.0000</text>
+  <text class="axis" x="44" y="576">Probability, not a confidence score</text>
+</svg>

@@ -16,6 +16,7 @@ content/articles/
   database-partitioning-sharding-consistent-hashing.md
   mvcc-isolation-serializable-transactions.md
   llms-read-write-neural-network-weights.md
+  llm-token-probabilities-and-attention.md
   rpc-remote-procedure-calls-explained.md
   why-grpc-uses-http2.md
   webrtc-signaling-ice-and-media.md

@@ -194,41 +194,17 @@ p_i = exp(z_i) / ∑_j exp(z_j)
 
 The denominator sums over every token in the vocabulary. This makes each `p_i` non-negative and makes all the probabilities sum to 1.
 
-For example, after the context `I poured coffee into the`, the model might give the highest probability to `cup`. A different model, tokenizer, or prompt could produce a different distribution. The following chart is illustrative.
+For example, after the context `I poured coffee into the`, a model might assign probabilities like these:
 
-![Horizontal bars compare the probabilities assigned to ten candidate next tokens after an illustrative prompt. The longest bar is the most probable token, while a separate region represents all remaining vocabulary tokens.](/articles/images/llm-next-token-probability-bars.svg "Illustrative next-token probability bars")
+| Candidate next token | Illustrative probability |
+| --- | ---: |
+| ` cup` | 0.42 |
+| ` mug` | 0.25 |
+| ` sink` | 0.12 |
+| ` pot` | 0.08 |
+| Other tokens combined | 0.13 |
 
-Figure: The highlighted `cup` token has the highest illustrative probability, `0.3171`. The remaining bars show that several other tokens are possible, and all remaining vocabulary tokens receive a combined probability of `0.5004`. The bars are sorted from highest to lower probability.
-
-The chart can be read in two ways:
-
-```text
-Which token is most likely?
-  cup — 31.71% probability
-
-How much probability remains elsewhere?
-  Remaining ten visible candidates plus every other vocabulary token
-  must share the remaining probability.
-```
-
-Suppose the model computes logits for those candidates and applies softmax. A common value for the ten shown candidates might look like this:
-
-```text
-cup     0.3171
-mug     0.0491
-kettle  0.0360
-sink    0.0330
-pot     0.0147
-bowl    0.0124
-glass   0.0101
-free    0.0100
-thermos 0.0091
-home    0.0081
-```
-
-These are illustrative values, not measurements from a particular model. The sum of every vocabulary probability, including both the candidates shown and every omitted token, is exactly `1.0`.
-
-The chart's longest bar does not mean the model has proven that `cup` is true. It only means that `cup` received the largest softmax probability for this one prediction step. The candidate is a **token**, not necessarily a complete word. The model's most probable token is `cup`, but the other tokens remain possible.
+These are illustrative values, not measurements from a particular model. The candidate is a **token**, not necessarily a complete word. The model's most probable token is ` cup`, but other tokens still have probability.
 
 ## How does attention use context?
 

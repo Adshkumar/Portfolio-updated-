@@ -2976,7 +2976,6 @@ a.cred:hover {
   [src$="tcp-kernel-buffers.svg"]
 ),
 :root[data-theme="light"] .articleImageButton img:is(
-  [src$="llm-next-token-probability-bars.svg"],
   [src$="api-evolution-migration.svg"],
   [src$="btree-lsm-storage.svg"],
   [src$="cache-invalidation-flow.svg"],
@@ -2991,7 +2990,6 @@ a.cred:hover {
   [src$="webrtc-connection-flow.svg"]
 ),
 :root[data-theme="light"] .articleImageViewerFigure img:is(
-  [src$="llm-next-token-probability-bars.svg"],
   [src$="api-evolution-migration.svg"],
   [src$="btree-lsm-storage.svg"],
   [src$="cache-invalidation-flow.svg"],

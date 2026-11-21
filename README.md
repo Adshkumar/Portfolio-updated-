@@ -2,9 +2,9 @@
 
 # Adarsh Kumar
 
-### Full-Stack Developer
+### Full-Stack and Desktop Software Developer
 
-Building thoughtful digital experiences and reliable software.
+Building practical software across web, mobile, desktop, AI, and developer tooling.
 
 [Portfolio](https://adshkumar.is-a.dev/) · [Resume](./public/Adarsh-Kumar-Resume.pdf) · [GitHub](https://github.com/Adshkumar) · [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/)
 
@@ -14,15 +14,39 @@ Building thoughtful digital experiences and reliable software.
 
 ## About
 
-I’m a Delhi-based full-stack developer interested in building useful, well-crafted software. I work across the stack, from shaping clear user experiences to developing the APIs and data flows behind them.
+I’m a Delhi-based software developer focused on building useful, polished, and reliable products. I work across interfaces, backend systems, databases, desktop applications, mobile apps, and AI-enabled workflows.
 
-My current toolkit includes **JavaScript, React, Next.js, Node.js, Express, and MongoDB**. I’m pursuing a Diploma in Computer Science at **Chhotu Ram Rural Institute of Technology, Delhi**.
+I’m pursuing a Diploma in Computer Science at **Chhotu Ram Rural Institute of Technology, Delhi**.
 
 ## Selected Projects
 
-### [r0 IDE](https://github.com/Adshkumar/r0)
+### [Notro](https://apps.microsoft.com/detail/9PB2K096PHCQ)
 
-An open-source IDE project. [Explore the case study](https://adshkumar.is-a.dev/experience/r0).
+A customizable Windows desktop companion that turns the top-edge of the screen into a hub for live activities, quick controls, notes, reminders, media, utilities, and local productivity tools.
+
+**Stack:** C# · .NET 8 · WPF · XAML · Win32 · PowerShell  
+[Microsoft Store](https://apps.microsoft.com/detail/9PB2K096PHCQ) · [Source](https://github.com/Adshkumar/Notch) · [Case study](https://adshkumar.is-a.dev/experience/notro)
+
+### [r0](https://r0-ide.vercel.app/)
+
+A cross-platform AI-powered code editor with Agent, Plan, and Ask workflows, an integrated terminal, Git tools, database support, language servers, debugging, previews, and extensions.
+
+**Stack:** Rust · TypeScript · CodeMirror 6 · portable-pty · SQLite  
+[Live app](https://r0-ide.vercel.app/) · [Source](https://github.com/Adshkumar/r0) · [Case study](https://adshkumar.is-a.dev/experience/r0)
+
+### [Finance Tracker](https://github.com/Adshkumar/Finance-Tracker)
+
+A mobile budgeting app for accounts, budgets, transactions, receipt scanning, voice entry, spending insights, and biometric or PIN protection.
+
+**Stack:** React Native · Expo · Supabase · PostgreSQL · Clerk · Gemini AI · NativeWind  
+[Source](https://github.com/Adshkumar/Finance-Tracker) · [Case study](https://adshkumar.is-a.dev/experience/finance-tracker)
+
+### [PurseWar](https://www.iplauction.site/)
+
+A real-time multiplayer IPL auction simulator with synchronized bidding, timers, franchise budgets, AI bots, and post-auction ratings.
+
+**Stack:** React · Vite · Tailwind CSS · Firebase · Supabase  
+[Live app](https://www.iplauction.site/) · [Source](https://github.com/Adshkumar/ipl-auction) · [Case study](https://adshkumar.is-a.dev/experience/pursewar)
 
 ### Real-Time Chat Application
 
@@ -45,16 +69,23 @@ A backend project exploring ride-booking workflows, protected endpoints, driver 
 **Stack:** Node.js · Express · MongoDB · JWT · Socket.IO  
 [Live app](https://uber-psi-three.vercel.app/) · [Source](https://github.com/Adshkumar/UBER)
 
-### Cross-Platform Finance App
+### URL Shortener
 
-A mobile-first finance application concept for managing everyday financial activity across Android and iOS.
+A full-stack link platform with custom aliases, JWT authentication, QR codes, click analytics, and Docker Compose-based deployment.
 
-**Stack:** React Native  
-[Source](https://github.com/Adshkumar/React-Native-Finance-App)
+**Stack:** MERN · JWT · REST APIs · Tailwind CSS · Docker  
+[Live app](https://url-linksnap.vercel.app/) · [Source](https://github.com/Adshkumar/URL-Shortener) · [Case study](https://adshkumar.is-a.dev/experience/url-shortener)
+
+### Agentic AI
+
+An authenticated AI application builder that turns natural-language prompts into React apps and improves generated projects through streaming agent workflows.
+
+**Stack:** Next.js · TypeScript · Clerk · Prisma · PostgreSQL · Supabase · Gemini · Sandpack  
+[Live app](https://agentic-flow-ai.vercel.app/) · [Source](https://github.com/Adshkumar/Agentic-AI) · [Case study](https://adshkumar.is-a.dev/experience/agentic-ai)
 
 ## Portfolio
 
-This portfolio brings together experience, selected projects, achievements, skills, and contact details in a responsive interface. It includes light and dark themes, subtle scroll-reveal motion, and a live activity view.
+This portfolio brings together experience, selected projects, achievements, skills, articles, and contact details in a responsive interface. It includes light and dark themes, section reveal motion, case studies, a blog modal, technical article pages, GitHub activity, and direct résumé access.
 
 Some daily GitHub activity values shown in the portfolio are estimates based on public activity and a supplied calendar pattern; they are not an exact record of private contributions. The annual GitHub Contributions card is synced separately from GitHub’s authenticated contribution calendar for the previous and current calendar years. LeetCode activity depends on the availability and freshness of its public calendar service.
 
@@ -63,11 +94,13 @@ Some daily GitHub activity values shown in the portfolio are estimates based on 
 | Area | Technologies |
 | --- | --- |
 | Framework | Next.js 16 · React 19 |
-| Language | JavaScript |
+| Languages | JavaScript · TypeScript · C# · Rust |
 | Interface | CSS · CSS custom properties · Font Awesome |
-| Backend and data | Node.js · Express · MongoDB · REST APIs |
-| Authentication and real time | JWT · Socket.IO |
-| Deployment | Next.js static export · Vercel |
+| Web and data | React · Next.js · Node.js · Express · PostgreSQL · MongoDB · Supabase |
+| Desktop and mobile | WPF · .NET 8 · React Native · Expo |
+| AI and real time | Gemini · Socket.IO · WebRTC · WebSockets |
+| Content | Markdown · marked · highlight.js |
+| Deployment | Next.js static export · GitHub Pages / Vercel |
 
 ## Run Locally
 

@@ -85,7 +85,7 @@ An authenticated AI application builder that turns natural-language prompts into
 
 ## Portfolio
 
-This portfolio brings together experience, selected projects, achievements, skills, articles, and contact details in a responsive interface. It includes light and dark themes, section reveal motion, case studies, a blog modal, technical article pages, GitHub activity, and direct résumé access.
+This portfolio brings together experience, selected projects, achievements, skills, articles, and contact details in a responsive interface. It includes light and dark themes, section reveal motion, case studies, a blog modal, technical article pages, GitHub activity, a unique-browser visitor counter, and direct résumé access.
 
 Some daily GitHub activity values shown in the portfolio are estimates based on public activity and a supplied calendar pattern; they are not an exact record of private contributions. The annual GitHub Contributions card is synced separately from GitHub’s authenticated contribution calendar for the previous and current calendar years. LeetCode activity depends on the availability and freshness of its public calendar service.
 
@@ -126,7 +126,28 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm run lint` | Run ESLint |
 | `npm run validate:articles` | Validate article metadata, links, and local images |
 | `npm run test:articles` | Run article validation and rendering tests |
+| `npm run test:visitor-counter` | Test unique counting and Worker CORS validation |
 | `npm run build` | Generate the production static export in `out/` |
+
+## Unique Visitor Counter
+
+The portfolio is a static GitHub Pages site, so the visitor total is stored by a separate Cloudflare Worker and SQLite-backed Durable Object. The counter keeps one random browser ID in local storage and stores only its SHA-256 hash on the Worker. The counter code does not read or store names, email addresses, or IP addresses; Cloudflare may process normal connection metadata to provide the service. A browser counts once, including across page navigation, reloads, and later visits. Clearing site data or using another browser or device creates a new count. As with any public counter, determined callers can submit fabricated visits.
+
+### Deploy the counter service
+
+1. Create or use a Cloudflare account with Workers enabled.
+2. From the repository root, authenticate and deploy the Worker:
+
+   ```bash
+   npx wrangler@latest login
+   npx wrangler@latest deploy --config visitor-counter/wrangler.toml
+   ```
+
+3. Copy the deployed Worker URL, ending in `/count`.
+4. In GitHub, open **Settings → Secrets and variables → Actions → Variables** and add a repository variable named `VISITOR_COUNTER_URL` with that URL. The deployment workflows pass it into the static build.
+5. To test locally, set `NEXT_PUBLIC_VISITOR_COUNTER_URL` to the same URL in `.env.local`, then run `npm run dev`.
+
+The Worker allows the production portfolio domains and localhost in `visitor-counter/wrangler.toml`. Update `ALLOWED_ORIGINS` there if the site’s domain changes, then redeploy the Worker. Until the Worker is deployed and the GitHub variable is set, the counter displays as unavailable rather than showing a misleading value.
 
 ## Project Structure
 
@@ -139,6 +160,7 @@ src/app/             Routes, layouts, metadata, and styles
 src/components/      Reusable interface components
 src/config/          Portfolio and case-study content
 src/lib/             Shared article loading and rendering utilities
+visitor-counter/     Cloudflare Worker and Durable Object configuration
 tests/               Automated tests
 ```
 

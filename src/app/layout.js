@@ -1,5 +1,6 @@
 
 import { siteConfig, socialLinks } from "@/config/portfolio";
+import VisitorCounter from "@/components/VisitorCounter";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -135,7 +136,10 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <VisitorCounter />
+      </body>
     </html>
   );
 }

@@ -3389,3 +3389,50 @@ a.cred:hover {
   opacity: 1;
   transform: none;
 }
+
+.visitorCounter {
+  position: fixed;
+  right: 16px;
+  bottom: 20px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--dock-bg);
+  color: var(--text-secondary);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-size: 0.7rem;
+}
+
+.visitorCounter > i {
+  color: #22d3ee;
+  font-size: 0.72rem;
+}
+
+.visitorCounter strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.visitorCounter button {
+  border: 0;
+  background: transparent;
+  color: #22d3ee;
+  cursor: pointer;
+  font: inherit;
+}
+
+@media (max-width: 640px) {
+  .visitorCounter {
+    right: 10px;
+    bottom: 76px;
+    padding: 7px 9px;
+    font-size: 0.65rem;
+  }
+}

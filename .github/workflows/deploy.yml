@@ -32,6 +32,8 @@ jobs:
 
       - name: Build Next.js
         run: npm run build
+        env:
+          NEXT_PUBLIC_VISITOR_COUNTER_URL: ${{ vars.VISITOR_COUNTER_URL }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

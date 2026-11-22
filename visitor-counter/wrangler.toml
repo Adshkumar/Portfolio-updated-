@@ -1,0 +1,14 @@
+name = "adarsh-portfolio-visitor-counter"
+main = "worker.js"
+compatibility_date = "2026-11-22"
+
+[vars]
+ALLOWED_ORIGINS = "https://adshkumar.is-a.dev,https://adshkumar.github.io,http://localhost:3000,http://127.0.0.1:3000"
+
+[[durable_objects.bindings]]
+name = "COUNTER"
+class_name = "VisitorCounter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["VisitorCounter"]

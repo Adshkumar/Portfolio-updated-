@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "validate:articles": "node scripts/validate-articles.mjs",
-    "test:articles": "node --test tests/articles.test.mjs"
+    "test:articles": "node --test tests/articles.test.mjs",
+    "test:visitor-counter": "node --test tests/visitor-counter.test.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

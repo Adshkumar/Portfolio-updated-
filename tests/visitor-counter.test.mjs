@@ -71,6 +71,18 @@ test("counts each browser once and increments for a new browser", async () => {
   assert.equal((await second.json()).total, 2);
 });
 
+test("returns the latest total to open visitors without counting them again", async () => {
+  const { env } = createCounter();
+  const firstVisitor = "00000000-0000-4000-8000-000000000001";
+  const secondVisitor = "00000000-0000-4000-8000-000000000002";
+
+  await worker.fetch(makeRequest(firstVisitor), env);
+  await worker.fetch(makeRequest(secondVisitor), env);
+  const refresh = await worker.fetch(makeRequest(null, { method: "GET" }), env);
+
+  assert.equal((await refresh.json()).total, 2);
+});
+
 test("rejects invalid visitor IDs and unapproved origins", async () => {
   const { env } = createCounter();
 

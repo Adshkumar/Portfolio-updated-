@@ -131,7 +131,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Unique Visitor Counter
 
-The portfolio is statically generated and served from Vercel in production. Its visitor total is stored by a separate Cloudflare Worker and SQLite-backed Durable Object. The counter keeps one random browser ID in local storage and stores only its SHA-256 hash on the Worker. The counter code does not read or store names, email addresses, or IP addresses; Cloudflare may process normal connection metadata to provide the service. A browser counts once, including across page navigation, reloads, and later visits. Clearing site data or using another browser or device creates a new count. As with any public counter, determined callers can submit fabricated visits.
+The portfolio is statically generated and served from Vercel in production. Its visitor total is stored by a separate Cloudflare Worker and SQLite-backed Durable Object. The counter keeps one random browser ID in local storage and stores only its SHA-256 hash on the Worker. The counter code does not read or store names, email addresses, or IP addresses; Cloudflare may process normal connection metadata to provide the service. A browser counts once, including across page navigation, reloads, and later visits. Open pages refresh the total every 15 seconds while visible, and refresh immediately when brought back into view. Clearing site data or using another browser or device creates a new count. As with any public counter, determined callers can submit fabricated visits.
 
 ### Deploy the counter service
 
@@ -154,7 +154,7 @@ The portfolio is statically generated and served from Vercel in production. Its 
 5. To test locally, set `NEXT_PUBLIC_VISITOR_COUNTER_URL` to the same URL in `.env.local`, then run `npm run dev`.
 6. If deploying through the repository's GitHub Pages workflows instead, add a GitHub Actions repository variable named `VISITOR_COUNTER_URL`; those workflows pass it into the static build.
 
-The Worker allows the production portfolio domains and localhost in `visitor-counter/wrangler.toml`. Update `ALLOWED_ORIGINS` there if the site’s domain changes, then redeploy the Worker. Until the Worker is deployed and the GitHub variable is set, the counter displays as unavailable rather than showing a misleading value.
+The Worker allows the production portfolio domains and localhost in `visitor-counter/wrangler.toml`. Update `ALLOWED_ORIGINS` there if the site’s domain changes, then redeploy the Worker. Until the Worker is deployed and the hosting environment variable is set, the counter displays as unavailable rather than showing a misleading value.
 
 ## Project Structure
 

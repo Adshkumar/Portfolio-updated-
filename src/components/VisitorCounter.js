@@ -4,6 +4,20 @@ import { useCallback, useEffect, useState } from "react";
 
 const counterUrl = process.env.NEXT_PUBLIC_VISITOR_COUNTER_URL;
 const visitorIdKey = "portfolio-visitor-id:v1";
+const refreshIntervalMs = 15_000;
+
+async function readCounterTotal(response) {
+  if (!response.ok) {
+    throw new Error(`Visitor counter returned HTTP ${response.status}`);
+  }
+
+  const data = await response.json();
+  if (!Number.isSafeInteger(data.total) || data.total < 0) {
+    throw new Error("Visitor counter returned an invalid total");
+  }
+
+  return data.total;
+}
 
 function createVisitorId() {
   const bytes = new Uint8Array(16);
@@ -16,49 +30,73 @@ function createVisitorId() {
 }
 
 export default function VisitorCounter() {
-  const [result, setResult] = useState({ status: "loading", total: null });
+  const [result, setResult] = useState({
+    status: counterUrl ? "loading" : "unconfigured",
+    total: null,
+  });
 
-  const loadCount = useCallback(async () => {
-    if (!counterUrl) {
-      setResult({ status: "unconfigured", total: null });
-      return;
-    }
+  const loadCount = useCallback(() => {
+    if (!counterUrl) return Promise.resolve();
 
-    setResult((current) => ({ ...current, status: "loading" }));
+    return Promise.resolve()
+      .then(() => {
+        let visitorId = window.localStorage.getItem(visitorIdKey);
+        if (!visitorId) {
+          visitorId = createVisitorId();
+          window.localStorage.setItem(visitorIdKey, visitorId);
+        }
+
+        return fetch(counterUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ visitorId }),
+          cache: "no-store",
+        });
+      })
+      .then(readCounterTotal)
+      .then((total) => setResult({ status: "ready", total }))
+      .catch((error) => {
+        console.error("Unable to load the portfolio visitor count", error);
+        setResult({ status: "error", total: null });
+      });
+  }, []);
+
+  const refreshCount = useCallback(async () => {
+    if (!counterUrl || document.visibilityState !== "visible") return;
 
     try {
-      let visitorId = window.localStorage.getItem(visitorIdKey);
-      if (!visitorId) {
-        visitorId = createVisitorId();
-        window.localStorage.setItem(visitorIdKey, visitorId);
-      }
-
-      const response = await fetch(counterUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visitorId }),
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Visitor counter returned HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!Number.isSafeInteger(data.total) || data.total < 0) {
-        throw new Error("Visitor counter returned an invalid total");
-      }
-
-      setResult({ status: "ready", total: data.total });
+      const response = await fetch(counterUrl, { cache: "no-store" });
+      const total = await readCounterTotal(response);
+      setResult((current) => ({
+        status: "ready",
+        total: current.total === null ? total : Math.max(current.total, total),
+      }));
     } catch (error) {
-      console.error("Unable to load the portfolio visitor count", error);
-      setResult({ status: "error", total: null });
+      console.error("Unable to refresh the portfolio visitor count", error);
+      setResult((current) =>
+        current.total === null ? { status: "error", total: null } : current
+      );
     }
   }, []);
 
-  useEffect(() => {
+  const retryLoadCount = useCallback(() => {
+    setResult({ status: "loading", total: null });
     loadCount();
   }, [loadCount]);
+
+  useEffect(() => {
+    loadCount();
+    const intervalId = window.setInterval(refreshCount, refreshIntervalMs);
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") refreshCount();
+    };
+
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [loadCount, refreshCount]);
 
   const message =
     result.status === "ready"
@@ -73,7 +111,7 @@ export default function VisitorCounter() {
     <aside
       className="visitorCounter"
       aria-label="Portfolio visitor count"
-      title="Unique browsers counted once; not a count of individual people"
+      title="Unique browsers counted once; updates every 15 seconds"
     >
       <i className="fas fa-users" aria-hidden="true"></i>
       <span className="visitorCounterLabel">Visitors</span>
@@ -81,7 +119,7 @@ export default function VisitorCounter() {
         {result.status === "ready" ? result.total.toLocaleString() : "—"}
       </strong>
       {result.status === "error" && (
-        <button type="button" onClick={loadCount} aria-label="Retry visitor count">
+        <button type="button" onClick={retryLoadCount} aria-label="Retry visitor count">
           Retry
         </button>
       )}

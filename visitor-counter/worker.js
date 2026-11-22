@@ -24,7 +24,7 @@ function getCorsHeaders(request, env) {
 
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -38,6 +38,16 @@ const worker = {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    const counterId = env.COUNTER.idFromName("portfolio-unique-visitors");
+    const counter = env.COUNTER.get(counterId);
+
+    if (request.method === "GET") {
+      const response = await counter.fetch("https://counter.internal/count", {
+        method: "GET",
+      });
+      return jsonResponse(await response.json(), response.status, corsHeaders);
     }
 
     if (request.method !== "POST") {
@@ -55,15 +65,12 @@ const worker = {
       return jsonResponse({ error: "Invalid visitor identifier" }, 400, corsHeaders);
     }
 
-    const counterId = env.COUNTER.idFromName("portfolio-unique-visitors");
-    const counter = env.COUNTER.get(counterId);
-    return counter.fetch("https://counter.internal/count", {
+    const response = await counter.fetch("https://counter.internal/count", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ visitorId: payload.visitorId }),
-    }).then(async (response) =>
-      jsonResponse(await response.json(), response.status, corsHeaders)
-    );
+    });
+    return jsonResponse(await response.json(), response.status, corsHeaders);
   },
 };
 
@@ -89,6 +96,17 @@ export class VisitorCounter {
   }
 
   async fetch(request) {
+    if (request.method === "GET") {
+      const [{ total }] = this.sql
+        .exec("SELECT total FROM visitor_total WHERE id = 1")
+        .toArray();
+      return jsonResponse({ total }, 200);
+    }
+
+    if (request.method !== "POST") {
+      return jsonResponse({ error: "Method not allowed" }, 405);
+    }
+
     let payload;
     try {
       payload = await request.json();

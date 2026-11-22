@@ -3399,7 +3399,7 @@ a.cred:hover {
   z-index: 90;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 0;
   padding: 8px 11px;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -3411,9 +3411,20 @@ a.cred:hover {
   font-size: 0.7rem;
 }
 
-.visitorCounter > i {
+.visitorCounterIcon {
   color: var(--visitor-accent);
   font-size: 0.72rem;
+  margin-right: 7px;
+}
+
+.visitorCounterToggle {
+  display: none;
+}
+
+.visitorCounterContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .visitorCounter strong {
@@ -3432,9 +3443,40 @@ a.cred:hover {
 
 @media (max-width: 640px) {
   .visitorCounter {
-    right: 10px;
+    right: 0;
     bottom: 76px;
-    padding: 7px 9px;
+    padding: 0;
     font-size: 0.65rem;
+    gap: 7px;
+    border-right: 0;
+    border-radius: 999px 0 0 999px;
+  }
+
+  .visitorCounter > .visitorCounterIcon,
+  .visitorCounter:not([data-expanded="true"]) .visitorCounterContent {
+    display: none;
+  }
+
+  .visitorCounterToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .visitorCounter[data-expanded="true"] {
+    padding-right: 8px;
+  }
+
+  .visitorCounterToggle > i {
+    color: var(--visitor-accent);
   }
 }

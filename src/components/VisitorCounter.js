@@ -30,6 +30,7 @@ function createVisitorId() {
 }
 
 export default function VisitorCounter() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [result, setResult] = useState({
     status: counterUrl ? "loading" : "unconfigured",
     total: null,
@@ -111,18 +112,31 @@ export default function VisitorCounter() {
     <aside
       className="visitorCounter"
       aria-label="Portfolio visitor count"
+      data-expanded={isExpanded}
       title="Unique browsers counted once; updates every 10 seconds"
     >
-      <i className="fas fa-users" aria-hidden="true"></i>
-      <span className="visitorCounterLabel">Visitors</span>
-      <strong aria-live="polite">
-        {result.status === "ready" ? result.total.toLocaleString() : "—"}
-      </strong>
-      {result.status === "error" && (
-        <button type="button" onClick={retryLoadCount} aria-label="Retry visitor count">
-          Retry
-        </button>
-      )}
+      <i className="visitorCounterIcon fas fa-users" aria-hidden="true"></i>
+      <button
+        className="visitorCounterToggle"
+        type="button"
+        aria-expanded={isExpanded}
+        aria-controls="visitorCounterContent"
+        aria-label={`${isExpanded ? "Hide" : "Show"} visitor count`}
+        onClick={() => setIsExpanded((expanded) => !expanded)}
+      >
+        <i className="fas fa-users" aria-hidden="true"></i>
+      </button>
+      <div className="visitorCounterContent" id="visitorCounterContent">
+        <span className="visitorCounterLabel">Visitors</span>
+        <strong aria-live="polite">
+          {result.status === "ready" ? result.total.toLocaleString() : "—"}
+        </strong>
+        {result.status === "error" && (
+          <button type="button" onClick={retryLoadCount} aria-label="Retry visitor count">
+            Retry
+          </button>
+        )}
+      </div>
       <span className="srOnly">{message}</span>
     </aside>
   );

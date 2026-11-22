@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 const counterUrl = process.env.NEXT_PUBLIC_VISITOR_COUNTER_URL;
 const visitorIdKey = "portfolio-visitor-id:v1";
-const refreshIntervalMs = 15_000;
+const refreshIntervalMs = 10_000;
 
 async function readCounterTotal(response) {
   if (!response.ok) {
@@ -111,7 +111,7 @@ export default function VisitorCounter() {
     <aside
       className="visitorCounter"
       aria-label="Portfolio visitor count"
-      title="Unique browsers counted once; updates every 15 seconds"
+      title="Unique browsers counted once; updates every 10 seconds"
     >
       <i className="fas fa-users" aria-hidden="true"></i>
       <span className="visitorCounterLabel">Visitors</span>

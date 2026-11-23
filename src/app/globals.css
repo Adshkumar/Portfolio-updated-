@@ -3335,8 +3335,8 @@ a.cred:hover {
 
 @media (max-width: 360px) {
   .dock {
-    gap: 0;
-    padding: 3px 8px;
+    gap: 1px;
+    padding: 3px 7px;
   }
 
   .dockItem {

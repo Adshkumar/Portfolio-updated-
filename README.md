@@ -85,7 +85,7 @@ An authenticated AI application builder that turns natural-language prompts into
 
 ## Portfolio
 
-This portfolio brings together experience, selected projects, achievements, skills, articles, and contact details in a responsive interface. It includes light and dark themes, section reveal motion, case studies, a blog modal, technical article pages, GitHub activity, a unique-browser visitor counter, and direct résumé access.
+This portfolio brings together experience, selected projects, achievements, skills, articles, and contact details in a responsive interface. It includes light and dark themes, section reveal motion, case studies, a blog modal, technical article pages, a Medium profile link, GitHub activity, a unique-browser visitor counter, and direct résumé access.
 
 Some daily GitHub activity values shown in the portfolio are estimates based on public activity and a supplied calendar pattern; they are not an exact record of private contributions. The annual GitHub Contributions card is synced separately from GitHub’s authenticated contribution calendar for the previous and current calendar years. LeetCode activity depends on the availability and freshness of its public calendar service.
 
@@ -178,6 +178,8 @@ Edit [`src/config/portfolio.js`](./src/config/portfolio.js) to update profile de
 ### Publishing articles
 
 Add articles as Markdown files in [`content/articles/`](./content/articles/). The build generates routes only for articles marked `published: true`. See the [article publishing guide](./content/articles/README.md) for metadata requirements and the review workflow. Store article images in `public/articles/` and keep existing asset URLs stable.
+
+The primary navigation links to the [Medium profile](https://medium.com/@adarsh99733207). The portfolio identifies it as an associated profile in its person metadata; search engines determine independently whether and where Medium stories appear in search results.
 
 ### GitHub commit totals
 

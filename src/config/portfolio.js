@@ -15,6 +15,7 @@ export const siteConfig = {
   tagline:
     "Software Engineer making the complex feel simple—and the useful feel exceptional.",
   resumeLink: "/Adarsh-Kumar-Resume.pdf",
+  mediumUrl: "https://medium.com/@adarsh99733207",
 };
 
 export const contactInfo = {
@@ -45,6 +46,12 @@ export const socialLinks = [
     url: "https://www.instagram.com/adsingh9.1/",
     icon: "fab fa-instagram",
     label: "Instagram",
+  },
+  {
+    platform: "medium",
+    url: siteConfig.mediumUrl,
+    icon: "fab fa-medium",
+    label: "Medium",
   },
   {
     platform: "email",

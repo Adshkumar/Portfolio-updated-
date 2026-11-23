@@ -93,7 +93,7 @@ export default function ArticleIndex({ articles }) {
         </header>
 
         <section className="articleListing" aria-labelledby="latest-heading">
-          <h2 id="latest-heading" className="srOnly">Latest articles</h2>
+          <h2 id="latest-heading">Articles on this site</h2>
           <div className="articleFilters" role="search">
             <label className="articleSearchField">
               <span className="srOnly">Search article titles and descriptions</span>

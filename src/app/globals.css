@@ -2265,6 +2265,12 @@ a.cred:hover {
   transition: transform var(--transition), color var(--transition);
 }
 
+.dockMediumLogo {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
 .dock button.dockItem {
   padding: 0;
   cursor: pointer;
@@ -2390,15 +2396,18 @@ a.cred:hover {
   color: #d94f12;
 }
 
+.articleListing > h2 {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
 .articleListing {
   margin-top: 38px;
 }
 
 .articleListing > h2 {
-  margin-bottom: 16px;
-  color: var(--text);
-  font-size: 1.05rem;
-  font-weight: 650;
+  margin-bottom: 10px;
 }
 
 .articleFilters {
@@ -3302,15 +3311,15 @@ a.cred:hover {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .dock {
-    gap: 3px;
-    padding: 5px 6px;
+    gap: 2px;
+    padding: 4px;
   }
 
   .dockItem {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     font-size: 0.78rem;
   }
 
@@ -3320,24 +3329,24 @@ a.cred:hover {
 
   .dockSep {
     height: 20px;
-    margin: 0 2px;
+    margin: 0 1px;
   }
 }
 
 @media (max-width: 360px) {
   .dock {
-    gap: 2px;
-    padding: 4px 5px;
+    gap: 0;
+    padding: 3px 4px;
   }
 
   .dockItem {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
     font-size: 0.7rem;
   }
 
   .dockSep {
-    margin: 0 1px;
+    margin: 0;
   }
 }
 

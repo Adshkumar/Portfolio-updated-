@@ -19,13 +19,11 @@ That’s why I enjoy building full-stack apps: they let me think about both the 
 
 ## What I work on
 
-My recent projects include:
+I focus on building:
 
-- real-time chat platforms with authentication and live communication
-- AI-powered mock interview apps with feedback reports
-- backend systems for ride-booking and service workflows
-- mobile finance applications with a clean user experience
-- responsive web apps designed for real users, not just demos
+- desktop software and developer tools for practical, everyday workflows
+- AI-powered features that make products more useful and capable
+- mobile finance apps for budgeting and managing personal expenses
 
 I enjoy combining frontend creativity with backend structure. I care about clean code, strong architecture, and making sure every feature feels intentional.
 
@@ -49,10 +47,9 @@ One of my strengths is building end-to-end experiences. I like projects where I 
 
 Some of the work I’m proud of includes:
 
-- a real-time chat application with secure auth and WebSocket messaging
-- an AI interview platform with mock interview logic and generated reports
-- an Uber-style backend system with protected routes and driver workflows
-- a React Native finance application for mobile users
+- r0, a cross-platform desktop code editor with AI agents, an integrated terminal, Git, and database tools
+- Notro, a customizable Windows desktop companion for live activities, quick controls, and everyday productivity
+- Finance Tracker, a React Native budgeting app for tracking accounts, income, expenses, and monthly budgets, with AI-powered receipt scanning and voice entry
 
 ## Looking ahead
 
@@ -60,7 +57,7 @@ I want to keep growing as a developer who can design, build, and ship meaningful
 
 I’m always open to building new ideas, collaborating on strong products, and taking on challenges that help me keep learning.
 
-Connect with me on [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/), [X](https://x.com/Adshkumar62), [GitHub](https://github.com/Adshkumar), [Instagram](https://www.instagram.com/adsingh9.1/), or [LeetCode](https://leetcode.com/u/Adarsh_kumar62041/), or email me at [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com).
+Find me on [LinkedIn](https://www.linkedin.com/in/adarsh-kumar62041/), [X](https://x.com/Adshkumar62), [GitHub](https://github.com/Adshkumar), [Instagram](https://www.instagram.com/adsingh9.1/), [Medium](https://medium.com/@adarsh99733207), and [LeetCode](https://leetcode.com/u/Adarsh_kumar62041/), or email me at [adarsh99733207@gmail.com](mailto:adarsh99733207@gmail.com).
 `;
 
 export default function GistContent() {

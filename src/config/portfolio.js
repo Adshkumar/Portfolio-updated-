@@ -14,7 +14,7 @@ export const siteConfig = {
     "Full-stack developer passionate about building modern web applications that solve real-world problems with elegant, user-centered design.",
   tagline:
     "Software Engineer making the complex feel simple—and the useful feel exceptional.",
-  resumeLink: "/Adarsh-Kumar-Resume.pdf",
+  resumeLink: "/Adarsh-Kumar-Resume.pdf?v=20261128",
   mediumUrl: "https://medium.com/@adarsh99733207",
 };
 
